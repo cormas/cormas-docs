@@ -1,6 +1,6 @@
 <!-- _coverpage.md -->
 
-![logo](_media/logo.png ':size=250')
+<img src="_media/logo.png" alt="logo" class="coverLogo" size="250" />
 
 # Cormas <small>v0.96</small>
 
