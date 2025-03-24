@@ -1,4 +1,4 @@
-img {
+img:not(.emoji) {
   display: block;
   width: 100%;
   max-width: 1000px;
