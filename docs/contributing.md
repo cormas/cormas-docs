@@ -10,6 +10,6 @@ This tutorial will teach you how to contribute to Cormas by resolving issues and
 
 ## Select an Issue
 
-<img src="_media/contributing/issues.png" style="max-width: 600px" />
+<img src="_media/contributing/issues.png" style="width:100%; max-width:600px" />
 
 ![](_media/contributing/issues.png)
