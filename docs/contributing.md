@@ -7,3 +7,9 @@ This tutorial will teach you how to contribute to Cormas by resolving issues and
 1. [Create a GitHub account](github?id=step-1-create-a-github-account)
 2. [Generate SSH keys](github?id=step-2-generate-ssh-keys)
 3. [Open Iceberg and add your SSH keys to Pharo](github?id=step-3-open-iceberg-and-add-your-ssh-keys)
+
+## Select an Issue
+
+<img src="_media/contributing/issues.png" style="max-width: 600px" />
+
+![](_media/contributing/issues.png)
