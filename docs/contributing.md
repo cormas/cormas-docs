@@ -13,7 +13,7 @@ This tutorial will teach you how to contribute to Cormas by resolving issues and
 All issues Cormas-related issues are recorded on our [issue tracker](https://github.com/cormas/cormas/issues). You can open it be clicking on the _"Issues"_ button on [our repository](https://github.com/cormas/cormas). 
 
 ![](_media/contributing/issues-button.png)
-
+ 
 You will see the list of open issues. Most issues will have one or multiple labels associated with them.
 
 ![](_media/contributing/issues.png)
