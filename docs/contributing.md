@@ -2,11 +2,10 @@
 
 This tutorial will teach you how to contribute to Cormas by resolving issues and making pull requests to [our repository](https://github.com/cormas/cormas) on GitHub.
 
-**Prerequisite:** Before going any further, you need to make sure that you have a GitHub account and that you can authenticate from your Pharo image. Follow those steps from our [GitHub tutorial](github):
+**Prerequisite:** Before going any further, you need to make sure that you have a GitHub account and that you can authenticate with SSH keys. Follow those steps from our [GitHub tutorial](github):
 
 1. [Create a GitHub account](github?id=step-1-create-a-github-account)
 2. [Generate SSH keys](github?id=step-2-generate-ssh-keys)
-3. [Open Iceberg and add your SSH keys to Pharo](github?id=step-3-open-iceberg-and-add-your-ssh-keys)
 
 ## Select an issue
 
@@ -53,7 +52,21 @@ This step is the same as the [Loading Cormas](install?id=loading-cormas) section
 
 ## Specify your SSH keys
 
+Now we must specify the location of our SSH keys to make sure that Pharo image can authenticate to GitHub and make commits from your account. If you don't have the SSH keys yet, please follow the [Generate SSH keys](github?id=step-2-generate-ssh-keys) step of our [GitHub tutorial](github). Click on _"Browse"_ in the world menu and then on _"Git Repositories Browser"_ (a tool also known as _"Iceberg"_). 
+
+![](_media/contributing/iceberg-menu.png)
+
+Now click on the _"Settings"_ button in the top-right corner of the repositories browser.
+
+![](_media/contributing/iceberg-settings-button.png)
+
+In the settings browser, select _"Credentials"_, check the _"Use custom SSH keys..."_ checkbox and make sure that both public and private SSH keys point to the correct location on your computer. Now you can close the settings browser, your changes will be automatically saved.
+
+![](_media/contributing/iceberg-ssh-keys.png)
+
 ## Create a new branch for issue
+
+
 
 ## Make changes
 
