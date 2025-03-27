@@ -67,27 +67,61 @@ Alternatively, you can use a shortcut: _Ctrl+OI_ on Windows and Linux or _Cmd+OI
 Before using Iceberg, you must first specify the location of your SSH keys.
 This way, Iceberg will be able to perform authentication when you push changes to your repositories.
 
+Open settings by pressing the _"settings"_ button in the right corner as it is shown in the next picture.
+
 ![Iceberg](_media/github/3-iceberg.png)
+Then, follow the order of the numbers as shown in the next picture:
+First, click on "Credentials", which will open "Use custom SSH keys" with a checkbox. Make sure to check it. This will open new dropdowns: "Public SSH key" and "Private SSH key", where you should add your keys from your personal computer.
+
+Then you should follow the order of the numbers as it is shown on the next picture:
+First, click on  _"Credentials"_, which will open _"Use custom SSH keys"_  with a checkbox. Make sure to check it. This will open new dropdowns: _"Public SSH key"_ and _"Private SSH key"_, where you should add your keys from your personal computer.
 
 ![Iceberg Settings](_media/github/4-iceberg-settings.png)
 
 ### Step 4. Create a GitHub Repository
-
+To create a new repository press on the big _+_ located in the top right corner and then press _"New repository"_. 
 ![GitHub new repository button](_media/github/5-github-new-repository-button.png)
 
+It will open a new tab in which you should follow the steps as shown in the next picture:  
+
+First, you should name your repository. Choose a clear and descriptive name that reflects the project's purpose.  
+
+Write a small description to explain what your repository is about and why it exists. This helps others understand its purpose and usage.  
+
+Choose public or private visibility. Since we are an open-source community, a public repository is the recommended choice. :)  
+
+A _README_ file is useful because it provides an introduction to your project. To include it, check the _"Add a README file"_ option. (For more details, follow the link to the documentation about READMEs.)  
+
+A _.gitignore_ file helps exclude unnecessary files from version control. Select _Smalltalk_ from the list to automatically ignore irrelevant files. (Learn more about _.gitignore_ on the link provided by GitHub)  
+
+Choose a license. The Pharo community uses the MIT license, which allows broad reuse while maintaining attribution.  
+
+Finally, press _"Create repository"_.  
+
 ![Create new repository on GitHub](_media/github/6-github-create-new-repository.png)
+
+Once created, your repository will look like the one shown in the next picture. It will contain the files you selected, including the _README_, and will be ready for you to start adding code!
 
 ![Github repository](_media/github/7-github-repository.png)
 
 ### Step 5. Load Your Repository With Iceberg
 
+To load your repository open the Iceberg and press _"Add"_ button in the top right corner. 
+
 ![Add Repository to Iceberg](_media/github/8-iceberg-add.png)
+First, you have to choose "Clone from github.com" option in the left box of the new tab. It will show you three spaces you have to fill. In "Owner name", write your GitHub nickname. In "Project name", you have to write the name of the repository you created in the previous step. In "Protocol", choose the option "SSH". In the end, press the button "Ok" at the bottom right corner. If you didn't make any mistakes, it should proceed correctly.
+
+First, you have to choose _"Clone from github.com"_ option in the left box of the new tab. It will show you three spaces you have to fill. In _"Owner name"_, write your GitHub nickname. In _"Project name"_, you have to write the name of the repository you created in the previous step. In _"Protocol"_, choose the option _"SSH"_. In the end, press button _"Ok"_ at the bottom right corner. If you've entered everything correctly, the process should proceed smoothly. If not, double-check your inputs, they should match your GitHub keywords from the previous step.
 
 ![Clone repository](_media/github/9-iceberg-clone-repository.png)
 
 ### Step 6. Set Up a Pharo Project in Your Repository
 
+Now, we want to set up a Pharo project in our repository. Normally, the status of our repository should be _"No project found"_, because our repository still does not have any project in it. To fix this, right-click on the repository and then click _"Repair repository"_. This will help us repair our repository when it is detached.
+
 ![Repair repository](_media/github/10-iceberg-repair-repository.png)
+
+As it is written, "Cannot find a project (meta-data and source directory) in your repository." We need to do this because Pharo relies on specific meta-data to identify and organize the project structure. Without the correct meta-data pointing to the source code directory, the system won’t be able to recognize the project and manage it properly.
 
 ![Create project metadata](_media/github/11-iceberg-create-project-metadata.png)
 
@@ -117,28 +151,47 @@ To add a new directory, click on the _"Add"_ button.
 > Those two files are called _"project metadata"_. They help Iceberg understand how to extract packages, classes, and methods from your repository.
 
 ### Step 7. Create Packages and Write Some Code
+Now we will create ```RFCell``` class in the ```RobotForager-Model``` package. 
 
 ```smalltalk
-CMSpatialEntityElement << #RFCell	slots: {};	package: 'RobotForager-Model'
+CMSpatialEntityElement << #RFCell
+	slots: {};
+	package: 'RobotForager-Model'
 ```
+Write a small method as a point of view of our ```RFCell``` class with a ```<pov>``` pragma. 
 
 ```smalltalk
-pov	<pov>	^ CMPointOfView color: Color lightGray
+pov
+	<pov>
+	^ CMPointOfView color: Color lightGray
 ```
+
+Save the code so we can commit and push it to the GitHub! It should look like the following picture:
 
 ![Create a package and write code](_media/github/14-write-code.png)
 
 ### Step 8. Add Your Packages to Iceberg
 
+If we want to commit and push our code, first we need to add it to the Iceberg. To do that, we have to open _"Repositores" and open our repository we created in previous steps. It should look as empty as the following picture. 
+
 ![Add package to repository](_media/github/15-iceberg-add-package-button.png)
 
+Click on _"Add package"_ button in the top right corner. In the search bar, write the keyword of the package you want to add. For us it is: _"Robo"_ as in _"RobotForager-Model"_. Our package should now pop-up. Check the check-box on its left side and press _"Ok"_. 
 ![Select package](_media/github/16-iceberg-select-package.png)
 
 ### Step 9. Commit and Push
 
+The next thing we want to do is commit and push. To do that, click on _"Commit"_ button in the top left corner. 
+
 ![Commit](_media/github/17-iceberg-commit.png)
 
+The new tab will have four boxes. First, top left box shows what changes you made in package. You can uncheck and check specific changes if you want to push them or not. Second, top middle box shows how repository looked before the change we made. Third, top right box shows how repository looks after our changes. Fourth, bottom box is for commenting the commit message. 
+Commenting on a commit message is crucial because it helps keep track of the changes made to the project. Clear and concise commit messages allow other collaborators (or even yourself in the future) to quickly understand what was changed and why. It provides context for the code, making collaboration smoother and debugging easier. A well-written commit message is like a note to the future you or the team.
+Over the comment box there is a check-box. If you check it, your changes will be automatically pushed to the GitHub. If you uncheck it, you will have to push changes manually.
+
 ![Enter commit message and push](_media/github/18-iceberg-commit-message.png)
+
+Two other options, which we can turn on, are _"Save image"_, which will automatically save the image after the commit, and _"Run critics"_ which will review and provide discussion of code analyzing, and providing feedback on specific aspects of the code.
 
 ![Code critics](_media/github/19-iceberg-critiques.png)
 
