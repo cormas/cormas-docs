@@ -66,7 +66,48 @@ In the settings browser, select _"Credentials"_, check the _"Use custom SSH keys
 
 ## Create a new branch for issue
 
+It is possible that while you make your changes, someone else will push their own changes to Cormas.
+Then you will be forced to pull those changes and resolve potential conflicts before pushing your own changes.
+To simplify this process, it is a good practice to create a separate branch for the issue that you are resolving and, once you are done, make a pull request merging this branch into the original branch (dev).
 
+Pharo automates all this process for you.
+In _"Git Repositories Browser"_ (Iceberg), right-click on _cormas_, select _"GitHub"_ and then _"Create new branch for issue"_.
+
+![](_media/contributing/new-branch-for-issue.png)
+
+You must now specify the remote repository that has the list of issues.
+This should be the central Cormas repository.
+But at this point, Pharo only has the link to your remote repository.
+So we must add another remote.
+To do that, click on the _"Add remote"_ button (the one with a green plus "+").
+
+![](_media/contributing/new-branch-for-issue-window.png)
+
+Now give the name to your remote.
+I call mine "cormas" but you can choose any name that you like.
+Remote URL should be the SSH address that you copy on GitHub.
+For Cormas repository it's _"git@github.com:cormas/cormas.git"_.
+Once you have completed both fields, click on the _"OK"_ button.
+
+![](_media/contributing/new-branch-for-issue-add-remote.png)
+
+Sometimes, this action will produce an error similar to the one below.
+This is a bug of Git Repositories Manager.
+You can ignore it and simpy close the debugger window.
+
+![](_media/contributing/new-branch-for-issue-bug.png)
+
+Now you can select Cormas repository from the list of remotes.
+Write the issue number in the second field.
+The number of my issue is 699 - it's the issue that I selected in the [Select an issue](#select-an-issue) section of this tutorial.
+If you did everything correctly, the branch name field will be auto-completed with your issue title that will be automatically retrieved from GitHub.
+
+![](_media/contributing/new-branch-for-issue-number.png)
+
+Once you click _"OK"_, the new branch will be created.
+You can see the name of this branch next in the _"Branch"_ column of the _"Repositories"_ table.
+
+![](_media/contributing/new-branch-for-issue-result.png)
 
 ## Make changes
 
