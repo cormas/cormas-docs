@@ -111,6 +111,91 @@ You can see the name of this branch next in the _"Branch"_ column of the _"Repos
 
 ## Make changes
 
+Now you can write the code to resolve your issue.
+In my case, I have to add a _"Browse"_ button to the context menu of all entities in a spatial grid visualization.
+To do that, I make the following changes (you do not need to understand them because your changes will be different anyway).
+
+First, I add a new subclass of `CMSpaceContextMenuCommand` and call it `CMBrowseSpaceContextMenuCommand`.
+
+```st
+CMSpaceContextMenuCommand << #CMBrowseSpaceContextMenuCommand	slots: {};	package: 'Cormas-UI-Commands'
+```
+
+I implement three required methods: `name`, `icon`, and `action` (notice that in the `name` method I call the `tBrowse` method of translator which will return the string in a different language depending of which tranlator is used).
+
+```st
+CMBrowseSpaceContextMenuCommand >> name
+	^ translator tBrowse
+
+CMBrowseSpaceContextMenuCommand >> icon
+	^ self iconNamed: #smallSystemBrowser
+
+CMBrowseSpaceContextMenuCommand >> action	^ owner class browse
+```
+
+Then I register my new command by adding it to the collection inside the `CMBrowseSpaceContextMenuCommand >> contextMenuItemsFor:` method.
+
+```st
+CMBrowseSpaceContextMenuCommand >> contextMenuItemsFor: anEntity	^ {		CMInspectSpaceContextMenuCommand forOwner: anEntity .		CMBrowseSpaceContextMenuCommand forOwner: anEntity	}
+```
+
+I verify that my changes are correct and everything works well.
+Now I am ready to commit and push my changes.
+
 ## Commit and push
 
+If you open _"Git Repositories Browser"_ after making your changes, you will see that _cormas_ repository is green and has a status _"Uncommitted changes"_ (sometimes we say that it's a _"dirty repository"_).
+
+![](_media/contributing/repo-with-uncommitted-changes.png)
+
+Double-click on _cormas_ repository to see the list of packges.
+The ones that you modified will also be green.
+You can now click on the _"Commit"_ button in the top-left corner.
+
+![](_media/contributing/commit-button.png)
+
+Carrefully go through the list of changes that you are about to commit.
+If there are some changes that are not supposed ton be included into this pull reques, make sure to uncheck them.
+Then write a meaningful commit message.
+If you are fixing an issue, it is a good practice to start your message with a special word _"Fixed"_ followed by a space, a hash, and the issue number.
+For example, my message is _"Fixed #699. Added a Browse button to the context menu of all entities"_.
+**GitHub will automatically detect the _"Fixed #699"_ part and close issue #699 as soon as your pull request is merged** (accepted).
+Once you wrote your message, click on the _"Commit"_ button in the bottom-right corner.
+
+![](_media/contributing/commit-message.png)
+
+At this point, you might get a list of **critiques** - optional suggestions on how to improve your code.
+Try to take them into account, then click the _"Update"_ button.
+When you are done, you can click on _"Commit"_.
+You can also ignore the critiques if you find them irrelevant and click on _"Commit"_ without fixing them.
+
+![](_media/contributing/commit-critiques.png)
+
+Click on the _"Push"_ button in the top-left corner of teh _"Working copy of cormas"_ window.
+
+![](_media/contributing/push-button.png)
+
+**Make sure to select your own remote repoository and not the central repository of cormas**. Otherwise your push will be rejected because you don't have the access rights to push to Cormas directly (also, it is not a very good practice, even for the core developers).
+Then click on the _"Push"_ button in the bottom-left corner.
+
+![](_media/contributing/push-remote.png)
+
 ## Open a pull request
+
+Now open GitHub in your web browser and go to your fork of Cormas.
+You should see a yellow message saying that there is a branch with a recent push.
+Click on _"Compare & pull request"_.
+
+![](_media/contributing/github-compare-and-pr.png)
+
+Make sure that you are making a pull request to the _dev_ branch and not to the _master_ branch.
+We do not accept any PRs to _master_.
+
+![](_media/contributing/github-pr-branch.png)
+
+Congratulations! You have just submitted your first pull request :)
+
+We will review it as soon as we can and either merge it  (accept your changes) or ask you to modify something.
+If nobody reacts to your PR in several days, don't hesitate to send us a message on Discord - most core developers of Cormas are researchers and sometimes we can be busy with other tasks and simply forget to respond to your PR.
+
+![](_media/contributing/github-pr-ready.png)
