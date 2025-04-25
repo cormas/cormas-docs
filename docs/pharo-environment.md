@@ -44,7 +44,33 @@ This button executes the entire contents of your Playground. In this case, it wi
 
 ![](_media/pharo-environment/playground-close-inspector.png)
 
+You can also execute one specific line by placing your cursor on it, right clicking and selecting _Do it_ from the menu. Alternatively, you can use a keyboard shortcut _Ctrl+D_ on Windows and Linux or _Cmd+D_ on Mac. If you want to execute multiple lines at one, select them with your mouse and do the same.
+
+![](_media/pharo-environment/playground-do-it.png)
+
+Let's add some more lines, evaluate (execute) them and print the result. Don't worry if the variables are highlighted in red. This happens because they are not explicitly declared. But as soon as you execute your code in the Playground, it will automatically declare all varibles for you. Select the lines that you added, right-click and select _Print it_ from the menu. You can also use the shortcut _Ctrl+P_ or _Cmd+P_ on Mac. 
+
+```smalltalk
+a := 25.b := 75.a + b
+```
+![](_media/pharo-environment/playground-print-it.png)
+
 ## Inspector
+
+The second important tool that you must learn is called _Inspector_. It is a window that represents an object. The default inspector will show you the propertioes of an object and allow you to interact with it by sending messages. You can also define custom tabs for an inspector to add custom representations (e.g., visualizations, tables, graphs, etc.) for your objects.
+
+Let's start with a simple example. In your Playground, write the following, right-click on in and select _Inspect it_ from the menu. You can also use the keyboard shortcut _Ctrl+I_ or _Cmd+I_ on Mac.
+
+```smalltalk
+4@2
+```
+![](_media/pharo-environment/inspector-menu.png)
+
+This will create a new instance of a Point class which represents a point `(4,2)` and open an inspector for this object. The default inspector tab is called _Raw_. It shows you the names and values of all instance variables. In our case, the object has two variables: `x` which holds the value 4 and `y` which holds the value 2.
+
+![](_media/pharo-environment/inspector.png)
+
+## Transcript
 
 ## System Browser
 
