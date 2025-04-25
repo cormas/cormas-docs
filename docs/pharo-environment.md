@@ -70,6 +70,16 @@ This will create a new instance of a Point class which represents a point `(4,2)
 
 ![](_media/pharo-environment/inspector.png)
 
+If you click on any variable in this tab, it will split the window and show another inspector on the right for the object that you selected. In the example below, I click on variable `x` and get an inspector of number 4 which is an instance of `Smallinteger`.
+
+![](_media/pharo-environment/inspector-integer.png)
+
+Notice that `Smallinteger` has a custom inspector tab called `Integer` which displays different representations of the number: hexadecimal, octal, binary, etc. Every class can define custom inspector tabs for its objects. For example, `Color indexedColors` returns an array of colors. If you inspect it, you will see a custom inspector tab for `Array` which displays the list of its elements. If you click on one element, you will see a custom inspector tab for `Color` which draws a rectangle of a given color.
+
+![](_media/pharo-environment/inspector-colors.png)
+
+To learn more about Inspector and to learn how to create custom tabs, read the [Inspector](https://github.com/pharo-open-documentation/pharo-wiki/blob/master/General/Inspector.md) article of [Pharo Wiki](https://github.com/pharo-open-documentation/pharo-wiki/).
+
 ## Transcript
 
 ## System Browser
