@@ -1,6 +1,6 @@
 # Basics of Pharo Environment
 
-In this short guide we will teach you how to use navigate the Pharo environment and use 4 main tools: Playground, Inspector, System Browser, and Debugger.
+In this short guide we will teach you how to use navigate the Pharo environment and use 4 main tools: Playground, Inspector, System Browser, and Debugger. We will also teach you how to search for methods and classes with Spotter and how to browse implementors and senders of different methods and classes.
 
 ## Welcome Window
 
@@ -31,6 +31,18 @@ You can also access World Menu by right-clicking anwhere in your world. It will 
 The first tool that you will learn is called _"Playground"_. It allows us to execute code and try different code snippets. As a general rule, **we don't program in Playground**. As the name suggests, it is only used for trying out different things. The actual code is written in _"System Browser"_, a tool that will be presented in the following sections. To open Playground, you can select _Browse > Playground_ in your world menu. You can also use a keyboard shortcut _Ctrl+OP_ on Windows or Linux or _Cmd+OP_ on Mac.
 
 ![](_media/pharo-environment/playground-open.png)
+
+Copy the following two lines to your Playground and click on _"Do it all"_ button in the top-left corner.
+
+```smalltalk
+StWelcomeBrowser open.Transcript open.
+```
+
+![](_media/pharo-environment/playground-do-it-all.png)
+
+This button executes the entire contents of your Playground. In this case, it will execute two lines that we wrote: first it will open the Welcome Window, then it will open a Transcript (another tool that you will learn in the following sections). _"Do it all"_ button will also open an inspector in the right half of your Playground on the object returned by the last line. We will explain Inspector in the next sections. For now, you can just close it by clicking on the little cross in the top-right corner.
+
+![](_media/pharo-environment/playground-close-inspector.png)
 
 ## Inspector
 
