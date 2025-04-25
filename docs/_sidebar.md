@@ -10,6 +10,7 @@
 * Basics of Pharo
 
 	* [Where to Learn Pharo?](learn-pharo.md)
+	* [Pharo Environment](pharo-environment.md)
 	* [Collections](collections.md)
 
 * Advanced Topics
