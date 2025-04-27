@@ -82,6 +82,40 @@ To learn more about Inspector and to learn how to create custom tabs, read the [
 
 ## Transcript
 
+Transcript is a simple logger that can be used to display string outputs. To open the Transcript window, you can either execute (Do it) `Transcript open`, click on _Browse > Transcript_ in the World Menu, or ue the keyboard shortcut _Ctrl+OT_ or _Cmd+OT_ on Mac. Once the Transcript window opens, it might already have some logs written in it. If you are using Pharo 13 or later, you can clear your Transcript by clicking on the _"Clear"_ button in the top-left corner. If you are on the earlier version of Pharo, execute `Transcript clear` in your Playground.
+
+![](_media/pharo-environment/transcript-clear.png)
+
+The simple way to write something on a Transcript is by sending a message `show:`. You can also send a message `cr` to create a new line. For example:
+
+```smalltalk
+Transcript show: 'Hello world!'; cr.
+Transcript show: 'Lorem ipsum dolor sit amet'; cr.
+```
+
+A better way of doing so inside a method is by using `trace:` and `traceCr:` messages. Why is it better? Because you can override those messages and easily change all the logging in your application (e.g., log to file or disable logging):
+
+```smalltalk
+foo
+	self traceCr: 'Hello world!'.
+	self trace: 'Lorem ipsum '.
+	slef traceCr: 'dolor sit amet'.
+```
+
+You can also send `trace` and `traceCr` messages to strings:
+
+```smalltalk
+'Hello world!' traceCr.
+'Lorem ipsum ' trace.
+'dolor sit amet' traceCr.
+```
+
+All the code spippets above produce the same Transcript log.
+
+![](_media/pharo-environment/transcript-traceCr.png)
+
+?> It is not a good practice to use Transcript for logging in your application. And even when you use it, there are good and bad ways of doing so. We recommend you to read [Transcript: the misunderstood global](https://thepharo.dev/2020/08/11/transcript-the-misunderstood-global/) - a short blog post by Stéphane Ducasse where he explains how not to use Transcript and proposes several alternatives. That being said, even though experienced Pharo programmers don't like Transcript, this tool is still used a by many people, so it's important that you know it.
+
 ## System Browser
 
 ## Debugger
@@ -93,4 +127,6 @@ To learn more about Inspector and to learn how to create custom tabs, read the [
 ## Browse Implementors
 
 ## Browse Senders
+
+
 
