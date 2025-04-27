@@ -2,6 +2,22 @@
 
 In this short guide we will teach you how to use navigate the Pharo environment and use 4 main tools: Playground, Inspector, System Browser, and Debugger. We will also teach you how to search for methods and classes with Spotter and how to browse implementors and senders of different methods and classes.
 
+## TL;DR Useful Shortcuts
+
+Here is the table of keyboard shortcuts that will be presented in this section:
+
+| Action | Windows and Linux | Mac |
+|---|---|---|
+| Do-it (execute selected piece of code) | Ctrl+D | Cmd+D |
+| Print-it (execute selected code and print the result) | Ctrl+P | Cmd+P |
+| Inspect-it (execute selected code and open Inspector on the result) | Ctrl+I | Cmd+I |
+| Open Playground | Ctrl+OP | Cmd+OP |
+| Open Transcript | Ctrl+OT | Cmd+OT |
+| Open SystemBroser | Ctrl+OB | Cmd+OB |
+| Open Spotter | Shift+Enter | Shift+Enter |
+| Browse implementors of selected method or class | Ctrl+M | Cmd+M |
+| Browse senders of selected method or users of selected class | Ctrl+N | Cmd+N | 
+
 ## Welcome Window
 
 When you first open a Pharo image, you will be presented with a Welcome window. It contains a lot of useful information, including links to our learning resources, `ProfStef` tutorial, different themes for Pharo, etc.
@@ -57,7 +73,7 @@ a := 25.b := 75.a + b
 
 ## Inspector
 
-The second important tool that you must learn is called _Inspector_. It is a window that represents an object. The default inspector will show you the propertioes of an object and allow you to interact with it by sending messages. You can also define custom tabs for an inspector to add custom representations (e.g., visualizations, tables, graphs, etc.) for your objects.
+The second important tool that you must learn is called _"Inspector"_. It is a window that represents an object. The default inspector will show you the propertioes of an object and allow you to interact with it by sending messages. You can also define custom tabs for an inspector to add custom representations (e.g., visualizations, tables, graphs, etc.) for your objects.
 
 Let's start with a simple example. In your Playground, write the following, right-click on in and select _Inspect it_ from the menu. You can also use the keyboard shortcut _Ctrl+I_ or _Cmd+I_ on Mac.
 
@@ -117,6 +133,10 @@ All the code spippets above produce the same Transcript log.
 ?> It is not a good practice to use Transcript for logging in your application. And even when you use it, there are good and bad ways of doing so. We recommend you to read [Transcript: the misunderstood global](https://thepharo.dev/2020/08/11/transcript-the-misunderstood-global/) - a short blog post by Stéphane Ducasse where he explains how not to use Transcript and proposes several alternatives. That being said, even though experienced Pharo programmers don't like Transcript, this tool is still used a by many people, so it's important that you know it.
 
 ## System Browser
+
+SystemBrowser is arguably the most used tool in Pharo. Generally speaking, this is the tool where we write all of our code - except for those cases when we code inside a debugge - a powerful practice known as [eXtreme Test-Driven Development (XTDD)](https://rmod-pharo-mooc.lille.inria.fr/AdvancedDesignMooc/Videos/M02_S4_V2.mp4).
+
+To open SystemBrowser, click on _Browse > System Browser_ in the World Menu. You can also use the keyboard shortcut _Ctrl+OB_ or _Cmd+OB_ on Mac.
 
 ## Debugger
 
