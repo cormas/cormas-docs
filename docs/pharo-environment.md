@@ -136,7 +136,7 @@ All the code spippets above produce the same Transcript log.
 
 SystemBrowser is arguably the most used tool in Pharo. Generally speaking, this is the tool where we write all of our code - except for those cases when we code inside a debugge - a powerful practice known as [eXtreme Test-Driven Development (XTDD)](https://rmod-pharo-mooc.lille.inria.fr/AdvancedDesignMooc/Videos/M02_S4_V2.mp4).
 
-To open SystemBrowser, click on _Browse > System Browser_ in the World Menu. You can also use the keyboard shortcut _Ctrl+OB_ or _Cmd+OB_ on Mac.
+To open SystemBrowser, click on _Browse > System Browser_ in the World Menu. You can also use the keyboard shortcut _Ctrl+OB_ or _Cmd+OB_ on Mac. 
 
 ## Debugger
 
