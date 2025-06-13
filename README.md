@@ -1,2 +1,2 @@
 # cormas-docs
-Documentation of Cormas
+Website of Cormas: https://cormas.org 
