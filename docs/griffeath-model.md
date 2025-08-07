@@ -1,0 +1,3 @@
+# Griffeath Model
+
+> TODO
