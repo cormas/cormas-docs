@@ -23,5 +23,6 @@
 	* [Loading example models](load-example-models.md)
 	* [ECEC model](ecec-model.md)
 	* [Shelling model](shelling-model.md)
+   	* [Griffeath model](griffeath-model.md)
 
 * [Changelog](changelog.md)
