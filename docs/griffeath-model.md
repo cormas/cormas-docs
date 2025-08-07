@@ -5,7 +5,7 @@ This auto-reproductive cell automaton is two-dimensional, and its cells can take
 
 The state of a cell at time t + 1 depends on its state at time t and the state of its 4 neighbors (Von Neumann's neighborhood). 
 A cell moves from a state i to a state i + 1 (mod 4) in the state cycle when the state i + 1 (mod 4) is present in at least one neighboring cell.
-<img width="713" alt="standard" src="https://github.com/user-attachments/assets/9262c19e-e1e1-47b1-8854-6c0c0c4c2f46" />
+![](_media/griffeath/cycle.png)
 
 ## Version with threshold
 For 8 neighbors (Moore), Griffeath did modifications by adding a threshold (3 by default) for wich a cell changes its state:
