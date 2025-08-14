@@ -5,12 +5,13 @@ Below is the list of example models that are available in the current version of
 - [ECEC model](ecec-model.md)
 - [Shelling model](shelling-model.md)
 - [Foraging robots](robot-forager.md)
+- [Griffeath model](griffeath-model.md)
 
 ## Old Models
 
 Over the years, Cormas community has produced many wonderful models that are available online for the general public.
 Some of those are simple models to teach agent-based modelling or demonstrate certain features of Cormas.
-Others are more complex models that were created for various research projects and applied in the field in Europe, Africa, South America, or South-East Asia.
+Others are more complex models that were created for various research projects and applied in the field in Europe, Africa, South America, or South-East Asia. These old models were developed on Cormas VisualWorks.
 
 You can find the complete list of our published models on the [old Cormas website](https://cormas.cirad.fr/en/applications).
 
