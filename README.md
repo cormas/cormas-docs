@@ -1,2 +1,2 @@
 # cormas-docs
-Website of Cormas: https://cormas.org 
+Source files (in MD) of CORMAS website: https://cormas.org 
