@@ -34,7 +34,7 @@ For this version, if you simulate with 5 states, you may observe such figure:
   - set the number of states to 5
     - click on the `Parameter Editor` button, and
     - change the parameter `nbOfStates` from 4 to 5
-  <img src="_media/griffeath/next-state.jpg" width="350">
+  <img src="_media/griffeath/parameterEditor.png" width="250">
   - init method = `initRandomSpace_VonNeuman`
   - step method = `stepThreshold`
   - click on the `Reinitialize simulation` button, then
