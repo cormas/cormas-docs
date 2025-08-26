@@ -2,11 +2,21 @@
 This cyclic cellular automaton is a kind of automaton rule invented by David Griffeath from University of Wisconsin – Madison.
 ## Standard version
 This auto-reproductive cell automaton is two-dimensional, and its cells can take four states (1, 2, 3 or 4) in the standard version. 
-
+### Description
 The state of a cell at time t + 1 depends on its state at time t and the state of its 4 neighbors (Von Neumann's neighborhood). 
 A cell moves from a state i to a state i + 1 (mod 4) in the state cycle when the state i + 1 (mod 4) is present in at least one neighboring cell.
 ![](_media/griffeath/cycle.png)
+### Run the standard version in Cormas
+1. Load the model
+2. Prepare the simulation:
+  - init method = `initRandomSpace_Moore`
+  - step method = `stepStandard`
+  - click on the `Reinitialize simulation` button, then
+  - click on the `Run` button
+You should get something like:
 
+![](_media/griffeath/cycle.png)
+  
 ## Version with threshold
 For 8 neighbors (Moore), Griffeath did modifications by adding a threshold (3 by default) for wich a cell changes its state:
 
