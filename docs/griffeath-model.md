@@ -66,5 +66,5 @@ For this version, if you simulate with 14 states, you may observe such figure:
 
 You should get something like:
 
-![](_media/griffeath/gridThreshold.png)
+![](_media/griffeath/gridAverage.png)
 <sup>Example of space at step 370, with random seed fixed at 111054449681629184 </sup> 
