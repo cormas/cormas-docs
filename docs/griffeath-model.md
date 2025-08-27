@@ -9,7 +9,7 @@ A cell moves from a state i to a state i + 1 (mod 4) in the state cycle when the
 ### Run the standard version in Cormas
 1. Load the model
 2. Prepare the simulation:
-  - init method = `initRandomSpace_Moore`
+  - init method = `initRandomSpace_VonNeuman` _(4 neighbours)_
   - step method = `stepStandard`
   - click on the `Reinitialize simulation` button, then
   - click on the `Run` button
@@ -33,13 +33,18 @@ For this version, if you simulate with 5 states, you may observe such figure:
 2. Prepare the simulation:
   - set the number of states to 5
     - click on the `Parameter Editor` button, and
-    - change the parameter `nbOfStates` from 4 to 5
-  <img src="_media/griffeath/parameterEditor.png" width="250">
-  - init method = `initRandomSpace_VonNeuman`
-  - step method = `stepThreshold`
-  - click on the `Reinitialize simulation` button, then
-  - click on the `Run` button
+    - change the parameter `nbOfStates` from 4 to 5:
+      
+      <img src="_media/griffeath/parameterEditor.png" width="250">
+    - init method = `initRandomSpace_Moore` _(8 neighbours)_
+    - step method = `stepThreshold`
+    - click on the `Reinitialize simulation` button, then
+    - click on the `Run` button
+
 You should get something like:
+
+![](_media/griffeath/gridStandard.png)
+<sup>Example of space at step 512, with random seed fixed at 111054449681629184 </sup> 
 
 ## Version with range of states
 The current cell in state i checks its state against the neighbors' states. If 3 (threshold) or more neighbors have a state between (i+1) and (i + nbStates/3), then the current cell changes to that state. 
