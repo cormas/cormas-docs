@@ -16,7 +16,7 @@ A cell moves from a state _i_ to a state _i + 1 (mod 4)_ in the state cycle when
 You should get something like:
 
 ![](_media/griffeath/gridStandard.png)
-<sup>Example of space at step 512, with random seed fixed at 111054449681629184 </sup> 
+<sup>Example of space at step 200, with random seed fixed at 111 </sup> 
   
 ## Version with threshold
 ### Description
