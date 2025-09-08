@@ -24,7 +24,7 @@ The easiest way to install and run Pharo is with **Pharo Launcher** - an applica
 
 ### Step 2. Create a Pharo image
 	
-Cormas always supports three latest versions of Pharo: the development version (at the moment, it's Pharo 13), the stable version (Pharo 12), and the old stable version (Pharo 11). Unless you have a reason to do otherwise, we recommend you to always use the latest stable version, in this case, Pharo 12.
+Cormas always supports three latest versions of Pharo: the development version (at the moment, it's Pharo 14), the stable version (Pharo 13), and the old stable version (Pharo 12). Unless you have a reason to do otherwise, we recommend you to always use the latest stable version, in this case, Pharo 13.
 In the dialog window of Pharo Launcher, select the version of Pharo **(1)**, give your image a name **(2)**, and then click on the _"Create image"_ button **(3)**.
 
 > **Note:** Pharo Launcher automatically detects the architecture of your processor: 64-bit or 32-bit. In case if you see both types of images offered to you by Pharo Launcher, you must manually check what of processor you have. Most modern computers have 64-bit processors.
