@@ -170,9 +170,23 @@ To create new class in an empty package, simply click on the _"New class"_ tab i
 
 In this example, I create a class `Book` which is a subclass of `Object` and has two instance variables: `#title` and `#author` (both variable names are Symbols, so they also start with a `#`). When you change anything in the code section, you will see a little orange triangle in the top-right corner and an asterisk (*) at the beginning of the tab name. Those indicate that your changes were not saved. To save your changes, click `Ctrl+S` on Windows or Linux or `Cmd+S` on Mac. You can also right-click anywhere in the code section and select _"Accept"_ in the bottom of the menu.
 
-!> Don't forget to save your code every time you modify a method implementation or class definition. You cna do so with `Ctrl+S` on Windows or Linux or `Cmd+S` on Mac.
+!> Don't forget to save your code every time you modify a method implementation or class definition. You can do so with `Ctrl+S` on Windows or Linux or `Cmd+S` on Mac.
 
 ![](_media/pharo-environment/system-browser-new-class-definition.png)
+
+To add a new instance side method, click on your class in the top part of the SystemBrowser, then click on the _"instance side"_ in the protocols section. The method template will appear in the code section. It will contain a method name (called `methodSelectorAndArgumentNames`), a comment, some temporary variable names, and a placeholder for statements.
+
+![](_media/pharo-environment/system-browser-new-method.png)
+
+Feel free to delete everything and start typing. The first line will be the name of your method (including the argument names). In this example, I will create a method `title:` which takes one argument called `aString` and assigns this value to the `title` variable. Don't forget to save your code after you have typed it.
+
+![](_media/pharo-environment/system-browser-new-method-defined.png)
+
+Pharo is smart, so it recognizes that my new method is an accessor and automatically classifies it into the `accessing` protocol. If you want to add a new protoccol, right-click anywhere in the protocols section, and select _"New protocol"_ in the menu. You can either select one of the existing protocols from the list or type a new protocol name and click _"OK"_. Once your new protocol has been added, you can drag-n-drop your method into it.
+
+![](_media/pharo-environment/system-browser-new-method-defined.png)
+
+?> To add more classes and methods, you can simply modify the code of the existing ones. As soon as you change the name and save it, a new class or method will be added.
 
 ## Debugger
 
