@@ -186,7 +186,15 @@ Pharo is smart, so it recognizes that my new method is an accessor and automatic
 
 ![](_media/pharo-environment/system-browser-new-method-defined.png)
 
-?> To add more classes and methods, you can simply modify the code of the existing ones. As soon as you change the name and save it, a new class or method will be added.
+To add a new class side method, click on te _"Class side"_ button, then click on the _"class side"_ in the protocols section and repeat the same process as for the instance side. In this example, I will add a class side method that returns a String with a URL to goodreads.com.
+
+![](_media/pharo-environment/system-browser-new-class-side-method.png)
+
+You can also add class side variables by switching to the class side view and modifying the class definition. In this example, I will add a class side varible called `storage`. 
+
+![](_media/pharo-environment/system-browser-new-class-side-variable.png)
+
+?> You can add more classes and methods, by simply modifying the code of the existing ones. As soon as you change the name and save it, a new class or method will be added.
 
 ## Debugger
 
