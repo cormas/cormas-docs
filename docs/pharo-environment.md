@@ -138,6 +138,42 @@ SystemBrowser is arguably the most used tool in Pharo. Generally speaking, this 
 
 To open SystemBrowser, click on _Browse > System Browser_ in the World Menu. You can also use the keyboard shortcut _Ctrl+OB_ or _Cmd+OB_ on Mac. 
 
+![](_media/pharo-environment/system-browser-open.png)
+
+SystemBrowser window conists of 5 main sections:
+
+1. **Packages** - all packages in your image, including those that define Pharo itself: the language, the environment, the graphics - everything is here. Since tere are many packages, you can filter them by name using the text input in the bottom.
+2. **Classes** in the selected package.
+3. **Protocols** in the selected ckass. Those are just groups of methods that allow us to organize them and quickly navigate large classes.
+4. **Methods** in a selected class or protocol. If you click on the class, this section will show all of its methods. If you click on a protocol, you will only see methods from it.
+5. **Source code** - if you click on a class, you will see a class definition. If you click on a method, you will see its implementation.
+
+![](_media/pharo-environment/system-browser-sections.png)
+
+Between the top 4 sections and the code section of SystemBrowser, there are some buttons that allow you to change what is displayed:
+
+1. **Flat / Hierararchy** - switch between the flat view (all classes in the selected package) and hierarchy (all superclasses and subclasses of the selected class).
+2. **Instance side / Class side** - switch between instance side and class side variables and methods.
+3. **Methods / Variables** - by default, methods are selectedm which means that the third section (described above) contains protocols. If you select "Vars", the third section will display all the variables (instance side or class side depending on what you selected) as well as the variable inherited from superclasses. If you click on a variable, the fourth section will display methods that use the selected variable.
+
+![](_media/pharo-environment/system-browser-buttons.png)
+
+### Creating new packages, classes, and methods
+
+To create a new package in a SystemBrowser, right-click on any existing package and select _"New package"_ from the menu. Type the name of your package in the dialog window and click _"OK"_. In this example, I create a package called _"Bookstore"_.
+
+![](_media/pharo-environment/system-browser-new-package.png)
+
+To create new class in an empty package, simply click on the _"New class"_ tab in the code section. You will get a default template of a class definition. Here `Object` is a superclass. `#MyClass` is the name of your class (pay attention that there it starts with a `#` because it is a Symbol). `slots:` accepts an array of instance variables. In the default template, this list is empty.
+
+![](_media/pharo-environment/system-browser-new-class.png)
+
+In this example, I create a class `Book` which is a subclass of `Object` and has two instance variables: `#title` and `#author` (both variable names are Symbols, so they also start with a `#`). When you change anything in the code section, you will see a little orange triangle in the top-right corner and an asterisk (*) at the beginning of the tab name. Those indicate that your changes were not saved. To save your changes, click `Ctrl+S` on Windows or Linux or `Cmd+S` on Mac. You can also right-click anywhere in the code section and select _"Accept"_ in the bottom of the menu.
+
+!> Don't forget to save your code every time you modify a method implementation or class definition. You cna do so with `Ctrl+S` on Windows or Linux or `Cmd+S` on Mac.
+
+![](_media/pharo-environment/system-browser-new-class-definition.png)
+
 ## Debugger
 
 ## Spotter
