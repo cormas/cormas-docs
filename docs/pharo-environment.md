@@ -204,7 +204,25 @@ You can also add class side variables by switching to the class side view and mo
 
 ## Browse Implementors
 
+Each message in Pharo can have many different implemenators (methods that implement it). Consider the following code:
+
+```Smalltalk
+left or: right
+```
+
+`or:` is a keyword message that is sent to the receiver `left` with one argumnent `right`. Which method will be executed as a result of this message send? This depends on the class of the receiver `left`. If left is `true` (instance of class `True`), it will execute the method `True >> or:`, if it is `false` (instance of class `False`), the method that will be executed is `False >> or:`.
+
+We can check all implementors of a given message by positioning our cursor on it and pressing _"Ctrl+M"_ (or _"Cmd+M"_ on Mac). This will show us all the methods that implement `or:` in our image (all methods named `or:`).
+
+![](_media/pharo-environment/browse-implementors.png)
+
 ## Browse Senders
+
+Another useful shortcut is to browse all senders of a message - all places in the source code of the whole image where a given message is sent (where one of the methods with a given name is called).
+
+To browse all senders, place your cursor at the message in the code and press _"Ctrl+N"_ (or _"Cmd+N"_ on Mac). This will show all methods that send a given message. Remember that since a message can have many implementations, we might not always be sure which method will be executed (in fact, this is the whole point oof polymorphism and the key to object-oriented programming).
+
+![](_media/pharo-environment/browse-senders.png)
 
 
 
