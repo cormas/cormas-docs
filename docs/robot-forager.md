@@ -53,11 +53,11 @@ If you haven't donne so already, you can [Install Cormas](install) then open a C
 
 ![New model menu](_media/robot-forager/1-new-model-menu.png)
 
-Type the name of your model. In our case, we will call it _"Robot Forager"_. All classes in Pharo exist in the same namespace, which means that every class must have a unique name. To ensure this, we follow a good practice of adding a project-specific prefix to every class name. Cormas will automatically suggest a prefix for your model classes, in our case, it suggests _"RF"_. Feel free to edit this prefix. In the bottom part of the window, you will see the packages and classes that will be generated for you. By default, Cormas will also generate test classes, but we will not use them in this tutorial, which is why we uncheck the _"Create a test package"_ checkbox. We also add a simple description for our model using [Microdown](https://github.com/pillar-markup/Microdown) (you can also write it in Markdown or in plain text).
+Type the name of your model. In our case, we will call it _"Robot forager"_. All classes in Pharo exist in the same namespace, which means that every class must have a unique name. To ensure this, we follow a good practice of adding a project-specific prefix to every class name. Cormas will automatically suggest a prefix for your model classes, in our case, it suggests _"RF"_. Feel free to edit this prefix. Then, Cormas will also propose a name for the model class. Typically, it's prefix + the word _"Model"_, so in our case, the class name will be _"RFModel"_. In the bottom part of the window, you will see the packages and classes that will be generated for you. By default, Cormas will also generate an empty test class and a baseline (baseline is a special class that specifies what are the packages and external dependencies of your project and how it can be loaded into another Pharo image). We also add a simple description for our model using [Microdown](https://github.com/pillar-markup/Microdown) (you can also write it in Markdown or in plain text).
 
 ![](_media/robot-forager/2-new-model.png)
 
-Once you click on _"Create"_ button, Cormas will generate a package `RobotForager-Model` and a class `RFModel`. If everything goes well, a System Browser will open on this new class. Now we can start coding!
+Once you click on _"Create"_ button, Cormas will generate a package `RobotForager-Model` with a class `RFModel`, a package `RobotForager-Model-Tests` with a class `RFModelTest`, and a package `BaselineOfRobotForager` and a class with the same name. If everything goes well, a System Browser will open on `RFModel` class. Now we can start coding!
 
 ![](_media/robot-forager/3-new-model-browser.png)
 
@@ -71,43 +71,15 @@ Alsternatively, you can edit the definition of any existing class in the bottom 
 
 ![](_media/robot-forager/5-new-cell-class.png)
 
-In our case, the cell class will be called `RFCell` (remember to use the prefix!) and it will be the subclass of `CMSpatialEntityElement` - a default superclass for spatial cells in Cormas.
+In our case, the cell class will be called `RFCell` (remember to use the prefix!) and it will be the subclass of `CMCell` - a default superclass for spatial cells in Cormas.
 
 ```smalltalk
-CMSpatialEntityElement << #RFCell
+CMCell << #RFCell
 	slots: {};
 	package: 'RobotForager-Model'
 ```
 
 In our model, cells will do nothing, which is why we do not need to implement any methods for this class. By default, cells will be represented as gray squares.
-
-We must now create a collection of cells in our model. To do that, we must edit a class definition of `RFModel` and add a new slot (instance variable). We will call it `cells` but you can choose any name you like.
-
-```smalltalk
-CMAbstractModel << #RFModel
-    slots: { #cells };
-    package: 'RobotForager-Model'
-```
-
-Now we will create some methods in `RFModel` class. To add a new method, click on _"instance side"_ in the third pane of the System Browser and then edit the method template in the bottom part. You can also create a new mthod by editing the code of any existing method. As soon as you change the name, the new method will be created.
-
-![](_media/robot-forager/6-new-method.png)
-
-First, we create an `initialize` method and initialize the `cells` variable with an empty collection. Cormas will populate this collection with actual cells once we define a spatial grid in the next section. Remember that the `RFModel >>` part is just an indication for you that this method should belond to the `RFModel` class. You must not type this part in the System Browser.
-
-```smalltalk
-RFModel >> initialize
-	super initialize.
-	cells := OrderedCollection new.
-```
-
-Now we must create a getter accessor for the `cells` collection. We add a pragma `<getterFor: #ClassName>` to tell Cormas that this getter is linked to the `RFCell` class.
-
-```smalltalk
-RFModel >> cells
-	<getterFor: #RFCell>
-	^ cells
-```
 
 ## Step 3. Create a grid
 
