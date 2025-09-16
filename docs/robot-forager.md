@@ -152,8 +152,6 @@ RFRobot >> pov
 		size: 0.6
 ```
 
-```
-
 Now we add one line to the end of our `initSmall` method telling Cormas to create two robots located randomly on the grid but only in those cells that are not occupied by other agents (the cells where robots would be _"alone"_.
 
 ```smalltalk
