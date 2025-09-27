@@ -10,7 +10,7 @@
 * Basics of Pharo
 
 	* [Where to learn Pharo?](learn-pharo.md)
- * [Running code in Playground](pharo-playground.md)
+	* [Running code in Playground](pharo-playground.md)
 	* [Pharo syntax in a nutshell](pharo-syntax.md)
 	* [Pharo environment](pharo-environment.md)
 	* [Collections](collections.md)
