@@ -82,6 +82,18 @@ Literal objects are values that you write directly in your code. They do not nee
 
 > **Note:** Even though these are called literal objects, they are still ordinary objects of classes (like `Number`, `String`, `Array`, ...) just like anything else in Pharo.
 
+## Three Types of Messages
+
+In Pharo, **everything happens by sending messages to objects**. A message is like a request: you ask an object to do something or to give you some information. 
+
+There are three kinds of messages in Pharo:
+
+- **Unary messages:** have no arguments. Example: `'Hello' size` asks the string `'Hello'` for its size.
+- **Binary messages:** are usually symbols like `+`, `-`, `*`, `<`. Example: `3 + 4` sends the `+` message with `4` as argument to the number `3`.
+- **Keyword messages:** contain words ending with colons, each followed by an argument. Example: `rabbit moveTo: forest` sends the message `moveTo:` with the argument `forest`.
+
+> **Note on precedence:** If you combine different kinds of messages in one expression, Pharo always evaluates unary first, then binary, then keyword messages. Parentheses can be used to make the order explicit.
+
 ## Variables
 
 Variables are names that allow us to remember objects so we can use them later. For example, instead of always writing the number 10, we can give it a name like `numberOfRabbits` and reuse it.
