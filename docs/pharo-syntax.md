@@ -60,6 +60,28 @@ Before learning syntax, we need to understand three very important ideas: **clas
 - An **object** is a real instance created from a class. If the class is the blueprint for a house, the object is the actual house built from it. Each wolf in a simulation is an object of the class `Wolf`.
 - We make objects do things by sending them **messages**. A message is like asking an object to perform an action or give us information.
 
+Here are some examples of sending messages to objects:
+
+```Smalltalk
+3 + 4          "we send the + message to the number 3, with 4 as the argument"
+'Hello' size   "we ask the string 'Hello' for its size"
+```
+
+You will use these ideas all the time in Cormas: your agents (wolves, rabbits, trees…) are objects that belong to classes, and you make them act by sending them messages.
+
+## Literal Objects
+
+Literal objects are values that you write directly in your code. They do not need to be created with a message or by calling a class; they simply appear as they are. For example:
+
+- **Numbers:** like `3`, `42`, or `-7`.
+- **Characters:** single letter or symbol, written with a leading `$`, like `$a`, `$Z` or `$?`.
+- **Strings:** sequences of characters, written between quotes, like `'Hello'` or `'Wolf'`.
+- **Symbols:** names written with a leading `#`, like `#wolf` or `#rabbit`. Unlike strings, symbols are unique and used as identifiers or keys rather than text. For example, two strings `'wolf'` and `'wolf'` are two separate objects, but the symbol `#wolf` always refers to the same object.
+- **Booleans:** the values `true` and `false`. They are used for yes/no, on/off, or condition checks in your code.
+- **Arrays:** fixed-size collections of objects written as `#(item1 item2 item3)`. For example, `#(1 2 3)` is an array of three numbers.
+
+> **Note:** Even though these are called literal objects, they are still ordinary objects of classes (like `Number`, `String`, `Array`, ...) just like anything else in Pharo.
+
 ## Variables
 
 Variables are names that allow us to remember objects so we can use them later. For example, instead of always writing the number 10, we can give it a name like `numberOfRabbits` and reuse it.
