@@ -204,7 +204,11 @@ Blocks are especially useful in loops and conditionals, where they define the ac
 
 Boolean values are special objects that represent logigal values: `true` and `false`. They are Pharo's way of representing yes/no or on/off situations. We need them whenever we want to make decisions in our programs: for example, checking if a rabbit is alive, if a cell is empty, or if one number is bigger than another.
 
-Booleans can also receive messages that combine them with other booleans:
+Pharo provides comparison messages that return booleans: `=`, `>`, `<`, `<=`, `>=`, and `~=`. For example, `3 = 3` gives `true`, while `3 < 2` gives `false`. The message `~=` means _"not equal to"_.
+
+Collections also understand useful boolean messages such as isEmpty, which answers true if the collection has no elements and false otherwise.
+
+Booleans can receive messages that combine them with other booleans:
 
 - `and:` means both must be true.
 - `or:` means at least one must be true.
@@ -217,3 +221,68 @@ These are very useful when writing conditions for your agents’ behaviour.
 (a > b) or: [ b > c ].    "true if at least one comparison is true"
 (a > b) not.              "negates the result, true becomes false"
 ```
+
+## Conditionals
+
+Conditionals let us choose different actions depending on whether something is true or false. In Pharo, we write conditionals by sending messages to booleans. The most common ones are `ifTrue:`, `ifFalse:`, `ifTrue:ifFalse:`, and `ifFalse:ifTrue:`.
+
+Why do we pass blocks as arguments? Because the block contains the code that should run only if the condition matches. Without blocks, the code would run immediately instead of waiting for the condition to decide.
+
+```Smalltalk
+5 > 3 ifTrue: [ 'Yes, 5 is greater than 3' ].
+5 < 3 ifFalse: [ 'No, 5 is not less than 3' ].
+
+age >= 18 ifTrue: [ 'Adult' ] ifFalse: [ 'Minor' ].
+
+'cat' = 'dog'
+	ifFalse: [ 'These are different animals' ]
+	ifTrue: [ 'These are the same' ].
+```
+
+In these examples, the comparisons produce either true or false. Depending on that value, Pharo decides which block of code to run.
+
+## Loops
+
+Sometimes we want to repeat an action many times. In programming this is called a **loop**. Instead of writing the same instruction again and again, we tell Pharo to repeat it for us.
+
+Here are some common kinds of loops in Pharo:
+
+### Looping a fixed number of times
+
+Use timesRepeat: to run a block several times:
+
+```Smalltalk
+"open Transcript to see the output"
+Transcript open. 
+
+"print 'Hello' 5 times"
+5 timesRepeat: [ 'Hello' traceCr ].
+```
+
+### Looping over a range of numbers
+
+Use `to:do:` to go through a range of numbers:
+
+```Smalltalk
+1 to: 3 do: [ :i | i squared traceCr ].
+```
+
+### Looping while a condition is true or false
+
+Use `whileTrue:` and `whileFalse:` to repeat as long as a condition holds:
+
+```Smalltalk
+count := 3.
+[count > 0] whileTrue: [ count := count - 1 ].
+```
+
+### Looping over collections
+
+We can use `do:` to run a block once for each element in a collection:
+
+```Smalltalk
+#(wolf rabbit) do: [ :each | each size traceCr ].
+```
+
+> We explain `do:` and other collection-related loops (`select:`, `collect:`, `detect:` ...) in more detail in the [Collections](collections) tutorial.
+
