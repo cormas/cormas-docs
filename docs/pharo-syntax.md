@@ -134,6 +134,18 @@ Anything between double quotes is a comment. Comments are notes written for huma
 "this is a comment"
 ```
 
+## Collections
+
+A collection is an object that groups other objects together. Collections are useful when you want to keep track of many things at once: for example, all the wolves in a model, all the cells in a grid, or all the numbers from 1 to 100. Instead of creating a separate variable for each object, you put them into a collection.
+
+```Smalltalk
+animals := #(wolf rabbit).	"an Array with two elements"
+animals at: 1.      		"first element of a collection"
+animals size.       		"size of a collection"
+```
+
+?> Collections are very important and often used in Cormas. This is just a short introduction. We cover collections in more detail in the dedicated guide: [Collections](collections).
+
 ## Blocks
 
 Blocks are small pieces of code written between square brackets `[ ... ]`. They are also called **anonymous functions** because, unlike methods, they do not have a name. Instead, you can create them on the spot wherever you need them.
