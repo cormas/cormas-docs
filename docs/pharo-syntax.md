@@ -133,3 +133,75 @@ Anything between double quotes is a comment. Comments are notes written for huma
 ```Smalltalk
 "this is a comment"
 ```
+
+## Blocks
+
+Blocks are small pieces of code written between square brackets `[ ... ]`. They are also called **anonymous functions** because, unlike methods, they do not have a name. Instead, you can create them on the spot wherever you need them.
+
+We use blocks because they let us:
+
+- Delay the execution of code until we decide to run it.
+- Pass behaviour (not just data) as arguments to other methods.
+
+### Evaluating a block
+
+A block is just another object in Pharo. To make a block run, we send it the message `value`:
+
+```Smalltalk
+[ 3 + 4 ] value.
+```
+
+### Blocks with arguments
+
+Blocks can also take arguments, which are written after a colon at the start of the block:
+
+```Smalltalk
+[ :x | x + 2 ] value: 5.
+```
+
+Here the block expects one argument `x`. When we send it the message `value:` with `5`, it calculates `5 + 2`.
+
+Blocks can also take two or more arguments:
+
+```Smalltalk
+[ :x :y | x * y ] value: 3 value: 4.
+```
+
+Here the block expects two arguments. When we send it the message `value:value:` with `3` and `4`, it multiplies them together.
+
+### Blocks are objects
+
+Blocks are objects like anything else in Pharo. This means you can:
+
+- Store them in variables:
+
+```Smalltalk
+adder := [ :x | x + 10 ].
+adder value: 3.
+```
+
+- Pass them as arguments to other messages:
+
+```Smalltalk
+#(1 2 3) collect: [ :each | each * 2 ].   "#(2 4 6)"
+```
+
+Blocks are especially useful in loops and conditionals, where they define the actions to perform.
+
+## Boolean Logic
+
+Boolean values are special objects that represent logigal values: `true` and `false`. They are Pharo's way of representing yes/no or on/off situations. We need them whenever we want to make decisions in our programs: for example, checking if a rabbit is alive, if a cell is empty, or if one number is bigger than another.
+
+Booleans can also receive messages that combine them with other booleans:
+
+- `and:` means both must be true.
+- `or:` means at least one must be true.
+- `not` flips the truth value (`true` becomes `false`, `false` becomes `true`).
+
+These are very useful when writing conditions for your agents’ behaviour.
+
+```Smalltalk
+(a > b) and: [ b > c ].   "true if both comparisons are true"
+(a > b) or: [ b > c ].    "true if at least one comparison is true"
+(a > b) not.              "negates the result, true becomes false"
+```
