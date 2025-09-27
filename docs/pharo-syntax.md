@@ -2,7 +2,7 @@
 
 Pharo is a live, object-oriented language. Everything is an object, and you send messages to objects to make them do things. This short guide covers only the essentials you need to read and write the code for Cormas models.
 
-## Running Code in Pharo Playground
+## 0. Running Code in Pharo Playground
 
 Before starting, make sure you already have Pharo installed. If not, follow the Installing Pharo section from our [How to Install Cormas](install) tutorial.
 
@@ -11,7 +11,7 @@ Once Pharo is installed, you will write and try out code in a **Playground**. A 
 **We encourage you to follow this tutorial hands‑on:** type each example in a Playground and try evaluating, printing, and inspecting it yourself.
 
 
-### Evaluating (Ctrl+D)
+#### Evaluating (Ctrl+D)
 
 To evaluate an expression (make Pharo run it), select it and press `Ctrl+D` if you are using Windows or Linux, or `Cmd+D` if you are using Mac. Pharo will execute the code but won’t display a value. To see a value, use Print it or Inspect it (next sections).
 
@@ -21,7 +21,7 @@ For example, if you type the following code into the Playground, then select it 
 ProfStef go.
 ```
 
-### Printing (Ctrl+P)
+#### Printing (Ctrl+P)
 
 To evaluate the expression and print the result, use `Ctrl+P` (or `Cmd+P` on Mac). Printing will show the result as a comment next to the code. This is useful when you want to quickly see the value produced by an expression.
 
@@ -33,7 +33,7 @@ Try it by typing the following expressions into your Playground, then selecting 
 true not.
 ```
 
-### Inspecting (Ctrl+I)
+#### Inspecting (Ctrl+I)
 
 To evaluate the expression and inspect the result, use `Ctrl+I` (or `Cmd+I` on Mac). Inspecting opens a new window showing the object in detail. You can explore the object's attributes and send messages to it to make it do things. Inspecting is one of the most powerful tools in Pharo. 
 
@@ -52,7 +52,7 @@ To go further, check our guide [Basics of the Pharo Environment](pharo-environme
 ?> **Tip:** In the same way as in the Playground, you can evaluate, print, or inspect expressions almost anywhere you see source code in Pharo, such as in the System Browser, Inspector, Debugger, and many other tools.
 
 
-## Classes, Objects and Messages
+## 1. Classes, Objects and Messages
 
 Before learning syntax, we need to understand three very important ideas: **classes**, **objects**, and **messages**.
 
@@ -69,7 +69,7 @@ Here are some examples of sending messages to objects:
 
 You will use these ideas all the time in Cormas: your agents (wolves, rabbits, trees…) are objects that belong to classes, and you make them act by sending them messages.
 
-## Literal Objects
+## 2. Literal Objects
 
 Literal objects are values that you write directly in your code. They do not need to be created with a message or by calling a class; they simply appear as they are. For example:
 
@@ -82,7 +82,7 @@ Literal objects are values that you write directly in your code. They do not nee
 
 > **Note:** Even though these are called literal objects, they are still ordinary objects of classes (like `Number`, `String`, `Array`, ...) just like anything else in Pharo.
 
-## Three Types of Messages
+## 3. Three Types of Messages
 
 In Pharo, **everything happens by sending messages to objects**. A message is like a request: you ask an object to do something or to give you some information. 
 
@@ -94,7 +94,7 @@ There are three kinds of messages in Pharo:
 
 > **Note on precedence:** If you combine different kinds of messages in one expression, Pharo always evaluates unary first, then binary, then keyword messages. Parentheses can be used to make the order explicit.
 
-## Variables
+## 4. Variables
 
 Variables are names that allow us to remember objects so we can use them later. For example, instead of always writing the number 10, we can give it a name like `numberOfRabbits` and reuse it.
 
@@ -116,7 +116,7 @@ numberOfWolves := 3.
 > 
 >These simple rules help keep code readable and consistent.
 
-## Assignment
+## 5. Assignment
 
 Use `:=` (colon + equal) to assign a value. Assignment means we give a variable a specific object to remember, so we can use that object later without rewriting it every time:
 
@@ -126,7 +126,7 @@ count := 5.
 
 > **Note:** In some other programming languages the symbol for assignment is different: for example, in Python, Java or C it is `=`, and in R it is `<-`. In Pharo, **assignment is always** `:=`. The single equals sign `=` is used to **test if two expressions are equal**. Mixing them up is a very common beginner mistake: writing `=` instead of `:=` will not assign a value, it will only check equality.
 
-## Comments
+## 6. Comments
 
 Anything between double quotes is a comment. Comments are notes written for humans, not for the computer: they help explain what the code does, why we wrote it a certain way, or to leave reminders for ourselves or others. Pharo ignores comments when running the program.
 
@@ -134,7 +134,7 @@ Anything between double quotes is a comment. Comments are notes written for huma
 "this is a comment"
 ```
 
-## Collections
+## 7. Collections
 
 A collection is an object that groups other objects together. Collections are useful when you want to keep track of many things at once: for example, all the wolves in a model, all the cells in a grid, or all the numbers from 1 to 100. Instead of creating a separate variable for each object, you put them into a collection.
 
@@ -146,7 +146,7 @@ animals size.       		"size of a collection"
 
 ?> Collections are very important and often used in Cormas. This is just a short introduction. We cover collections in more detail in the dedicated guide: [Collections](collections).
 
-## Blocks
+## 8. Blocks
 
 Blocks are small pieces of code written between square brackets `[ ... ]`. They are also called **anonymous functions** because, unlike methods, they do not have a name. Instead, you can create them on the spot wherever you need them.
 
@@ -155,7 +155,7 @@ We use blocks because they let us:
 - Delay the execution of code until we decide to run it.
 - Pass behaviour (not just data) as arguments to other methods.
 
-### Evaluating a block
+#### Evaluating a block
 
 A block is just another object in Pharo. To make a block run, we send it the message `value`:
 
@@ -163,7 +163,7 @@ A block is just another object in Pharo. To make a block run, we send it the mes
 [ 3 + 4 ] value.
 ```
 
-### Blocks with arguments
+#### Blocks with arguments
 
 Blocks can also take arguments, which are written after a colon at the start of the block:
 
@@ -181,7 +181,7 @@ Blocks can also take two or more arguments:
 
 Here the block expects two arguments. When we send it the message `value:value:` with `3` and `4`, it multiplies them together.
 
-### Blocks are objects
+#### Blocks are objects
 
 Blocks are objects like anything else in Pharo. This means you can:
 
@@ -200,7 +200,7 @@ adder value: 3.
 
 Blocks are especially useful in loops and conditionals, where they define the actions to perform.
 
-## Boolean Logic
+## 9. Boolean Logic
 
 Boolean values are special objects that represent logigal values: `true` and `false`. They are Pharo's way of representing yes/no or on/off situations. We need them whenever we want to make decisions in our programs: for example, checking if a rabbit is alive, if a cell is empty, or if one number is bigger than another.
 
@@ -222,7 +222,7 @@ These are very useful when writing conditions for your agents’ behaviour.
 (a > b) not.              "negates the result, true becomes false"
 ```
 
-## Conditionals
+## 10. Conditionals
 
 Conditionals let us choose different actions depending on whether something is true or false. In Pharo, we write conditionals by sending messages to booleans. The most common ones are `ifTrue:`, `ifFalse:`, `ifTrue:ifFalse:`, and `ifFalse:ifTrue:`.
 
@@ -241,13 +241,13 @@ age >= 18 ifTrue: [ 'Adult' ] ifFalse: [ 'Minor' ].
 
 In these examples, the comparisons produce either true or false. Depending on that value, Pharo decides which block of code to run.
 
-## Loops
+## 11. Loops
 
 Sometimes we want to repeat an action many times. In programming this is called a **loop**. Instead of writing the same instruction again and again, we tell Pharo to repeat it for us.
 
 Here are some common kinds of loops in Pharo:
 
-### Looping a fixed number of times
+#### Looping a fixed number of times
 
 Use timesRepeat: to run a block several times:
 
@@ -259,7 +259,7 @@ Transcript open.
 5 timesRepeat: [ 'Hello' traceCr ].
 ```
 
-### Looping over a range of numbers
+#### Looping over a range of numbers
 
 Use `to:do:` to go through a range of numbers:
 
@@ -267,7 +267,7 @@ Use `to:do:` to go through a range of numbers:
 1 to: 3 do: [ :i | i squared traceCr ].
 ```
 
-### Looping while a condition is true or false
+#### Looping while a condition is true or false
 
 Use `whileTrue:` and `whileFalse:` to repeat as long as a condition holds:
 
@@ -276,7 +276,7 @@ count := 3.
 [count > 0] whileTrue: [ count := count - 1 ].
 ```
 
-### Looping over collections
+#### Looping over collections
 
 We can use `do:` to run a block once for each element in a collection:
 
