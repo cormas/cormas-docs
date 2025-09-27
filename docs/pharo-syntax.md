@@ -25,15 +25,11 @@ ProfStef go.
 
 To evaluate the expression and print the result, use `Ctrl+P` (or `Cmd+P` on Mac). Printing will show the result as a comment next to the code. This is useful when you want to quickly see the value produced by an expression.
 
-Try it by typing the following expressions into your Playground, then selecting them and pressing `Ctrl+P`.
+Try it by typing the following expressions into your Playground, then selecting each line and pressing `Ctrl+P`. You can also select all three expressions at the same time. In that case, all of them will be evaluated but only the result of the last one will be printed.
 
 ```Smalltalk
 10 * 4 + 2.
-```
-```Smalltalk
 'Hello ', 'world!'.
-```
-```Smalltalk
 true not.
 ```
 
@@ -41,21 +37,13 @@ true not.
 
 To evaluate the expression and inspect the result, use `Ctrl+I` (or `Cmd+I` on Mac). Inspecting opens a new window showing the object in detail. You can explore the object's attributes and send messages to it to make it do things. Inspecting is one of the most powerful tools in Pharo. 
 
-Try inspecting the following expressions.
+Try inspecting the following expressions one by one.
 
 ```Smalltalk
 #(apple banana orange).
-```
-```Smalltalk
 Color red.
-```
-```Smalltalk
 Date today.
-```
-```Smalltalk
 Time now.
-```
-```Smalltalk
 Smalltalk ui icons.
 ```
 
@@ -86,12 +74,13 @@ numberOfRabbits := 10.
 numberOfWolves := 3.
 ```
 
-?> **Note on naming:** In Pharo we use **camelCase** notation: if a name is made of several words, we start with a lowercase letter and capitalize each following word (e.g., `numberOfRabbits`).
-?>
-?> - Variable names and method names must **always begin with a lowercase letter**.
-?> - Class names must **always begin with an uppercase letter** (e.g., `Wolf`, `Rabbit`).
-?> - A valid name must start with a letter, may contain letters and digits, and may also include underscores. It must not begin with a number, contain spaces, or include punctuation or special symbols.
-?>These simple rules help keep code readable and consistent.
+> **Note on naming:** In Pharo we use **camelCase** notation: if a name is made of several words, we start with a lowercase letter and capitalize each following word (e.g., `numberOfRabbits`).
+>
+> - Variable names and method names must **always begin with a lowercase letter**.
+> - Class names must **always begin with an uppercase letter** (e.g., `Wolf`, `Rabbit`).
+> - A valid name must start with a letter, may contain letters and digits, and may also include underscores. It must not begin with a number, contain spaces, or include punctuation or special symbols.
+> 
+>These simple rules help keep code readable and consistent.
 
 ## Assignment
 
@@ -101,7 +90,7 @@ Use `:=` (colon + equal) to assign a value. Assignment means we give a variable 
 count := 5.
 ```
 
-?> **Note:** In some other programming languages the symbol for assignment is different: for example, in Python, Java or C it is `=`, and in R it is `<-`. In Pharo, **assignment is always** `:=`. The single equals sign `=` is used to **test if two expressions are equal**. Mixing them up is a very common beginner mistake: writing `=` instead of `:=` will not assign a value, it will only check equality.
+> **Note:** In some other programming languages the symbol for assignment is different: for example, in Python, Java or C it is `=`, and in R it is `<-`. In Pharo, **assignment is always** `:=`. The single equals sign `=` is used to **test if two expressions are equal**. Mixing them up is a very common beginner mistake: writing `=` instead of `:=` will not assign a value, it will only check equality.
 
 ## Comments
 
