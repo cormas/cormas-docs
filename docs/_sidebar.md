@@ -5,18 +5,19 @@
 * Getting Started
 	* [Install Cormas](install.md)
 	* [How to get help](contact.md)
-	* [Robot-Forager Tutorial](robot-forager.md)
+	* [Robot-Forager tutorial](robot-forager.md)
 
 * Basics of Pharo
 
-	* [Where to Learn Pharo?](learn-pharo.md)
-	* [Pharo Syntax in a Nutshell](pharo-syntax.md)
-	* [Pharo Environment](pharo-environment.md)
+	* [Where to learn Pharo?](learn-pharo.md)
+ * [Running code in Playground](pharo-playground.md)
+	* [Pharo syntax in a nutshell](pharo-syntax.md)
+	* [Pharo environment](pharo-environment.md)
 	* [Collections](collections.md)
 
 * Advanced Topics
 	* [Using GitHub](github.md)
-	* [How to Contribute to Cormas?](contributing.md)
+	* [How to contribute to Cormas?](contributing.md)
 
 * Models
 
