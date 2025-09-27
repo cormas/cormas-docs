@@ -10,6 +10,7 @@
 * Basics of Pharo
 
 	* [Where to Learn Pharo?](learn-pharo.md)
+	* [Pharo Syntax in a Nutshell](pharo-syntax.md)
 	* [Pharo Environment](pharo-environment.md)
 	* [Collections](collections.md)
 
