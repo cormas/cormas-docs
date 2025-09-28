@@ -1,0 +1,19 @@
+pharo:
+  label: Pharo
+  permalink: /pharo
+  description: Pharo programming language and environment
+
+commod:
+  label: ComMod
+  permalink: /commod
+  description: Companion Modelling
+
+serious-games:
+  label: Serious Games
+  permalink: /serious-games
+  description: Serious Games
+
+planetc:
+  label: Planet C
+  permalink: /planetc
+  description: Planet C - Play Again

@@ -1,0 +1,21 @@
+oleks:
+  name: Oleksandr Zaitsev
+  title: CS Researcher at UMR SENS, CIRAD
+  url: https://www.umr-sens.fr/fr/web/guest/-/zaitsev-oleksandr
+  image_url: https://github.com/olekscode.png
+  page: true
+  socials:
+    linkedin: https://www.linkedin.com/in/-oleks/
+    github: olekscode
+
+pierbo:
+  name: Pierre Bommel
+  title: Modelling Researcher at UMR SENS, CIRAD
+  url: https://www.umr-sens.fr/fr/web/guest/-/pierre
+  image_url: https://github.com/pierbo.png
+  page: true
+    # customize the url of the author page at /blog/authors/<permalink>
+    # permalink: '/all-sebastien-lorber-articles'
+  socials:
+    linkedin: pierre-bommel-70579415a
+    github: pierbo

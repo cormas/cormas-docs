@@ -1,0 +1,54 @@
+.carousel {
+  position: relative;
+  max-width: 520px;
+  width: 100%
+}
+
+.carouselViewport {
+  overflow: hidden;
+  border-radius: 20px
+}
+
+.carouselTrack {
+  display: flex;
+  width: 100%
+}
+
+.slide {
+  flex: 0 0 100%
+}
+
+.slideImg {
+  width: 100%;
+  height: auto;
+  display: block
+}
+
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  cursor: pointer
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 8px
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #2A2A2A;
+  border: none;
+  cursor: pointer
+}  
