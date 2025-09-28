@@ -111,7 +111,7 @@ export default function Home() {
 		
     self energy <= 0
         ifTrue: [ self die ]`}
-        </CodeBlock>
+      </CodeBlock>
       </section>
 
       {/* FEATURES */}
