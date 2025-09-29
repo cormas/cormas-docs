@@ -98,7 +98,7 @@
 
 .photoImg {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 10;
   height: auto;
   display: block;
   object-fit: cover;
