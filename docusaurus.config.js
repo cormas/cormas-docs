@@ -81,7 +81,9 @@ const config = {
       // Replace with your project's social card
       image: 'img/cormas-social-card.jpg',
       colorMode: {
-        respectPrefersColorScheme: true,
+        defaultMode: 'light',
+        disableSwitch: true,
+        respectPrefersColorScheme: false,
       },
       navbar: {
         title: 'Cormas',
