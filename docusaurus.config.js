@@ -51,7 +51,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/cormas/cormas-docs/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/cormas/cormas-docs/tree/main/',
         },
         blog: {
           showReadingTime: true,
@@ -62,7 +62,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/cormas/cormas-docs/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/cormas/cormas-docs/tree/main/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -136,15 +136,15 @@ const config = {
             items: [
               {
                 label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                href: 'https://stackoverflow.com/questions/tagged/cormas',
               },
               {
                 label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                href: 'https://discord.gg/jYG5Hn3cx3',
               },
               {
-                label: 'X',
-                href: 'https://x.com/docusaurus',
+                label: 'Mastodon',
+                href: 'https://mastodon.social/@cormas',
               },
             ],
           },
