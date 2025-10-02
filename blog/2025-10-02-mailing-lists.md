@@ -1,7 +1,7 @@
 ---
 title: New Mailing Lists for the Cormas Community
 authors: [oleks]
-description: The Cormas project now has three dedicated mailing lists: modelers@cormas.org for community discussions, devs@cormas.org for the development team, and contact@cormas.org for general inquiries. We chose to self-host with Sympa to ensure autonomy, privacy, and long-term stability for our community communications.
+description: The Cormas project now has three dedicated mailing lists. modelers@cormas.org for community discussions. devs@cormas.org for the development team, and contact@cormas.org for general inquiries. We chose to self-host with Sympa to ensure autonomy, privacy, and long-term stability for our community communications.
 tags: [announcement]
 ---
 
