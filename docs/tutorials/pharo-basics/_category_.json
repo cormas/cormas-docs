@@ -3,6 +3,7 @@
   "position": 2,
   "link": {
     "type": "generated-index",
-    "description": "The basics of Pharo programming language and environment"
+    "title": "Basics of Pharo",
+    "description": "Essential Pharo concepts and tools needed for Cormas."
   }
 }
