@@ -1,0 +1,9 @@
+{
+  "label": "Tutorials",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "title": "Learn Cormas",
+    "description": "Start here to install Cormas, learn Pharo basics, and build your first model."
+  }
+}
