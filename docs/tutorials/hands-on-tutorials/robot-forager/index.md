@@ -1,3 +1,9 @@
+---
+title: Robot-Forager Tutorial
+sidebar_position: 1
+slug: /robot-forager-tutorial
+---
+
 # Robot-Forager Tutorial
 
 In this tutorial, you will learn how to build a very simple model in Cormas.

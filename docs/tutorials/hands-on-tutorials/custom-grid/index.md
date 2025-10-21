@@ -1,5 +1,6 @@
 ---
-title: Creating a Custom Grid
+title: Custom Grid
+sidebar_position: 2
 slug: /custom-grid
 ---
 

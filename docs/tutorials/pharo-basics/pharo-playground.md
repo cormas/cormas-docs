@@ -1,3 +1,9 @@
+---
+title: Running Code in Playground
+sidebar_position: 2
+slug: /run-code-in-playground
+---
+
 # Running Code in Pharo Playground
 
 Before starting, make sure you already have Pharo installed. If not, follow the Installing Pharo section from our [How to Install Cormas](/download) tutorial.

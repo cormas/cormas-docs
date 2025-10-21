@@ -1,8 +1,14 @@
+---
+title: Pharo Syntax
+sidebar_position: 3
+slug: /pharo-syntax
+---
+
 # Pharo Syntax in a Nutshell
 
 Pharo is a live, object-oriented language. Everything is an object, and you send messages to objects to make them do things. This short guide covers only the essentials you need to read and write the code for Cormas models.
 
-**We encourage you to follow this tutorial hands‑on:** type each example in a Playground and try evaluating, printing, and inspecting it yourself. If you are new to Playground, check out our tutorial on [Running code in Pharo Playground](pharo-playground).
+**We encourage you to follow this tutorial hands‑on:** type each example in a Playground and try evaluating, printing, and inspecting it yourself. If you are new to Playground, check out our tutorial on [Running code in Pharo Playground](run-code-in-playground).
 
 ## Classes, Objects and Messages
 

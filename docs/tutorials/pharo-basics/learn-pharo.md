@@ -1,3 +1,9 @@
+---
+title: Where to Learn Pharo?
+sidebar_position: 1
+slug: /where-to-learn-pharo
+---
+
 # Where to Learn Pharo?
 
 The following pages of this guide will teach you the basics of Pharo programming language and environment that are necessary to use Cormas.
