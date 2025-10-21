@@ -1,6 +1,7 @@
 ---
-title: Initialize method
-sidebar_position: 4
+title: Initialize Method
+sidebar_position: 7
+slug: /initialize-method
 ---
 
 # Understanding the initialize method

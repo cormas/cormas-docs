@@ -1,5 +1,6 @@
 ---
 title: Publish your model on Github
+sidebar_position: 3
 slug: /publish-model-on-github
 ---
 

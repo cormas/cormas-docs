@@ -1,6 +1,7 @@
 ---
-title: Understanding Messages in Pharo
-sidebar_position: 4
+title: Messages
+sidebar_position: 6
+slug: /pharo-messages
 ---
 
 In Pharo (and therefore in **Cormas**), *everything is an object* - agents, cells, plots, and even numbers and strings. Objects **interact** by *sending messages* to each other. Messages are how we tell an object what to do.
@@ -14,7 +15,7 @@ plot burn.
 Here we send the message `burn` to the object `plot`.\
 If the object knows how to respond to `burn`, it performs an action - for example, it may change its color to red and mark itself as burned.
 
-## 1. What is a Message?
+## What is a Message?
 
 A **message** in Pharo is similar to a "function call" in other languages, but it's more natural to read:
 
@@ -46,7 +47,7 @@ Here:
 - `moveTo:` is the **message** 
 - `newPlot` is an **argument** 
 
-## 2. Everything Happens by Sending Messages
+## Everything Happens by Sending Messages
 
 Objects never access another object's data directly.\
 They always **communicate by sending messages**.
@@ -62,7 +63,7 @@ This means that when you design a Cormas model, you define:
 - **the messages your agents understand** (their behavior),
 - and **the messages you send** to make them act or query information.
 
-## 3. Messages vs. Methods
+## Messages vs. Methods
 
 It's important to understand that **messages** and **methods** are not the same thing.
 
@@ -84,7 +85,7 @@ In short:
 - **Message**: what you send.
 - **Method**: what the object does when it receives that message.
 
-## 4. Messages Can Have Arguments
+## Messages Can Have Arguments
 
 Some messages require extra information, called *arguments*.
 
@@ -98,7 +99,7 @@ Here `biomass:`, `moveTo:` and `addTree:` are *keyword messages* that take argum
 
 Notice the colon (`:`) - it indicates that the message expects a value.
 
-## 5. Messages Return Values
+## Messages Return Values
 
 Each message returns a result, which can be stored or used in another message:
 
@@ -121,7 +122,7 @@ growBiomass
 Then the message `cell growBiomass` will increase the biomass by 1 and return cell. You can imagine that there is an invisible `^ self` at the end of each method.
 :::
 
-## 6. Nested Messages
+## Nested Messages
 
 You can also *nest* messages to combine multiple requests in one expression:
 
@@ -134,7 +135,7 @@ This means:
 1. Ask the forest for its largest tree.
 2. Then ask that tree for its height.
 
-## 7. Messages Can Be Chained
+## Messages Can Be Chained
 
 You can send several messages to the same object in sequence by using a semicolon (`;`):
 
@@ -146,7 +147,7 @@ This reads naturally: *"Increment, increment, then decrement the counter."*
 
 This is a key idea in Pharo - code is readable and close to natural language.
 
-## 8. Message Types
+## Message Types
 
 In Pharo, there are three kinds of messages. These are just different ways of writing instructions for objects, depending on how many arguments (extra pieces of information) they need.
 

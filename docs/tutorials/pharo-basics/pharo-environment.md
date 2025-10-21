@@ -1,3 +1,9 @@
+---
+title: Pharo Environment
+sidebar_position: 4
+slug: /pharo-environment
+---
+
 # Basics of Pharo Environment
 
 In this short guide we will teach you how to use navigate the Pharo environment and use 4 main tools: Playground, Inspector, System Browser, and Debugger. We will also teach you how to search for methods and classes with Spotter and how to browse implementors and senders of different methods and classes.
@@ -51,7 +57,8 @@ The first tool that you will learn is called _"Playground"_. It allows us to exe
 Copy the following two lines to your Playground and click on _"Do it all"_ button in the top-left corner.
 
 ```smalltalk
-StWelcomeBrowser open.Transcript open.
+StWelcomeBrowser open.
+Transcript open.
 ```
 
 ![](img/pharo-environment/playground-do-it-all.png)
@@ -67,7 +74,9 @@ You can also execute one specific line by placing your cursor on it, right click
 Let's add some more lines, evaluate (execute) them and print the result. Don't worry if the variables are highlighted in red. This happens because they are not explicitly declared. But as soon as you execute your code in the Playground, it will automatically declare all varibles for you. Select the lines that you added, right-click and select _Print it_ from the menu. You can also use the shortcut _Ctrl+P_ or _Cmd+P_ on Mac. 
 
 ```smalltalk
-a := 25.b := 75.a + b
+a := 25.
+b := 75.
+a + b
 ```
 ![](img/pharo-environment/playground-print-it.png)
 

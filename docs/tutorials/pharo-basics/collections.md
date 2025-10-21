@@ -1,3 +1,9 @@
+---
+title: Collections
+sidebar_position: 5
+slug: /collections
+---
+
 # Collections
 
 This guide introduces you to **collections** in Pharo - groups of objects used to organize and manipulate data. You will learn how to create and use arrays, ordered collections, sets, and dictionaries, understand what makes each type special, and explore how to iterate over them with messages like `do:`, `collect:`, `select:`, and others. These operations are essential for building models and handling data effectively in Cormas. 
