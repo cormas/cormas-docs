@@ -112,6 +112,7 @@ const config = {
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {to: '/download', label: 'Download', position: 'left'},
+          { to: "/missabms", label: "MISS ABMS 2026", position: "right" },
           {
             href: 'https://github.com/cormas/cormas',
             label: 'GitHub',
@@ -168,6 +169,14 @@ const config = {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
         additionalLanguages: ['smalltalk'],
+      },
+      announcementBar: {
+        id: "missabms-2026",
+        content:
+          '🎓 <strong>MISS ABMS 2026</strong> · 15–26 June · Montpellier — <a href="/missabms"><strong>See details →</strong></a>',
+        backgroundColor: "#1E6E2B", // dark green
+        textColor: "#FFFFFF",
+        isCloseable: true,
       },
     }),
 };

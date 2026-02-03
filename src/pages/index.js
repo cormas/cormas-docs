@@ -172,37 +172,6 @@ export default function Home() {
             </div>
           </article>
         </div>
-
-        
-      <section className={styles.section}>
-        <h2>Summer School</h2>
-        <p style={{fontSize: 16, margin: '0 auto 24px', opacity: 0.85}}>
-          <strong>MISSABMS 2026</strong>, the multi-platform training course on ABM will take place <strong>from 15 to 26 June 2026</strong>. <br />
-
-          MISS-ABMS = Multi-platform International Summer School on Agent-Based Modelling & Simulation for renewable resources management. <br /> <br />
-
-By taking part in this course, you will gain a modelling culture and learn the different skills required for building agent-based models (ABMs) applied to sociological, ecological, or socio-ecological systems. <br />
-
-Key points <br />
-
-·  MISS-ABMS is multi-cultural in terms of background and nationalities of the trainers and participants <br />
-
-·  MISS-ABMS promotes a collaborative practice of modelling and simulation <br />
-
-·  MISS-ABMS is multi-platform: Cormas, Gama and NetLogo <br />
-
-·  MISS-ABMS presents the different stages of an ABM process, with a focus on model design and implementation <br />
-
-·  MISS-ABMS offers a significant time for group work to design and implement an ABM <br /> <br />
-
-Further information can be found <a href="https://www.agropolis.fr/MISSABMS" target="_blank" title="here">here</a> <br />
-
-The application form is <a href="https://www.agropolis.fr/MISS-ABMS-APPLICATION-FORM" target="_blank" title="here">here</a>
-
-
-        </p>
-
-					
       </section>
 
       {/* CTA BAND */}
