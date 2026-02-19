@@ -1,6 +1,8 @@
-# Website
+# Website of Cormas
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+This repository stores the Cormas' website: https://cormas.org 
+
+The website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
 
 ## Installation
 
