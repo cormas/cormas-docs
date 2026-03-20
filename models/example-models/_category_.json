@@ -1,0 +1,10 @@
+{
+  "label": "Example models",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "title": "Example models",
+    "description": "Official library of simple playground models.",
+    "slug": "/example-models"
+  }
+}

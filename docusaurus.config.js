@@ -75,6 +75,23 @@ const config = {
     ],
   ],
 
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'models',
+        path: 'models',
+        routeBasePath: 'models',
+        sidebarPath: './sidebarsModels.js',
+        editUrl: 'https://github.com/cormas/cormas-docs/tree/main/',
+      },
+    ],
+    [
+      require.resolve("./plugins/cormas-releases"),
+      { releasesUrl: "https://files.cormas.org/releases.json" },
+    ],
+  ],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -100,6 +117,7 @@ const config = {
           },
           {
             type: 'docSidebar',
+            docsPluginId: 'models',
             sidebarId: 'modelsSidebar',
             position: 'left',
             label: 'Models',
