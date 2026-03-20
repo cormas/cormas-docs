@@ -41,7 +41,7 @@ export default function Home() {
             <Link className={`${styles.secondaryBtn} button button--lg`} to="/docs/tutorials">
               Quickstart
             </Link>
-            <Link className={`${styles.secondaryBtn} button button--lg`} to="/docs/models">
+            <Link className={`${styles.secondaryBtn} button button--lg`} to="/models">
               Models
             </Link>
           </div>
