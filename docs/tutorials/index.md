@@ -17,6 +17,6 @@ Before beginning, ensure you have a working installation of [Pharo and Cormas](/
 ## Where to go next
 
 Once you are comfortable with the tutorials, you can:  
-- Explore the [Models gallery](/docs/models).  
+- Explore the [Models gallery](/models).  
 - Connect with other users via our mailing lists.  
 - Read the [blog](/blog) for updates and community highlights.  
