@@ -132,7 +132,7 @@ const config = {
           {to: '/download', label: 'Download', position: 'left'},
           { to: "/missabms", label: "MISS ABMS 2026", position: "right" },
           {
-            href: 'https://vw.cormas.org',
+            href: 'https://vw.cormas.org/indexeng.htm',
             label: 'Cormas VW',
             position: 'right',
           }
