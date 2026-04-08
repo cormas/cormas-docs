@@ -77,4 +77,6 @@ This means that Cormas ws successfully installed.
 
 ![Cormas is installed](img/8-cormas-installed.png)
 
+We recommand to save your Cormas.image (Menu --> Pharo --> Save).
+
 You can now close the Playground and move on to the [Robot-Forager Tutorial](/docs/robot-forager-tutorial) where you will create your first model and run the simulation.
