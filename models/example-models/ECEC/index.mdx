@@ -4,10 +4,6 @@ title: ECEC
 slug: /ecec
 ---
 
-import ImgNextState from './img/next-state.jpg';
-import ImgNextState2 from './img/next-state.jpg';
-import ImgParameterEditor from './img/parameterEditor.png';
-
 # ECEC Model
 
 The model we present here has been replicated from a paper by Pepper and Smuts, "Evolution of Cooperation in an Ecological Context":
@@ -27,9 +23,8 @@ The Plants are created only once and have a fixed location. They do not move, di
 
 * Biomass(t+1) = Biomass(t) + r.Biomass(t) . [1 - Biomass(t) / K]
 
-The state of a cell at time _t + 1_ depends on its state at time _t_ and the state of its 4 neighbors (Von Neumann's neighborhood). 
-A cell moves from a state _i_ to a state _i + 1 (mod 4)_ in the state cycle when the state i + 1 (mod 4) is present in at least one neighboring cell.
-![](img/cycle.png)
+The following figure presents the discret logistic equation (with 2 parameters: r and K), and the resulting curve:
+![](img/logistic.png)
 
 ### Run the standard version in Cormas
 
