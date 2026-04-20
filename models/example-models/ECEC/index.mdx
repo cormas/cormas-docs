@@ -16,15 +16,16 @@ The model we present here has been replicated from a paper by Pepper and Smuts, 
 
 > Pepper, J.W. and B.B. Smuts. 2002. "Assortment through Environmental Feedback". American Naturalist, 160: 205-213
 
-The model consists of a two-dimensional grid of cells that contain plants. 
-It contains two kinds of entities: plants and foragers. 
-The main idea is the study of the survival of two populations of foragers that compete for plants. The Plants are created only once and have a fixed location. They do not move, die, or reproduce. A plant’s only “behaviors” is to grow (and be eaten by foragers). The plants vary only in their biomass, which represents the amount of food energy available to foragers. At each time unit, this biomass level increases according to a logistic growth:
+The model consists of a two-dimensional grid of cells that contain plants and ruminants. 
+The main idea is to study the survival of two populations of ruminants (called foragers) that compete for plants. 
 
-## Standard version
+## Description of ECEC
 
-This auto-reproductive cell automaton is two-dimensional, and its cells can take four states (1, 2, 3 or 4) in the standard version. 
+### Dynamics of the plants
 
-### Description
+The Plants are created only once and have a fixed location. They do not move, die, or reproduce. A plant’s only “behaviors” is to grow (and be eaten by foragers). The plants vary only in their biomass, which represents the amount of food energy available to foragers. At each time unit, this biomass level increases according to a **logistic growth**:
+
+* Biomass(t+1) = Biomass(t) + r.Biomass(t) . [1 - Biomass(t) / K]
 
 The state of a cell at time _t + 1_ depends on its state at time _t_ and the state of its 4 neighbors (Von Neumann's neighborhood). 
 A cell moves from a state _i_ to a state _i + 1 (mod 4)_ in the state cycle when the state i + 1 (mod 4) is present in at least one neighboring cell.
