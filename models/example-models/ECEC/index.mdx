@@ -19,7 +19,7 @@ The main idea is to study the survival of two populations of ruminants (called f
 
 ### Dynamics of the plants
 
-The Plants are created only once and have a fixed location. They do not move, die, or reproduce. A plant’s only “behaviors” is to grow (and be eaten by foragers). The plants vary only in their biomass, which represents the amount of food energy available to foragers. At each time unit, this biomass level increases according to a **logistic growth**:
+The Plants are created only once and have a fixed location. They do not move, die, or reproduce. A plant’s only “behaviors” is to grow (and be eaten by foragers). The plants vary only in their biomass level, which represents the amount of food energy available to foragers. At each time unit, this biomass level increases according to a **logistic growth**:
 
 * Biomass(t+1) = Biomass(t) + r.Biomass(t) . [1 - Biomass(t) / K]
 
@@ -53,7 +53,7 @@ But if not, they move instead to a random free place.
 ![Forager movement](./img/foragerMove.png){width=130}
 
 #### Foragers’ Reproduction
-If a forager’s energy level reaches an upper **fertility threshold** (100 energy units), it reproduces asexually, creating an offspring with the same heritable traits as itself (e.g., feeding strategy). 
+If the forager’s energy level reaches an upper **fertility threshold** (100 energy units), the animal reproduces asexually, creating an offspring with the same heritable traits as itself (e.g., feeding strategy). 
 Thus, parent’s energy is reduced by the offspring’s initial energy (50).  
 New borns occupy the nearest free place to their parent. 
 
@@ -66,7 +66,7 @@ The following Class diagram presents the structure of the model:
 ![ECEC Class Diagram](./img/ececClassDiag.png){width=700}
 
 The underlined attributes are called “Class variables”: their values are equal for all instances.
-For example, the <ins>catabolicRate</ins> class variable means that its value (2 units of energy) is
+For example, the <u>catabolicRate</u> class variable means that its value (2 units of energy) is
 identical for every foragers whatever their strategy (restrained or unrestrained).
 
 The following Sequence Diagram presents the main time step of ECEC. This is a DTSS (Discrete Time System Specification, according to Zeigler et al. 2000[^1] classification), meaning that, on the contrary of DEVS (Discrete Event System Specification), the evolution of the simulation is sliced in time steps.
