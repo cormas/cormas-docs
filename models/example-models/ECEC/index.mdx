@@ -4,10 +4,6 @@ title: ECEC
 slug: /ecec
 ---
 
-import Logistic from './img/logistic.png';
-import ForagerMove from './img/foragerMove.png';
-import ForagerReproduction from './img/foragerReproduction.png';
-
 # ECEC Model
 
 The model we present here has been replicated from a paper by Pepper and Smuts, "Evolution of Cooperation in an Ecological Context":
@@ -30,6 +26,8 @@ The Plants are created only once and have a fixed location. They do not move, di
 The following figure presents the discret logistic equation (with 2 parameters: r and K), and the resulting curve:
 
 <img src="img/logistic.png" width="700" >
+
+By default, the parameter ***r*** (reproduction rate) is fixed to 0.2 (/step) and the parameter ***K*** (carrying capacity) is fixed to 10 (foragers).
 
 ### Dynamics of the foragers
 
@@ -74,11 +72,32 @@ The underlined attributes are called “Class variables”: their values are equ
 For example, the <ins>catabolicRate</ins> class variable means that its value (2 units of energy) is
 identical for every foragers whatever their strategy (restrained or unrestrained).
 
-The following Sequence Diagram presents the main time step of ECEC. This is a DTSS (Discrete Time System Specification, according to Zeigler et al. 2000 classification), meaning that, on the contrary of DEVS (Discrete Event System Specification), the evolution of the simulation is sliced in time steps.
+The following Sequence Diagram presents the main time step of ECEC. This is a DTSS (Discrete Time System Specification, according to Zeigler et al. 2000[^1] classification), meaning that, on the contrary of DEVS (Discrete Event System Specification), the evolution of the simulation is sliced in time steps.
 As the model is purely theoretical, the step duration is not defined. In one step, all entities should evolve: the plants increase their biomass (according to Logistic equation), and the foragers perform their biological functions. In order not to give always preference to the same agents (the privilege to choose first the best plant), the list of the foragers is randomly shuffled at each step.
 
-[hobbit-hole][1], and that means comfort.
-
-[1]: <https://en.wikipedia.org/wiki/Hobbit#Lifestyle> "Hobbit lifestyles"
-
 <img src="img/ececSeqDiag.png" width="500" >
+
+At each step, a forager performs its activities. Its `#step` method is described as the following activity diagram:
+
+<img src="img/ececActivityDiag.png" width="350" >
+
+## Running ECEC
+
+### Initialization
+By default (cf. initializeParameters[^2], the landscape is a 27 by 27 torroidal grid, with 10 RestrainedForagers and 10 UnrestrainedForagers:
+
+<img src="img/initialGrid.png" width="700" >
+
+
+
+
+[^1]: Zeigler, B.P., Praehofer, H. et Kim, T.G., 2000. (2nd ed.). Theory of modeling and simulation: integrating discrete event and continuous, Academic Press, New York
+[^2]: initializeParameters: `{ 
+initializeParameters
+
+	super initializeParameters.
+	numberOfRows := 27.
+	numberOfColumns := 27.
+	initialNumberOfRestrainedForagers := 10.
+	initialNumberOfUnrestrainedForagers := 10
+}`
