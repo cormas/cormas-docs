@@ -84,7 +84,17 @@ At each step, a forager performs its activities. Its `#step` method is described
 ## Running ECEC
 
 ### Initialization
-By default (cf. initializeParameters[^2], the landscape is a 27 by 27 torroidal grid, with 10 RestrainedForagers and 10 UnrestrainedForagers:
+By default `#initializeParameters` is called when initializing ECEC in Cormas.
+```st
+initializeParameters: 
+	super initializeParameters.
+	numberOfRows := 27.
+	numberOfColumns := 27.
+	initialNumberOfRestrainedForagers := 10.
+	initialNumberOfUnrestrainedForagers := 10
+```
+
+With those values of parameters, the landscape is a 27 by 27 torroidal grid, with 10 RestrainedForagers and 10 UnrestrainedForagers:
 
 <img src="img/initialGrid.png" width="700" >
 
@@ -99,7 +109,7 @@ Because the ECEC model is stochastic (there is randomness at intialization, mouv
 
 <img src="img/ecec1000rep.png" width="500" >
 
-On average, across these 100 simulations, the population of Restrained foragers is eliminated. The ECEC model thus illustrates a process of exclusive competition known as the **‘Principle of Gause’ (1935)**[^3]. G.F. Gause explains that « Two species in biological competition for the same resources cannot permanently coexist »: the species with the best fitness will eliminate the other. The « Fitness » (or selective value, Darwin) is the number of offsprings that reach sexual maturity.
+On average, across these 100 simulations, the population of Restrained foragers is eliminated. The ECEC model thus illustrates a process of exclusive competition known as the **‘Principle of Gause’ (1935)**[^2]. G.F. Gause explains that « Two species in biological competition for the same resources cannot permanently coexist »: the species with the best fitness will eliminate the other. The « Fitness » (or selective value, Darwin) is the number of offsprings that reach sexual maturity.
 
 The ECEC model also looks like the famous prey–predator model of Lotka and Volterra (1931):
 
@@ -122,11 +132,5 @@ In this particular spatial configuration, the population of Restrained foragers 
 Go to the GitHub page of ECEC: https://github.com/cormas/ecec-model or visite the [ECEC page on Cormas VW](https://vw.cormas.org/en/applica/ecec.htm).
 
 [^1]: Zeigler, B.P., Praehofer, H. et Kim, T.G., 2000. (2nd ed.). Theory of modeling and simulation: integrating discrete event and continuous, Academic Press, New York
-[^2]: initializeParameters: 
-	super initializeParameters.
-	numberOfRows := 27.
-	numberOfColumns := 27.
-	initialNumberOfRestrainedForagers := 10.
-	initialNumberOfUnrestrainedForagers := 10
 
-[^3]: Gause G. F., 1935. Vérifications expérimentales de la théorie mathématique de la lutte pour la vie. Hermann et Cie, éditeurs, Paris, France
+[^2]: Gause G. F., 1935. Vérifications expérimentales de la théorie mathématique de la lutte pour la vie. Hermann et Cie, éditeurs, Paris, France
