@@ -4,6 +4,10 @@ title: ECEC
 slug: /ecec
 ---
 
+import logistic from './img/logistic.png';
+import foragerMove from './img/foragerMove.png';
+import foragerReproduction from './img/foragerReproduction.png';
+
 # ECEC Model
 
 The model we present here has been replicated from a paper by Pepper and Smuts, "Evolution of Cooperation in an Ecological Context":
@@ -45,13 +49,13 @@ Foragers examine their current location and around (local vision).
 From locations not occupied by another forager, they choose the one containing the plant with the highest biomass.
 If the chosen plant would yield enough food to meet their catabolic rate (> 2), they move there. 
 But if not, they move instead to a random free place.
-![](img/foragerMove.png)
+<img src={img/foragerMove} style={{width: 50}} />
 
 #### Foragers’ Reproduction
 If a forager’s energy level reaches an upper **fertility threshold** (100 energy units), it reproduces asexually, creating an offspring with the same heritable traits as itself (e.g., feeding strategy). 
 Thus, parent’s energy is reduced by the offspring’s initial energy (50).  
 New borns occupy the nearest free place to their parent. 
-![](img/foragerReproduction.png)
+![](foragerReproduction)
   
 ## Version with threshold
 ### Description
