@@ -26,20 +26,32 @@ The Plants are created only once and have a fixed location. They do not move, di
 The following figure presents the discret logistic equation (with 2 parameters: r and K), and the resulting curve:
 ![](img/logistic.png)
 
-### The foragers
+### Dynamics of the foragers
 
-A forager is a ruminant that feeds on plants. 
-Each step, the Foragers burn energy according to their **catabolic rate**. This rate is the same for all foragers. It is fixed to **2 units of energy** per time period.
+The foragers are ruminants located on the grid that feed on plants. 
+#### Foragers loose energy
+Each step, the Foragers burn energy according to their **catabolic rate**. This rate is the same for all foragers: it is fixed to **2 units of energy** per time period.
 If the energy of a forager reaches 0, it dies.
 
-A forager feeds on the plant in its current location if there is one. It increases its own energy level by reducing the same amount of the plant. Foragers are of two types that differs in their feeding behavior:
+#### Foragers get energy
+A forager feeds on the plant in its current location if there is one. It increases its own energy level by reducing the same amount of the plant. there is no loss.
+Foragers are of two types that differs in their feeding behavior:
 - When **“Restrained”** foragers eat, they take only **50%** of the plant‟s energy.
-- In contrast, **“Unrestrained”** foragers eat **99%** of the plant. This harvest rate is less than 100%
-so that plants can continue to grow after being fed on, rather than being permanently
-destroyed.
+- In contrast, **“Unrestrained”** foragers eat **99%** of the plant. This harvest rate is less than 100% so that plants can continue to grow after being fed on, rather than being permanently destroyed.
 The Foragers do not change their feeding behavior type and their offspring keep the same heritable traits.
 
+#### Foragers’ Movements
+Foragers examine their current location and around (local vision). 
+From locations not occupied by another forager, they choose the one containing the plant with the highest biomass.
+If the chosen plant would yield enough food to meet their catabolic rate (> 2), they move there. 
+But if not, they move instead to a random free place.
+![](img/foragerMove.png)
 
+#### Foragers’ Reproduction
+If a forager’s energy level reaches an upper **fertility threshold** (100 energy units), it reproduces asexually, creating an offspring with the same heritable traits as itself (e.g., feeding strategy). 
+Thus, parent’s energy is reduced by the offspring’s initial energy (50).  
+New borns occupy the nearest free place to their parent. 
+![](img/foragerReproduction.png)
   
 ## Version with threshold
 ### Description
