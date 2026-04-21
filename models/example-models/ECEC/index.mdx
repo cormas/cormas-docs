@@ -28,13 +28,13 @@ The Plants are created only once and have a fixed location. They do not move, di
 * Biomass(t+1) = Biomass(t) + r.Biomass(t) . [1 - Biomass(t) / K]
 
 The following figure presents the discret logistic equation (with 2 parameters: r and K), and the resulting curve:
-![](img/logistic.png)
 
-<img src={Logistic} style={{width: 150}} />
+<img src="img/logistic.png" width="700" >
 
 ### Dynamics of the foragers
 
 The foragers are ruminants located on the grid that feed on plants. 
+
 #### Foragers loose energy
 Each step, the Foragers burn energy according to their **catabolic rate**. This rate is the same for all foragers: it is fixed to **2 units of energy** per time period.
 If the energy of a forager reaches 0, it dies.
@@ -48,16 +48,37 @@ The Foragers do not change their feeding behavior type and their offspring keep 
 
 #### Foragers’ Movements
 Foragers examine their current location and around (local vision). 
-From locations not occupied by another forager, they choose the one containing the plant with the highest biomass.
+From those not occupied by another forager, they choose the one containing the plant with the highest biomass.
 If the chosen plant would yield enough food to meet their catabolic rate (> 2), they move there. 
 But if not, they move instead to a random free place.
 
-<img src={ForagerMove} style={{width: 50}} />
+Foragers examine their current location and around. From those not occupied by another
+forager, they choose the one containing the plant with the highest energy.
+If the chosen plant would yield enough food to meet their catabolic rate they move there.
+
+<img src="img/foragerMove.png" width="130" >
 
 #### Foragers’ Reproduction
 If a forager’s energy level reaches an upper **fertility threshold** (100 energy units), it reproduces asexually, creating an offspring with the same heritable traits as itself (e.g., feeding strategy). 
 Thus, parent’s energy is reduced by the offspring’s initial energy (50).  
 New borns occupy the nearest free place to their parent. 
 
-<img src={ForagerReproduction} style={{width: 50}} />
+<img src="img/foragerReproduction.png" width="130" >
 
+### UML description of ECEC
+
+The following Class diagram presents the structure of the model:
+
+<img src="img/ececClassDiag.png" width="700" >
+The underlined attributes are called “Class variables”: their values are equal for all instances.
+For example, the <ins>catabolicRate</ins> class variable means that its value (2 units of energy) is
+identical for every foragers whatever their strategy (restrained or unrestrained).
+
+The following Sequence Diagram presents the main time step of ECEC. This is a DTSS (Discrete Time System Specification, according to Zeigler et al. 2000 classification), meaning that, on the contrary of DEVS (Discrete Event System Specification), the evolution of the simulation is sliced in time steps.
+As the model is purely theoretical, the step duration is not defined. In one step, all entities should evolve: the plants increase their biomass (according to Logistic equation), and the foragers perform their biological functions. In order not to give always preference to the same agents (the privilege to choose first the best plant), the list of the foragers is randomly shuffled at each step.
+
+[hobbit-hole][1], and that means comfort.
+
+[1]: <https://en.wikipedia.org/wiki/Hobbit#Lifestyle> "Hobbit lifestyles"
+
+<img src="img/ececSeqDiag.png" width="500" >
