@@ -88,11 +88,36 @@ By default (cf. initializeParameters[^2], the landscape is a 27 by 27 torroidal 
 
 <img src="img/initialGrid.png" width="700" >
 
+But a simulation can also be initialized without any agent, in order to see the natural evolution of the biomass.
+
+### Analysing ECEC
 By running this simulation, we can visualize the mouvements of the agents and the modification of the landscape. We can also observe this simulation with the indicators (called *probes* in Cormas):
 
 <img src="img/ececProbes.png" width="700" >
 
+Because the ECEC model is stochastic (there is randomness at intialization, mouvements, and shuffles), simulations must be repeated in order to obtain a more accurate picture of the model’s overall behaviour (rather than relying on a single simulation). The following repeated analysis presents a **‘averaged over repetitions’ analysis**: it calculates the average value of the probe at each step using the average obtained from 100 repetitions
 
+<img src="img/ecec1000rep.png" width="500" >
+
+On average, across these 100 simulations, the population of Restrained foragers is eliminated. The ECEC model thus illustrates a process of exclusive competition known as the **‘Principle of Gause’ (1935)**[^3]. G.F. Gause explains that « Two species in biological competition for the same resources cannot permanently coexist »: the species with the best fitness will eliminate the other. The « Fitness » (or selective value, Darwin) is the number of offsprings that reach sexual maturity.
+
+The ECEC model also looks like the famous prey–predator model of Lotka and Volterra (1931):
+
+<img src="img/predatorPreys.png" width="700" > 
+
+_For these simulations, the [VENSIM software](https://vensim.com/free-downloads/), an open source system dynamics tool, was used._
+
+The Lotka–Volterra model is a differential equation model in which each line (or equation) represents the fluctuation of a population. In the first equation, the fluctuation in the prey population (dx/dt) depends on the birth rate of the prey (n), minus predation (calculated as the number of preys multiplied by the number of predators multiplied by the predators’ efficiency p). Similarly, the fluctuation in the predator population depends on their natural mortality rate (m), plus predation (preys consumption). Depending on the values of m, n and p, the results of this model can show regular, phase-shifted fluctuations in x (prey) and y (predators).
+
+In ECEC, predators can be considered to be the Foragers, whilst preys are the plants. ECEC shows the same regular fluctuations between the two populations of plants and foragers.
+
+<img src="img/ececPlantsForagersEvolution.png" width="500" >
+
+Whilst ECEC provides evidence supporting Gause’s principle (the competitive exclusion of restrained foragers by unrestricted ones) in a homogeneous grid of plants (corroboration), the opposite result (refutation) can also be observed when the landscape consists of oasis-like patches of greenery within a desert:
+
+<img src="img/ececOasis.png" width="500" >
+
+In this particular spatial configuration, the population of Restrained foragers survives whilst the Unrestrained ones die out due to their over-consumption.
 
 [^1]: Zeigler, B.P., Praehofer, H. et Kim, T.G., 2000. (2nd ed.). Theory of modeling and simulation: integrating discrete event and continuous, Academic Press, New York
 [^2]: initializeParameters: `{ 
@@ -104,3 +129,4 @@ initializeParameters
 	initialNumberOfRestrainedForagers := 10.
 	initialNumberOfUnrestrainedForagers := 10
 }`
+[^3]: Gause G. F., 1935. Vérifications expérimentales de la théorie mathématique de la lutte pour la vie. Hermann et Cie, éditeurs, Paris, France
