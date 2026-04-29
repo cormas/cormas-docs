@@ -1,12 +1,19 @@
 
 ---
 id: SPD
-title: Spatialized Prisoners Dilemma
+title: Spatialized Prisoners Dilemma Model
 slug: /spd
 ---
+<style>
+r { color: Red }
+b { color: Blue }
+g { color: Green }
+y { color: Yellow }
+</style>
 
 # The Spatialized Prisoners Dilemma Model
 
+## The standard Prisoner’s Dilemma
 The Prisoner’s Dilemma (first described in 1950 by Albert W. Tucker) is a classic model in game theory. 
 It presents a situation in which two players would be better off cooperating, but where, in the absence of communication between them, each chooses to defect if the game is played only once. The reason for this is that, if one cooperates and the other defects, the cooperator is strongly penalized. However, if both players defect, the outcome is less favourable to them than if both had chosen to cooperate.
 
@@ -17,7 +24,26 @@ It presents a situation in which two players would be better off cooperating, bu
 > - if both betray each other, they will be condemned to a lighter sentence (2 years);
 > - if both refuse to betray the other, the sentence will be the minimum (1 year), due to lack of evidence in the case file.
 
-! [matrix](./img/matrix1.png)
+![matrix](./img/matrix1.png)
 
-This cellular automaton is a kind of automaton rule invented by David Griffeath from University of Wisconsin – Madison.
-A spatialization of the famous game theory "Prisoners Dilemma" model. Here, each cell (of a Cellular Automata) stands for a player in the "Prisoners Dilemma" context. The payoff for the different configurations are such that from an individualist point of view, its better to defect (whatever the strategy of the opponent, the best individual payoff corresponds to the "defect" strategy), whereas from a collective point of view, its better to cooperate (the sum of the two individual payoffs is maximal for the configuration "cooperate" vs "cooperate").
+The payoff for the different configurations are such that from an individualist point of view, its better to defect (whatever the strategy of the opponent, the best individual payoff corresponds to the "defect" strategy), whereas from a collective point of view, its better to cooperate (the sum of the two individual payoffs is maximal for the configuration "cooperate" vs "cooperate").
+Defection always results in a better payoff than cooperation, so it is a strictly dominant strategy for both players. 
+Mutual defection is the only strong Nash equilibrium in the game. Since the collectively ideal result of mutual cooperation is irrational from a self-interested standpoint, this Nash equilibrium is not Pareto efficient.
+
+## The Spatialized Prisoners Dilemma Model
+Here, the famous game theory "Prisoners Dilemma" model is spatialized: each cell (of a Cellular Automata) stands for a player.
+With a Moore neighbourgood (8), the boundaries are "periodic" (toroidal spatial grid). 
+At each time-step, the strategy of the players being set, each player perform 9 games: with its 8 neighbours and also with itself. 
+The total payoff is then compared to the total payoffs of the 8 neighbours players. 
+If one of them is higher than the personal one, then the corresponding strategy will be adopted for the next time-step. 
+In such a context, at the global level, does one of the two strategies invade the other ???...
+
+IN DPS, the payoffs matrix is the following:
+![matrix DPS](./img/matrix2.png)
+
+At start, the grid size is 61x61 (full of cooperators) and one defector is initially located in the center of the grid. 
+The movie displayed below shows the intrusion of one defector in a world of cooperators... 
+![GIF](./img/spdMovie.gif)
+
+The <r>stable defectors</r> appear in red, or yellow for <y>previous cooperators</y> just turning into defectors. 
+The <b>stable cooperators</b> appear in blue, or in green for <g>previous defectors</g> just turning into cooperators.
