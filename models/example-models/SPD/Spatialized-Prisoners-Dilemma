@@ -17,7 +17,7 @@ It presents a situation in which two players would be better off cooperating, bu
 > - if both betray each other, they will be condemned to a lighter sentence (2 years);
 > - if both refuse to betray the other, the sentence will be the minimum (1 year), due to lack of evidence in the case file.
 
-
+! [matrix](./img/matrix1.png)
 
 This cellular automaton is a kind of automaton rule invented by David Griffeath from University of Wisconsin – Madison.
 A spatialization of the famous game theory "Prisoners Dilemma" model. Here, each cell (of a Cellular Automata) stands for a player in the "Prisoners Dilemma" context. The payoff for the different configurations are such that from an individualist point of view, its better to defect (whatever the strategy of the opponent, the best individual payoff corresponds to the "defect" strategy), whereas from a collective point of view, its better to cooperate (the sum of the two individual payoffs is maximal for the configuration "cooperate" vs "cooperate").
