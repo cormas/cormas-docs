@@ -1,1 +1,23 @@
-Spatialized-Prisoners-Dilemma
+
+---
+id: SPD
+title: Spatialized Prisoners Dilemma
+slug: /spd
+---
+
+# The Spatialized Prisoners Dilemma Model
+
+The Prisoner’s Dilemma (first described in 1950 by Albert W. Tucker) is a classic model in game theory. 
+It presents a situation in which two players would be better off cooperating, but where, in the absence of communication between them, each chooses to defect if the game is played only once. The reason for this is that, if one cooperates and the other defects, the cooperator is strongly penalized. However, if both players defect, the outcome is less favourable to them than if both had chosen to cooperate.
+
+> Tucker imagines two prisoners (accomplices to a crime) held in separate cells who cannot communicate with one another. 
+> The prison authorities offer each prisoner the following choices:
+> 
+> - if only one of the two prisoners betrays the other, he is released, whilst the second receives the maximum sentence (3 years);
+> - if both betray each other, they will be condemned to a lighter sentence (2 years);
+> - if both refuse to betray the other, the sentence will be the minimum (1 year), due to lack of evidence in the case file.
+
+
+
+This cellular automaton is a kind of automaton rule invented by David Griffeath from University of Wisconsin – Madison.
+A spatialization of the famous game theory "Prisoners Dilemma" model. Here, each cell (of a Cellular Automata) stands for a player in the "Prisoners Dilemma" context. The payoff for the different configurations are such that from an individualist point of view, its better to defect (whatever the strategy of the opponent, the best individual payoff corresponds to the "defect" strategy), whereas from a collective point of view, its better to cooperate (the sum of the two individual payoffs is maximal for the configuration "cooperate" vs "cooperate").
