@@ -48,3 +48,17 @@ The movie displayed below shows the intrusion of one defector in a world of coop
 
 The "stable defectors" appear in red, or yellow for "previous cooperators" just turning into defectors. 
 The "stable cooperators" appear in blue, or in green for "previous defectors" just turning into cooperators.
+
+## How to install it?
+
+To install the model, you must first get a latest version of Cormas platform by following the instructions at [Cormas GitHub](https://github.com/cormas/cormas/blob/master/README.md) (in this experiment, we used the version [8735b99](https://github.com/cormas/cormas/tree/8735b9931b98a06913b4ecf2f6214e89bbe43a27) but more recent versions should also work).
+Then open the Playground (Ctrl+OW) in your image and execute the following Metacello script (select it and press Do-it button or Ctrl+D):
+
+```Smalltalk
+Metacello new
+  baseline: 'Spatialized-Prisoners-Dilemma-model';
+  repository: 'github://cormas/Spatialized-Prisoners-Dilemma-model/src';
+  load.
+```
+
+Go to the GitHub page of SPD: https://github.com/cormas/Spatialized-Prisoners-Dilemma-model.git or visite the [SPD page on Cormas VW](https://vw.cormas.org/en/applica/dps.htm)
