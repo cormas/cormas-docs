@@ -4,10 +4,6 @@ title: Diffuse
 slug: /diffuse
 ---
 
-import ImgNextState from './img/next-state.jpg';
-import ImgNextState2 from './img/next-state.jpg';
-import ImgParameterEditor from './img/parameterEditor.png';
-
 # Diffuse Model
 
 A simple model of pheromone diffusion by ants.
@@ -20,24 +16,23 @@ There is 2 kinds of entities:
 
 ## Standard version
 
-In the standard version. 
+Diffusion of pheromones (evaporation and synchronous diffusion), then activities of the ants.
+In the standard version `stepSynchronously`, the ants move randomly in a radius of 2 cells. 
+![](img/diffuse1.gif)
 
-### Description
+## Jumping version
 
-The state of a cell at time _t + 1_ depends on its state at time _t_ and the state of its 4 neighbors (Von Neumann's neighborhood). 
-A cell moves from a state _i_ to a state _i + 1 (mod 4)_ in the state cycle when the state i + 1 (mod 4) is present in at least one neighboring cell.
-![](img/cycle.png)
+In the jumping version `stepSynchronouslyJump`, the ant moves randomly (radius of 2 cells) and deposits pheromone. But if the hormone qty is too elevated, it jumps randomly.
 
-### Run the standard version in Cormas
+![](img/jumpingAnt.gif)
+
+### Run the model in Cormas
 
 1. Load the model
 2. Prepare the simulation:
-  - init method = `initRandomSpace_VonNeuman` _(4 neighbours)_
-  - step method = `stepStandard`
+  - init method = `init` _(4 neighbours)_
+  - step method = `stepSynchronously` (or `stepSynchronouslyJump`) 
   - click on the `Reinitialize simulation` button, then
   - click on the `Run` button
-You should get something like:
 
-![](img/gridStandard.png)
-<sup>Example of space at step 200, with random seed fixed at 111 </sup> 
   
