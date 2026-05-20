@@ -1,0 +1,43 @@
+---
+id: diffuse
+title: Diffuse
+slug: /diffuse
+---
+
+import ImgNextState from './img/next-state.jpg';
+import ImgNextState2 from './img/next-state.jpg';
+import ImgParameterEditor from './img/parameterEditor.png';
+
+# Diffuse Model
+
+A simple model of pheromone diffusion by ants.
+This simple model presents ants that move randomly in a radius of 2 space units and deposits pheromones on the ground. 
+The pheromones diffuse on the space and evaporate simultaneously.
+
+There is 2 kinds of entities:
+- Ants who deposite hormones on the ground while moving randomly, and
+- Cell, in charge of storing hormone (#qty attribute), diffusing it and evaporating it
+
+## Standard version
+
+In the standard version. 
+
+### Description
+
+The state of a cell at time _t + 1_ depends on its state at time _t_ and the state of its 4 neighbors (Von Neumann's neighborhood). 
+A cell moves from a state _i_ to a state _i + 1 (mod 4)_ in the state cycle when the state i + 1 (mod 4) is present in at least one neighboring cell.
+![](img/cycle.png)
+
+### Run the standard version in Cormas
+
+1. Load the model
+2. Prepare the simulation:
+  - init method = `initRandomSpace_VonNeuman` _(4 neighbours)_
+  - step method = `stepStandard`
+  - click on the `Reinitialize simulation` button, then
+  - click on the `Run` button
+You should get something like:
+
+![](img/gridStandard.png)
+<sup>Example of space at step 200, with random seed fixed at 111 </sup> 
+  
