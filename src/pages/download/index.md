@@ -7,7 +7,7 @@ If you are not new to Pharo, just run this script in the Playground and you're d
  
 ```smalltalk
 Metacello new
-    repository: 'github://cormas/cormas';
+    repository: 'github://cormas/cormas:dev';
     baseline: 'Cormas';
     load.
 ```
@@ -58,7 +58,7 @@ Copy the following installation script into your Playground.
 
 ```smalltalk
 Metacello new
-    repository: 'github://cormas/cormas';
+    repository: 'github://cormas/cormas:dev';
     baseline: 'Cormas';
     load.
 ```
