@@ -186,7 +186,7 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
-        additionalLanguages: ['smalltalk'],
+        additionalLanguages: ['smalltalk', 'java', 'scala'],
       },
       announcementBar: {
         id: "missabms-2026",
