@@ -1,0 +1,94 @@
+---
+id: boundaryboar
+title: Boundaryboar
+slug: /boundaryboar
+---
+
+# Boundaryboar Model
+
+:::info
+This model was developed using [Cormas VisualWorks](https://vw.cormas.org).
+:::
+
+## Objectives
+
+This model represents wild boar population dynamics in an urban/suburban area embedded within a broader landscape, as well as the effects of local stakeholders’ decisions on these dynamics. It was developed as part of the ANR Boundaryboar project with the following main objectives:
+
+- To foster dialogue and the sharing of knowledge and perspectives between researchers and non-academic stakeholders involved in wild boar management, with a focus on social learning
+- To explore management scenarios by testing different intervention strategies and discussing their implications.
+
+This model was co-designed by the project researchers and stakeholders in the Montpellier region, including representatives of the hunting federation, hunting officers, and animal welfare associations.
+
+The model balances a representation of the real-world territorial context with abstraction, using simplified land-use data from the European Corine Land Cover database. This makes it readily adaptable to other urban areas.
+
+
+<style>
+{`
+.model-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.model-gallery figure {
+  margin: 0;
+  text-align: center;
+}
+
+.model-gallery img {
+  width: 100%;
+  height: 100%;
+}
+
+.model-gallery figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* responsive */
+@media (max-width: 996px) {
+  .model-gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .model-gallery {
+    grid-template-columns: 1fr;
+  }
+}
+`}
+</style>
+
+<div className="model-gallery">
+  <figure>
+    <img src={require('./img/montpellier-urban.png').default} />
+    <figcaption>Montpellier urban area</figcaption>
+  </figure>
+
+  <figure>
+    <img src={require('./img/nimes-urban.png').default} />
+    <figcaption>Nîmes urban area</figcaption>
+  </figure>
+</div>
+
+## Description
+
+The model represents interactions between territorial elements (<span style={{color:'green'}}>green</span>), landscape-structuring elements (<span style={{color:'purple'}}>purple</span>), wild boar populations (<span style={{color:'orange'}}>orange</span>), human actors (<span style={{color:'red'}}>red</span>), and direct management actions (<span style={{color:'blue'}}>blue</span>).
+
+![](./img/big-fancy-diagram.png)
+
+In this model, we have incorporated a variety of levers that influence population dynamics and can be adjusted to explore management scenarios: hunting strategies, access to anthropogenic food sources in urban areas (trash and direct feeding of animals), scrub encroachment, supplementary feeding practices, and targeted interventions. We have also included the option to consider the issue of agricultural damage and ways to protect crops.
+
+## Usage
+
+Up to time step t = 28, the simulator operates retrospectively to reconstruct the current situation from historical dynamics. This corresponds to the period from 1990 to 2018. During this parameter calibration phase, the simulator serves as a tool for reflection and discussion among stakeholders to reconstruct a recent situation consistent with their on-the-ground knowledge.
+
+After t=28, the simulator can be used in several ways: as a tool for reflecting on various possible management measures, as a tool for role-playing, and to explore different governance scenarios.
+
+
+
+
+
+
