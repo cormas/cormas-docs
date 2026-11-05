@@ -41,6 +41,14 @@ const config = {
     locales: ['en'],
   },
 
+  markdown: {
+    mermaid: true,
+  },
+
+  themes: ['@docusaurus/theme-mermaid'],
+
+  clientModules: [require.resolve('./src/clientModules/d3Transition.js')],
+
   presets: [
     [
       'classic',

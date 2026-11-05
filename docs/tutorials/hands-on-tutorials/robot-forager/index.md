@@ -6,52 +6,69 @@ slug: /robot-forager-tutorial
 
 # Robot-Forager Tutorial
 
-In this tutorial, you will learn how to build a very simple model in Cormas.
+In this tutorial, you will learn how to build a simple agent-based model in Cormas.
 
 ## General presentation
-This model is inspired by an article by Steel (1989) in which robots are tasked with recovering ore from the environment and bringing it back to a specific location. Steel explains: 
-The paper discusses some issues in the cooperation between distributed agents using the following case study: The objective is to explore a distant planet, more concretely to collect samples of a particular type of precious rock. The location of the rock samples is unknown in advance but they are typically clustered in certain spots. There is a vehicle that can drive around on the planet and later reenter the spacecraft  to go back to earth. There is no detailed map of the terrain although it is known that the terrain is full of obstacles, hills, valleys, etc.
 
-The case study is designed to require autonomy. It is not feasible to plan and steer the whole thing out of earth because communication from and to the planet has a considerable time delay and may be cut off during certain periods. Although one solution could be that the vehicle itself wanders around and collects the rocks, it is obvious that a larger terrain could be covered much more quickly if there is a group of mobile robots that perform the task of searching and carrying the rocks to the vehicle. This would make the solution also less fault-tolerant because loss of one robot is not fatal. Because the desired samples are clustered in certain spots, the robots better cooperate to accomplish the task. This give us the problem addressed in this paper : how can these distributed robots cooperate to find samples and to carry them to the collecting vehicle. If the present case study seems somewhat far fetched, the cleanup of toxic waste or household garbage collection can be viewed as comparable talks.
+This model is inspired by a paper by [Steels (1989)](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=3d79478898cb3c67b6a66675577334bd5286ec01), in which a group of robots explores a distant planet to collect precious minerals and transport them to a central vehicle.
 
-Steels, Luc. 1989. Cooperation Between Distributed Agents Through Self-Organisation. Pages 175–196 of : Demazeau, Yves, & Müller, Jean-Pierre (eds), Decentralized A.I. : Proceedings of the First European Workshop on Modelling Autonomous Agents in a Multi-Agent World (MAAMAW-89), Cambridge, England, August. Amsterdam, North-Holland : Elsevier Science Publishers.
+The locations of the minerals are initially unknown, but they tend to form clusters. Since communication with Earth is slow and unreliable, robots must operate autonomously. Using multiple robots allows the exploration of larger areas and improves fault tolerance, as the loss of one robot does not compromise the mission.
+
+The central question explored in the paper is **how autonomous robots can cooperate to locate, collect, and transport minerals efficiently**. Similar challenges arise in applications such as toxic waste cleanup and garbage collection.
+
+**Reference:** Steels, Luc. 1989. Cooperation Between Distributed Agents Through Self-Organisation. Pages 175–196 of : Demazeau, Yves, & Müller, Jean-Pierre (eds), Decentralized A.I. : Proceedings of the First European Workshop on Modelling Autonomous Agents in a Multi-Agent World (MAAMAW-89), Cambridge, England, August. Amsterdam, North-Holland : Elsevier Science Publishers.
 This paper is available [here](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=3d79478898cb3c67b6a66675577334bd5286ec01). 
 
-For the first version of this tutorial, the model the model has been made even simpler: the base to recover all the ore is not considered. Robots do not have a maximum capacity and do not leave marks when carrying ore.
-Here is a class diagram for this version:
+## Model Description
 
-![UML class diagram of the model](img/Foragers-ClassDiag.png) 
+For this tutorial, we use a simplified version of the original model: there is no central collection base, robots have unlimited carrying capacity, and they do not leave marks when collecting minerals.
 
-As the spatial zone is the full grid of the space, this model is composed of three elements:
+The model consists of four classes:
 
-1. A square grid of cells
-2. Minerals that can be located in those cells
-3. Robots that move across the cells and collect minerals
+- **RFModel** manages the simulation, including the spatial grid, robots, and minerals. It defines the grid dimensions and the initial numbers of robots and minerals.
+- **RFCell** represents a cell in the spatial grid. It provides methods to check whether a mineral is present and retrieve it.
+- **RFMineral** represents a mineral that can be collected by a robot.
+- **RFRobot** represents an autonomous agent that moves between cells and collects minerals. Each robot maintains a collection of the minerals it has collected.
 
-The complete implementation can be found in our [robot-forager-model](https://github.com/cormas/robot-forager-model/tree/main/src/RobotForager-Model) repository.
+The following UML class diagram illustrates the model's structure:
+
+![UML class diagram of the model](img/robot-forager-uml.png) 
+
+### Simulation Rules
+
+The simulation follows several rules:
+
+- Each cell can contain at most one robot and one mineral.
+- During initialization, robots are placed first, followed by minerals. Minerals cannot be placed on cells already occupied by robots.
+- When a robot collects a mineral, the mineral is removed from its cell and added to the robot's collection.
+
+### Robot Behavior
+
+At each simulation step, every robot examines its eight neighboring cells and follows these rules:
+
+1. **If a mineral is found:** Move to the cell containing the mineral and collect it.
+2. **Otherwise:** Move randomly to one of the eight neighboring cells.
+
+The following activity diagram illustrates this behavior:
+
+![Activity diagram of the step of a robot](img/robot-forager-uml-step.png)
+
+Robots act asynchronously, meaning that each robot completes its actions before the next robot acts. This prevents multiple robots from simultaneously targeting the same mineral.
+
+### Simulation Environments
+
+We will implement two configurations:
+
+| Environment | Grid Size | Number of robots | Number of minerals |
+|---|---|---|---|
+| Small | 5x5 | 2 | 20 |
+| Large | 27x27 | 10 | 200 |
+
+Here is an example of the simulation environment:
 
 ![Example of space](img/0-example-space.png)
 
-To make the model description more precise:
-
-- Multiple robots should never appear on the same cell
-- Multiple minerals should never appear on the same cell
-- When model is initialized, first we generate robots and then minerals. A mineral cannot be generated on a cell where robot is located.
-
-At each simulation step, all robots perform two actions:
-
-![Activity diagram of the step of a robot](img/Foragers-Step.png) 
-
-- **Move.** Look around at 8 neighbor cells, if any one of them contains a mineral, move to that cell. If no neighbor has minerals, then move randomly to any of the 8 neighbors.
-- **Collect minerals.** Look at the cell on which robot is located (after moving). If this cell has a mineral, then collect it (add it to robot’s inventory and remove it from the cell)
-Otherwise do nothing.
-
-Robots perform their actions asyncronously, meaning that as soon as the robot sees a mineral, it moves to the nighbour cell and collects the mineral, without waiting for other robots to make their decision. If this was not the case, we could arrive at a situation when two robots move to the same cell to collect the same mineral.
-
-We will implement two environments: 
-
-- **Small environment:** 5x5 cells, 2 robots, 20 minerals
-- **Large environment:** 27x27 cells, 10 robots, 200 minerals.
+The complete implementation is available in the [robot-forager-model](https://github.com/cormas/robot-forager-model/tree/main/src/RobotForager-Model) repository.
 
 ## Step 1. Create a new model 
 
@@ -59,135 +76,224 @@ If you haven't donne so already, you can [Install Cormas](/download) then open a
 
 ![New model menu](img/1-new-model-menu.png)
 
-Type the name of your model. In our case, we will call it _"Robot forager"_. All classes in Pharo exist in the same namespace, which means that every class must have a unique name. To ensure this, we follow a good practice of adding a project-specific prefix to every class name. Cormas will automatically suggest a prefix for your model classes, in our case, it suggests _"RF"_. Feel free to edit this prefix. Then, Cormas will also propose a name for the model class. Typically, it's prefix + the word _"Model"_, so in our case, the class name will be _"RFModel"_. In the bottom part of the window, you will see the packages and classes that will be generated for you. By default, Cormas will also generate an empty test class and a baseline (baseline is a special class that specifies what are the packages and external dependencies of your project and how it can be loaded into another Pharo image). We also add a simple description for our model using [Microdown](https://github.com/pillar-markup/Microdown) (you can also write it in Markdown or in plain text).
+Enter _"Robot forager"_ as the model name.
+
+In Pharo, all classes share the same namespace, so each class must have a unique name. To avoid naming conflicts, we use a project-specific prefix. Cormas automatically suggests:
+
+- **Class prefix:** `RF` (you can change it).
+- **Model class name:** `RFModel` (prefix + `Model`).
+
+At the bottom of the window, you can preview the packages and classes that will be generated. By default, Cormas also creates:
+
+- A **cell class** (`RFCell`) representing the cells of the spatial grid.
+- A **test class** for writing unit tests.
+- A **Baseline class** that defines the project's packages and dependencies, allowing it to be loaded into another Pharo image.
+
+Finally, add a short description of your model using [Microdown](https://github.com/pillar-markup/Microdown), Markdown, or plain text.
 
 ![](img/2-new-model.png)
 
-Once you click on _"Create"_ button, Cormas will generate a package `RobotForager-Model` with a class `RFModel`, a package `RobotForager-Model-Tests` with a class `RFModelTest`, and a package `BaselineOfRobotForager` and a class with the same name. If everything goes well, a System Browser will open on `RFModel` class. Now we can start coding!
+Click _"Create"_ to generate the following packages and classes:
+
+- `RobotForager-Model` containing `RFModel` and `RFCell`
+- `RobotForager-Model-Tests` containing `RFModelTest`
+- `BaselineOfRobotForager` containing a class of the same name
+
+Cormas will then open the **System Browser** on the newly created `RFModel` class.
+
+We are now ready to start coding!
 
 ![](img/3-new-model-browser.png)
 
-## Step 2. Create a Cell class
 
-We will start by creating a class for a cell of our spatial grid. Cell will define a location where robots and minerals can be located. To create a new class, you can right-click on any of the existing classes and select _"New class"_ from the menu. You will see a window with a template class definition.
+## Step 2. Create a grid
 
-![](img/4-new-class.png) 
+Now we are ready to create a spatial grid and take our first look at the simulation.
 
-Alsternatively, you can edit the definition of any existing class in the bottom part of the System Browser. As soon as you change the name and hit _"Save"_ (`Ctrl+S` on Windows and Linux or `Cmd+S` on Mac), the new class will be created.
+Every Cormas model requires at least two methods:
 
-![](img/5-new-cell-class.png)
+- **Initialization method** (`<init>`): Defines the initial state of the simulation. Executed once when the simulation starts.
+- **Control method** (`<control>`): Defines what happens at each simulation step.
 
-In our case, the cell class will be called `RFCell` (remember to use the prefix!) and it will be the subclass of `CMCell` - a default superclass for spatial cells in Cormas.
+Cormas automatically generates templates for both methods when creating a new model.
 
-```smalltalk
-CMCell << #RFCell
-	slots: {};
-	package: 'RobotForager-Model'
-```
+### Default methods
 
-In our model, cells will do nothing, which is why we do not need to implement any methods for this class. By default, cells will be represented as gray squares.
-
-## Step 3. Create a grid
-
-Now we are ready to create a spatial grid and have a first look at our simulation. 
-To do that, we have to make sure that the model class has at least one _"init"_ method which defines the initial scenario for our simulation and at least one _"control"_ method which defines what happens at each step of the simulation.
-
-Every new model that is generated by Cormas contains the default templates of those two methods. The default init method contains an example of defining a 4x4 square grid with 8 neighbours of each cell and an open (thoroidal) environment. The last two lines are commented out - they provide examples for generating agants and positioning them randomly on the grid.
+The generated `init` method creates a 4 x 4 grid with eight neighbors per cell and an open (toroidal) environment. It also contains commented-out examples of creating and positioning agents.
 
 ```smalltalk title="RFModel"
 init
-	<init>
-	"This method is used to define the initial environment of a simulation. It will be executed once when the simulation is initialized."
+    <init>
+    "This method is used to define the initial environment of a simulation. It will be executed once when the simulation is initialized."
 	
-	"Example of a 4x4 rectangular grid"
-	self
-		createGridNumberOfRows: 4
-		numberOfColumns: 4
-		neighbourhood: 8
-		closed: false.
+    "Example of a 4x4 rectangular grid"
+    self
+        createGridNumberOfRows: 4
+        numberOfColumns: 4
+        neighbourhood: 8
+        closed: false.
 		
-	"Example of creating agents and randomly positioning them on a grid"
+    "Example of creating agents and randomly positioning them on a grid"
 		
-	"self createN: 3 randomlyLocatedEntities: YourAgentClass1.
-	self createN: 3 randomlyLocatedAloneEntities: YourAgentClass2."
+    "self create: 3 randomlyLocatedAloneEntitiesOfClass: YourAgentClass1.
+    self create: 3 randomlyLocatedAloneEntitiesOfClass: YourAgentClass2."
 ```
 
-The default control method is empty. It is simply a placeholder for defining a simulation step:
+The generated step method is initially empty. We will use it later to define the behavior of our simulation.
 
 ```smalltalk title="RFModel"
 step
-	<control>
-	"This method will be executed at every step of the simulation"
+    <control>
+    "This method will be executed at every step of the simulation"
 ```
 
-As we discussed at the beginning of this tutorial, we want to implement two environments: a big one with 27x27 grid and a small one with 5x5 grid. We will start with the small environment. Create a new method in the `RFModel` class and call it `initSmall`. We must add a pragma `<init>` to tell Cormas that this is one of the _"init"_ methods. Then we use a method provided by the superclass to define the spatial grid. We specify the number of rows and columns, the size of the neighbourhool (in this case, there are two options: 4 or 8; neighbourhood of size 4 means that only north, south, east, and west cells are considered as neighbours; neighbourhood of size 8 includes diagonal cells such as north-east, north-west, etc.). Finally, we pass `true` as a last parameter telling Cormas that the environment should be closed - the agents won't be able to walk over the edge of the grid (if the environment is _"open"_, the agents can cross the left edge and appear on the right or cross the top edge and appear in the bottom. 
+Notice the **pragmas** `<init>` and `<control>`. They tell Cormas which methods can be used to initialize and control the simulation.
+
+### Create the small environment
+
+As described earlier, we will implement two environments: a small 5 x 5 grid and a large 27 x 27 grid. Let's start with the small one.
+
+In the `RFModel` class, create a new method called `initSmall`:
 
 ```smalltalk title="RFModel"
 initSmall
-	<init>
-	self
-		createGridNumberOfRows: 5
-		numberOfColumns: 5
-		neighbourhood: 8
-		closed: true.
+    <init>
+    self
+        createGridNumberOfRows: 5
+        numberOfColumns: 5
+        neighbourhood: 8
+        closed: true.
 ```
 
-We must create at least one _"control"_ method. We will call it `step` and leave it empty for now. We add a pragma `<control>` to tell Cormas that this is one of the control methods.
+The `createGridNumberOfRows:numberOfColumns:neighbourhood:closed:` method is inherited from the superclass. Its parameters define:
+
+- **Rows and columns**: The grid dimensions (5 x 5).
+- **Neighbourhood**: The shape of the cells and their neighborhood configuration:
+
+| Value | Cell shape | Neighbors |
+|---|---|---|
+| `#four` or `4` | Square | 4 (orthogonal) |
+| `#eight` or `8` | Square | 8 (including diagonals) |
+| `#three` or `3` | Triangle | 3 |
+| `#pointy6` or `6` | Pointy-top hexagon | 6 |
+| `#flat6` | Flat-top hexagon | 6 |
+
+- **Closed**: Whether the grid has boundaries:
+	- `true`: Agents cannot cross the grid boundaries.
+	- `false`: The grid wraps around, so agents leaving one edge reappear on the opposite side.
+
+Finally, keep the generated step method empty for now:
 
 ```smalltalk title="RFModel"
 step
-	<control>
-	"do nothing"
+    <control>
+    "do nothing"
 ```
 
-## Step 4. First look at a simulation
+We now have everything needed to initialize our first spatial grid. We will add agents and their behavior in the following steps.
 
-Now we can open the simulation view and take a first look at our model. Select _"Models in this image"_ from the _"Cormas"_ menu in the top left corner.
+## Step 3. First Look at the Simulation
+
+Now that we have created our spatial grid, let's open the simulation and explore the Cormas interface.
+
+### Open the Simulation
+
+From the _"Cormas"_ menu, select _"Models in this image"_.
 
 ![](img/7-models-in-image-menu.png)
 
-Then select your model from the list (in our case, it's `RFModel`) and click on _"Open Simulation"_ button.
+In the window that opens, select _"Robot Forager"_ from the list of installed models and click _"Simulate"_.
 
 ![](img/8-models-in-image.png)
 
-You will see the Cormas Simulation browser. The left side allows you to initialize the simulation. Here you can select the _"init"_ and _"control"_ methods that will be executed, fix the random seed, modify parameters of the model (we don't have any parameters at this point). The right side of the window is currently empty because the simulation was not initialized yet.
+This opens the **Cormas Simulation Browser**, where you can configure and run your simulation.
+
+The left panel lets you select the initialization (`<init>`) and control (`<control>`) methods, configure the random seed, and adjust model parameters. The right panel is initially empty because the simulation has not yet been initialized.
 
 ![](img/9-simulation.png)
 
-In our case, we have only one _"init"_ method: `initSmall` anb only one _"control"_ method: `step`. They are selected by default, so you can simply click the _"Initialize simulation"_ button. You will see a 5x5 grid with instances of `RFCell` class that were created in the `initSmall` method. Every cell is gray because this is the default color in Cormas. If you click on _"Step"_ button in the top part of the Simulation window, the _"control"_ method (in this case, `step`) will be executed. Our `step` method is empty, so nothing will happen.
+### Initialize and Run the Simulation
+
+Our model currently has one initialization method, `initSmall`, and one control method, `step`. Both are selected by default.
+
+Click _"Initialize simulation"_. You should see the 5 x 5 grid created by `initSmall`, containing 25 instances of `RFCell`. All cells are gray, which is the default color in Cormas.
 
 ![](img/10-simulation-initialized.png)
 
-Every cell is a live object, you can right-click on it and select _"Inspect"_ from the menu. This will open an interactive inspector for the selected cell.
+Try clicking _"Step"_ at the top of the window. This executes the selected control method (`step`) once. Since our method is empty, nothing changes in the grid, but the simulation step counter increases.
+
+### Inspect Live Objects
+
+One of the advantages of Cormas is that you can inspect and interact with simulation objects while the model is running.
+
+**Inspect a cell:** Right-click any cell in the grid and select _"Inspect"_. This opens an interactive Pharo inspector for that `RFCell` instance.
 
 ![](img/11-inspect-cell.png)
 
-You can also select the _"Inspector"_ tab of the Simulation window. This will open the inspector of the simulation object. This object has an instance variable called `cormasModel`. If you click on it, you will open an inspector of your `RFModel` instance in a separate pane. If you click on the `cells` variable, you will inspect the collection of cells.
+**Inspect the model:** Select the _"Inspector"_ tab in the Simulation Browser. This opens an inspector for the simulation object (`CMSimulation`).
+
+From there, you can navigate through the live objects:
+
+- Select `cormasModel` to inspect the `RFModel` instance.
+- Explore its `spaceModel` and `entities` variables to examine the spatial environment and its cells.
 
 ![](img/12-simulation-inspector.png)
 
-## Step 5. Add robots
+You now have a working spatial grid and can explore its objects directly. In the next steps, we will add minerals and robots to bring the simulation to life.
 
-Open SystemBrowser again and create a new class called `RFRobot`. It should be a subclass of `CMAgent` - a common superclass for all Cormas agents.
+## Step 4. Add robots
+
+Now let's add our first agents to the simulation. We will create a new class, define how robots should look, and place two robots on the grid.
+
+### Create the Robot Class
+
+Open the **System Browser** and select the `RobotForager-Model` package.
+
+To create a new class:
+
+1. Right-click an existing class (e.g., `RFModel`) and select _"New class"_.
+2. In the class definition editor, enter the following code:
 
 ```smalltalk
 CMAgent << #RFRobot
-	slots: {};
-	package: 'RobotForager-Model'
+    slots: {};
+    package: 'RobotForager-Model'
 ```
 
-We add a _"pov"_ (point of view) method to describe how the agent should be visualized on the grid. Cormas allows you to define many different points of view methods and change them while the simulation is running. We will call this method `pov` but you can choose any name you like. The only requirement is to include a `<pov>` pragma. Our method will return an instance of a `CMPointOfView` class specifying that the color of our agents should be blue, the shape should be a _"star"_, and the size should be 0.6 (60% of the cell; default size is 0.3). We will use the colors defined in `CMColor` class instead of the standard Pharo `Color` because they are more aesthetic.
+3. Press **Ctrl+S** (or **Cmd+S** on macOS) to save and compile the class.
+
+![](img/4-new-class.png) 
+
+This creates RFRobot as a subclass of CMAgent, the base class for Cormas agents. The new class belongs to the same package as our model.
+
+![](img/5-new-agent-class.png)
+
+### Define the Robot's Appearance
+
+Cormas uses **Point of View (PoV)** methods to define how agents appear in the simulation. You can define multiple PoVs for the same agent and switch between them at runtime.
+
+In `RFRobot`, create a method called `pov`:
 
 ```smalltalk title="RFRobot"
 pov
-	<pov>
-	^ CMPointOfView
-		color: CMColor blue
-		shape: #star
-		size: 0.6
+    <pov>
+    ^ CMPointOfView
+        color: CMColor blue
+        shape: #star
+        size: 0.6
 ```
 
-Now we add one line to the end of our `initSmall` method telling Cormas to create two robots located randomly on the grid but only in those cells that are not occupied by other agents (the cells where robots would be _"alone"_.
+This method defines:
+
+- **Color:** Blue, using CMColor (Cormas' color palette).
+- **Shape:** A star.
+- **Size:** 0.6, or 60% of the cell size (the default is 0.3).
+
+The `<pov>` pragma tells Cormas that this method defines a point of view. You can give the method any name, as long as it includes this pragma.
+
+### Add Robots to the Grid
+
+Now modify the `initSmall` method in RFModel to create two robots:
 
 ```smalltalk title="RFModel"
 initSmall
@@ -198,36 +304,57 @@ initSmall
         neighbourhood: 8
         closed: true.
 
-	/* highlight-next-line */
-	self createN: 2 randomlyLocatedAloneEntities: RFRobot
+    /* highlight-next-line */
+    self create: 2 randomlyLocatedAloneEntitiesOfClass: RFRobot
 ```
 
-Now, when you open (or simply re-initialize) your simulation, you should see two robots located somewhere on the grid.
+The new line creates two instances of `RFRobot`, placing them randomly on the grid. The `randomlyLocatedAloneEntities:` part ensures that each robot occupies a different cell.
+
+### See the Result
+
+Return to the Simulation Browser and click _"Initialize simulation"_ to restart the simulation.
+
+You should now see two blue stars representing your robots, randomly positioned on the grid.
 
 ![](img/13-adding-robots.png)
 
-Congratulations! You have created your first agents :) At this point, they are not doing anythig other than simply "exist" in your simulation. In the next step, we will define a first action for our robots.
+Congratulations! You have created your first Cormas agents. For now, they do nothing but exist in the simulation. In the next step, we will give them their first behavior.
 
-## Step 6. Make robots move
+## Step 5. Make robots move
 
-Actions are special methods that autonomous agents can _"perform"_ during the simulation. The first action that we will define for our robots will be called `moveRandomly` - as the name suggests, it will make robots move randomly on the spatial grid. We add a pragma `<action>` to tell Cormas that this is an _"action"_ method. We will call a method `randomWalk` provided by the trait `TCMLocated`. This method will make simply select a random neighbouring cell and make the robot move there.
+Now let's give our robots their first behavior: moving randomly across the grid.
+
+### Define an Action
+
+In Cormas, **actions** are methods that agents can perform during a simulation. They are identified by the `<action>` pragma.
+
+Create a new method called `moveRandomly` in the `RFRobot` class:
 
 ```smalltalk title="RFRobot"
 moveRandomly
-	<action>
-	self randomWalk
+    <action>
+    self randomWalk
 ```
 
-Now we modify the `step` method of `RFModel` to ask all robots to move randomly at each step of the simulation.
+The `randomWalk` method, provided by the superclass, moves the robot to a randomly selected neighboring cell.
+
+### Make Robots Move at Each Step
+
+Next, modify the step method in RFModel to make every robot perform this action:
 
 ```smalltalk title="RFModel"
 step
     <control>
     /* highlight-next-line */
-    robots do: [ :each | each moveRandomly ]
+    (self @@ RFRobot) do: [ :each | each moveRandomly ]
 ```
 
-You can now come back to your simulation and click on the _"Step"_ button (1) to perform one step. You can also click on the _"Run"_ button (2) to make the simulation run for the given number of steps at a given speed.
+The robots collection contains all robots in the model. The `do:` method iterates over this collection, sending `moveRandomly` to each robot.
+
+Return to the Simulation Browser. You can now:
+
+1. Click **Step** to execute one simulation step.
+2. Click **Run** to run the simulation continuously at the selected speed.
 
 ![](img/14-step-run.png)
 
@@ -235,13 +362,15 @@ Since we added the `<action>` pragma to the `moveRandomly` method, Cormas has ad
 
 ![](img/15-move-randomly-action.png)
 
+### Interact with Individual Robots
+
 If you run the simulation long enough, you will notice a problem: sometimes robots move randomly into the same cell, even though, at the very beginning of this tutorial, we have specified that "Multiple robots should never appear on the same cell". To ensure that this doesn't happen, we modify the `moveRandomly` method and instead of calling the `randomWalk` method, we will call `randomWalkConstrainedBy:` - this method acceps a block as an argument allowing us to specify a condition for selecting candidate cells to which an agent can move. We will then use a method of cell called `hasOccupantsOfClass:` which returns `true` if the cell has at least one occupant of a given class. We will negate the result using the `not` method, thus specifying theat the candidate cell must **not** have any agents of class `RFRobot` in it.
 
 ```smalltalk title="RFRobot"
 moveRandomly
-	<action>
-	self randomWalkConstrainedBy: [ :aCell |
-		(aCell hasOccupantsOfClass: RFRobot) not ]
+    <action>
+    self randomWalkConstrainedBy: [ :aCell |
+        (aCell hasOccupantsOfClass: RFRobot) not ]
 ```
 If you run the simulation again, the robots should move randomly but never come to the same cell.
 
