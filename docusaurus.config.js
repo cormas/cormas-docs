@@ -125,6 +125,12 @@ const config = {
           },
           {
             type: 'docSidebar',
+            sidebarId: 'referenceSidebar',
+            position: 'left',
+            label: 'Reference',
+          },
+          {
+            type: 'docSidebar',
             docsPluginId: 'models',
             sidebarId: 'modelsSidebar',
             position: 'left',
