@@ -24,7 +24,7 @@ Metacello new
     load.
 ```
 
-The valley is a grid of 10 by 10 fields. Water rises at a spring and flows through irrigation canals, always in one direction. Footpaths join some fields, and people walk along them both ways. Three farmers stand on their fields, and some of them trust others. Canals, footpaths and trust are three kinds of links.
+The valley is a grid of 30 by 30 fields. Water rises at a spring and flows through irrigation canals, always in one direction. Footpaths join some fields, and people walk along them both ways. Three farmers stand on their fields, and some of them trust others. Canals, footpaths and trust are three kinds of links.
 
 Six fields have names: the spring, A, B, C, D and E. Water flows from the spring to A, from A to B and to C, and from C to D, as the arrows show on the diagram below. Footpaths join B to E and E to D, drawn as dotted lines with no arrow, because people walk them both ways. No canal reaches E: only footpaths go there.
 
@@ -49,7 +49,7 @@ flowchart LR
 
 Ben trusts Ana, but Ana does not trust Ben. Ana and Carl trust each other.
 
-Before the first step, only the spring has water. Every cell of the grid is a field, and all the others are dry, as can be seen in the simulation below: the spring is the blue field near the top left corner, and the dry fields are brown. Canals are blue lines with arrowheads, footpaths are thin brown lines, the farmers are dark dots, and trust is thin purple lines between them, with an arrowhead at the farmer who is trusted.
+Before the first step, only the spring has water. Every cell of the grid is a field, and all the others are dry, as can be seen in the simulation below: the spring is the blue field near the top left corner, and the dry fields are the color of wheat. Canals are blue lines with arrowheads, footpaths are thinner brown lines, the farmers are dark dots, and trust is thin purple lines between them, with an arrowhead at the farmer who is trusted.
 
 <img src={valleyImg} width="600" />
 
@@ -216,7 +216,7 @@ canal := (d incomingLinksOfClass: VACanal) first.
 | `ends` | Both ends, as a new collection | `canal ends` | C and D |
 | `otherEndOf:` | The end that is not the argument | `canal otherEndOf: d` | field C |
 | `isDirected` | Whether the link goes one way only | `canal isDirected` | `true` |
-| `length` | The number of cells between its ends | `canal length` | `5` |
+| `length` | The number of cells between its ends | `canal length` | `15` |
 
 `otherEndOf:` is handy when you have one end and want the other, for example to walk along a link without caring about its direction. It raises an error if its argument isn't an end of the link: `canal otherEndOf: a` fails, because A is not an end of this canal.
 
@@ -226,7 +226,7 @@ The ends of a link never change. To connect something else, delete the link and 
 
 ### Length
 
-`length` counts the steps between the ends, as an agent would walk on this grid. The valley's grid has 4 neighbours, so a diagonal counts as two steps. The canal from A, in row 2 and column 5, to C, in row 6 and column 4, has a length of 5: 4 rows and 1 column.
+`length` counts the steps between the ends, as an agent would walk on this grid. The valley's grid has 4 neighbours, so a diagonal counts as two steps. The canal from A, in row 5 and column 14, to C, in row 17 and column 11, has a length of 15: 12 rows and 3 columns.
 
 `length` works between cells, agents and aggregates. When an end is not on the grid, there is nothing to measure, so `length` raises an error.
 
@@ -344,13 +344,13 @@ The keywords of `moveStraight:towards:` and their arguments:
 | `moveStraight:` | How far to move, where the width of one cell is 1. It can be a fraction, such as `0.25` for a quarter of a cell |
 | `towards:` | The cell whose center the agent moves towards, usually the other end of the link |
 
-For example, Ana stands at the center of B, and a footpath leads from B to E, 7 cells further down. Ana walks the whole footpath, one cell at a time:
+For example, Ana stands at the center of B, and a footpath leads from B to E, 21 cells further down. Ana walks the whole footpath, three cells at a time:
 
 ```smalltalk
 path := (ana cell linksOfClass: VAFootpath) first.
 target := path otherEndOf: ana cell.     "field E"
 [ ana isAtCenterOf: target ] whileFalse: [
-    ana moveStraight: 1 towards: target ].
+    ana moveStraight: 3 towards: target ].
 ana cell name.     "'E', after 7 moves"
 ```
 
@@ -433,7 +433,7 @@ Other settings of a point of view, such as `shape:` or a border, are ignored for
 ```smalltalk
 VACanal >> pov
     <pov>
-    ^ CMPointOfView color: (Color fromHexString: '1F5FBF') size: 0.15
+    ^ CMPointOfView color: (Color fromHexString: '2F7FC1') size: 0.3
 ```
 
 A point of view can depend on the link, as for any entity. This one makes a canal wide while water flows through it:
@@ -442,8 +442,8 @@ A point of view can depend on the link, as for any entity. This one makes a cana
 VACanal >> povWater
     <pov>
     self isFlowing ifTrue: [
-        ^ CMPointOfView color: (Color fromHexString: '1F5FBF') size: 0.4 ].
-    ^ CMPointOfView color: (Color fromHexString: '9A9A9A') size: 0.08
+        ^ CMPointOfView color: (Color fromHexString: '2F7FC1') size: 0.45 ].
+    ^ CMPointOfView color: (Color fromHexString: 'A8A8A8') size: 0.12
 ```
 
 With `povWater` selected for canals and `povInvisible` for trust, the canals show where water flows. After one step, water has reached A, so the canals leaving the spring and A carry water, and are wide and blue, as can be seen below. C is still dry, so the canal from C to D is thin and grey. Trust is hidden, which makes the farmers easier to see.
