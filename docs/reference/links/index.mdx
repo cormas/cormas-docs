@@ -11,7 +11,7 @@ import valleyWaterImg from './img/waterFlowing.png'
 
 A **link** connects two entities: a road between two cells, a canal from one field to another, the trust of one farmer in another, or a person's attachment to their home. A link is an entity in its own right. It has its own attributes, its own behaviour and its own points of view, and it is drawn as a line on the grid.
 
-This page explains everything you can do with links. When you want to treat many links as one thing, such as a street made of roads or a river made of segments, read the Networks page next, coming soon.
+This page explains everything you can do with links. When you want to treat many links as one thing, such as a street made of roads or a river made of segments, read [Networks](../networks/index.mdx) next.
 
 ## The example: a valley
 
@@ -121,7 +121,7 @@ After two steps, water has reached A, B and C, which turn green, as can be seen 
 
 A link connects two **things**: cells, agents and aggregates. It can join two things of the same kind, such as two fields or two farmers, or of different kinds, such as a farmer and a field.
 
-A link cannot be the end of another link. Neither can a network. Cormas organizes connections in three levels: things, links between things, and networks of links. The Networks page, coming soon, explains the three levels.
+A link cannot be the end of another link. Neither can a network. Cormas organizes connections in three levels: things, links between things, and networks of links. [Networks](../networks/index.mdx#things-links-and-networks) explains the three levels.
 
 To check whether an entity can be the end of a link, send it the message `isLinkable`:
 
@@ -328,6 +328,47 @@ Standing on a field is not a link. Ana stands on B, but `(valley field: 'B') lin
 - These messages **go through** dead agents and things that are not on the grid. Check `isDead` yourself when it matters.
 - When there are no such links or entities, the message returns an **empty collection**, never `nil`.
 
+## Walking along a link
+
+A link is drawn as a straight line from the center of one end to the center of the other. An agent can walk exactly on this line, by any distance at a time, with two messages that you send to the agent:
+
+| Message | What it does |
+|---|---|
+| `moveStraight:towards:` | Moves the agent along the straight line from where it is to the center of a cell, by a distance, and never beyond that center |
+| `isAtCenterOf:` | Returns whether the agent has reached the center of a cell |
+
+The keywords of `moveStraight:towards:` and their arguments:
+
+| Keyword | Its argument |
+|---|---|
+| `moveStraight:` | How far to move, where the width of one cell is 1. It can be a fraction, such as `0.25` for a quarter of a cell |
+| `towards:` | The cell whose center the agent moves towards, usually the other end of the link |
+
+For example, Ana stands at the center of B, and a footpath leads from B to E, 7 cells further down. Ana walks the whole footpath, one cell at a time:
+
+```smalltalk
+path := (ana cell linksOfClass: VAFootpath) first.
+target := path otherEndOf: ana cell.     "field E"
+[ ana isAtCenterOf: target ] whileFalse: [
+    ana moveStraight: 1 towards: target ].
+ana cell name.     "'E', after 7 moves"
+```
+
+In a model, an agent usually moves a little at each step, so it keeps the cell it is walking to in an attribute. Get the other end of the link when the agent sets off, because the agent's own cell changes on the way. In the [Road Traffic model](/models/road-traffic), a person walks along a road like this, more slowly on a worn road:
+
+```smalltalk
+self moveStraight: speed / road wear towards: roadEnd.
+(self isAtCenterOf: roadEnd) ifTrue: [ "choose the next road" ]
+```
+
+Some things to know:
+
+- As the agent moves, it enters the cell where its new position falls. When it moves more than one cell at a time, it passes over the cells in between without entering them.
+- The line takes no account of what is on the grid, such as walls or other agents.
+- The agent must be on the grid, or `moveStraight:towards:` raises an error.
+- The lines of the agent's own links follow it as it moves, because a link ends where the agent is drawn.
+- `moveTowards:` is different: it moves the agent from cell to neighbouring cell, so on a sloping link the agent leaves the line and comes back to it.
+
 ## All the links of a model
 
 To get every link of your model, of every class, send `links` to the model:
@@ -446,8 +487,9 @@ Choose a point of view in the simulation window, as for cells and agents.
 | A link | `from`, `to`, `ends`, `otherEndOf:`, `isDirected`, `length`, `delete` |
 | Any entity | `isLinkable`, `isOnGrid` |
 | A cell, an agent or an aggregate | The 24 messages in [Accessing links and linked entities](#accessing-links-and-linked-entities) |
+| An agent | `moveStraight:towards:`, `isAtCenterOf:`, in [Walking along a link](#walking-along-a-link) |
 
-Links can also belong to networks. The messages for that are on the Networks page.
+Links can also belong to networks. The messages for that are on the [Networks](../networks/index.mdx#the-networks-a-link-or-a-network-belongs-to) page.
 
 :::info See it in a real model
 The [Road Traffic model](/models/road-traffic) uses links for roads that wear out with use, for one-way roads, and to connect people to their homes and workplaces.
