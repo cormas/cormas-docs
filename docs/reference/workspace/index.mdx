@@ -7,7 +7,7 @@ sidebar_position: 4
 
 The **workspace** is the folder on your computer that holds your Cormas models. Each model is a folder of the workspace, and that folder holds everything about the model: its code, its data, its screenshot and the files exported from its simulations. Cormas keeps each model folder up to date with the code in the image, so a model folder can be opened, zipped, emailed or put under version control at any moment.
 
-This page describes the workspace, model folders, the model list, examples, exports and backups.
+This page describes the workspace, model folders, the model list, examples, exports and backups. The versions of Cormas and of models are described in [Versions](../versions/index.mdx).
 
 ## The workspace folder
 
@@ -17,7 +17,7 @@ A workspace holds four folders. Cormas creates `Examples`, `Catalog` and `Backup
 |---|---|---|
 | `Models` | Your models | You |
 | `Examples` | The example models you downloaded | Cormas only |
-| `Catalog` | The list of example models, kept so that it can be browsed offline | Cormas only |
+| `Catalog` | A copy of the catalog of example models, to browse it without internet (see [The catalog](#the-catalog)) | Cormas only |
 | `Backups` | The zips Cormas makes before removing any code (see [Backups](#backups)) | Cormas only |
 
 Only the folders directly inside `Models` and `Examples` can be models.
@@ -84,7 +84,7 @@ The `cormas.json` file of the Forest model looks like this:
 |---|---|
 | `baseline` | The name of the model: the name of its baseline, without `BaselineOf`. The model Forest is loaded by the class `BaselineOfForest`, in `src/`. Do not change it by hand, or the model can no longer be loaded: rename the model with **Rename…** (see [Renaming a model](#renaming-a-model)). |
 | `summary` | One paragraph describing the model, shown in the model list when the model has no README, and in the catalog. |
-| `cormas` | The version of Cormas the model was last saved with, such as `1.0`. Cormas writes it; do not change it by hand (see Versions). |
+| `cormas` | The version of Cormas the model was last saved with, such as `1.0`. Cormas writes it; do not change it by hand (see [Versions](../versions/index.mdx#the-cormas-a-model-is-made-with)). |
 
 ### The name of a model
 
@@ -100,10 +100,14 @@ Cormas creates the baseline of a new model, and keeps it up to date (see [The ba
 
 The name of a model is also shown in the title of its simulation and sensitivity analysis windows.
 
-Two folders with the same baseline hold the same model. Only one of them can be installed at a time: the other one is shown as Copy.
+### Copies of a model
+
+A copy of a model folder holds the same model: the same name, the same packages and the same classes. Only one of the two can be installed at a time: the other one is shown as Copy in the model list.
+
+To install both side by side, the copy needs its own name and its own code. Uninstall the original, install the copy, give it a new name with **Rename…** (see [Renaming a model](#renaming-a-model)), then rename its packages and classes in the Pharo tools. Until then, Cormas refuses to install a model whose packages or classes are already in the image.
 
 :::info
-In the future, Cormas will be able to give a copy its own name, so that both can be installed together.
+In the future, Cormas will be able to give a copy its own name, packages and classes in one step.
 :::
 
 ### Renaming a model
@@ -114,11 +118,11 @@ In the future, Cormas will be able to give a copy its own name, so that both can
 - the `baseline` field of `cormas.json`;
 - its folder, when the folder has the name of the model and the new name is free.
 
-The other packages and classes of the model keep their names. The new name is made of letters, digits and `_`, and no other model of the workspace, and no class of the image, may have it.
+The other packages and classes of the model keep their names (see [Copies of a model](#copies-of-a-model)). The new name is made of letters, digits and `_`, and no other model of the workspace, and no class of the image, may have it.
 
 Renaming the baseline, or its package, in a Pharo tool is renaming the model: Cormas asks whether to rename the model, and otherwise gives the baseline its name back.
 
-Examples and old versions cannot be renamed, as they cannot be changed: renaming the baseline of an example offers to make your own copy, which is then renamed. An old version keeps the name the model had when it was released.
+Renaming the baseline of an example is a change like any other: it makes the example yours, and Cormas offers to make your own copy, which is then renamed (see [Changing an example](#changing-an-example)). An old version keeps the name the model had when it was tagged (see [Changing an old version](../versions/index.mdx#changing-an-old-version)).
 
 If the folder of the model was open in GitHub Desktop, locate it again there after it was renamed.
 
@@ -166,7 +170,7 @@ For example, in the workspace `/Users/zaitsev/Cormas`, the model Forest of `Mode
 
 | Column | Content |
 |---|---|
-| Model | The name of the model, or its name and version for an old version, such as "Forest v1.0.0" (see Versions). |
+| Model | The name of the model, or its name and version for an old version, such as "Forest v1.0.0" (see [Versions of your models](../versions/index.mdx#versions-of-your-models)). |
 | In | **Models** or **Examples**: the folder the row comes from. **Online**: only in the catalog. **Image**: installed, but its folder is gone. |
 | State | See below. |
 
@@ -207,7 +211,7 @@ When a row is selected, the description shows its README (or its summary from th
 | **Browse** | Installed, Not saved | Opens the code of the model in a System Browser. |
 | **Reload from folder** | Not saved | Backs up the code in the image, then loads the model from its folder. |
 | **Add &lt;package&gt;** | A model with a package not declared in its baseline | Adds the package to the model, so that it is saved. |
-| **Versions…** | A model with versions to choose | See Versions. |
+| **Versions…** | A model of `Models` with git tags, an old version, or an example with several versions | Chooses the version of the model (see [Choosing a version](../versions/index.mdx#versions-dialog) and [Versions of examples](../versions/index.mdx#versions-of-examples)). |
 | **Uninstall…** | Installed, Not saved | Backs up the code of the model, then removes it from the image. The folder stays as it is. |
 | **Rename…** | Installed, in `Models` | Renames the model (see [Renaming a model](#renaming-a-model)). |
 | **Export…** | A model with a folder | Zips the whole model folder, as it is on disk, to a file you choose. |
@@ -219,22 +223,43 @@ When a row is selected, the description shows its README (or its summary from th
 
 **New** in the model list, or Cormas > **New model**, creates a model. It takes:
 
-- a name;
+- a name, such as `Forest fire`. The name of the model, its baseline, is made from it in one word: `ForestFire`;
 - a prefix for the names of its classes, suggested from the name;
 - a short description, which becomes the summary.
 
-Before it creates anything, the dialog shows what will be created, or why it cannot be. It creates `Models/<name>` with `cormas.json`, `README.md`, `.gitignore`, `.project`, `data/`, `output/` and `src/`. `src/` holds the baseline, a package with a model class and a cell class, and a test package with a test class. Then it installs the model. The new folder is not a git repository.
+Before it creates anything, the dialog shows what will be created, or why it cannot be. It creates `Models/ForestFire` with `cormas.json`, `README.md`, `.gitignore`, `.project`, `data/`, `output/` and `src/`. `src/` holds the baseline, a package with a model class and a cell class, and a test package with a test class. Then it installs the model. The new folder is not a git repository.
 
 ## Examples
 
-Examples are models made by the Cormas team, listed in the catalog. **Download** puts an example in `Examples/<name>`, at the version the catalog offers for this version of Cormas (see Versions).
+Examples are models made by the Cormas team, ready to install, simulate and study.
+
+### The catalog
+
+The **catalog** is the list of the example models: their names, summaries and screenshots. Its online version is kept by the Cormas team on GitHub. Cormas keeps a copy of it in the `Catalog` folder of the workspace:
+
+- **Browsing the catalog works without internet.** The model list shows the examples of the catalog, with their summaries and screenshots, from that copy.
+- **Downloading an example needs internet.** The catalog only lists the examples: their code is downloaded when you ask for it.
+- **Update catalog** synchronizes the copy with the online catalog, so that new examples and new versions appear. Nothing changes until you press it.
+
+### Downloaded examples
+
+**Download** puts an example in `Examples/<name>`, at the version the catalog offers for this version of Cormas (see [Versions of examples](../versions/index.mdx#versions-of-examples)). A downloaded example stays there until you delete it, with **Delete…**. It can be installed and used without internet, from any Cormas image that uses this workspace.
 
 **Update examples** brings every downloaded example to the version the catalog now offers. Before updating an example, Cormas backs up any of its files that were changed. Files added to the example folder, such as outputs, are kept.
 
-Examples cannot be changed. When the code of an installed example is changed, Cormas asks whether to make your own copy in `Models`:
+### Changing an example
 
-- **Yes**: Cormas copies the example folder, its git history included, to `Models` (as `Firefighters`, or `Firefighters 2` if that name is taken), uses the copy from then on, and saves the change there.
-- **No**: the change is undone.
+Feel free to change an example: it is the best way to learn how it works. Changing it makes it **yours**. At the first change, Cormas offers to make your own copy of the example in `Models`, and the original example stays in `Examples`, as it was:
+
+- **Yes**: Cormas copies the example folder, its git history included, to `Models` (as `Firefighters`, or `Firefighters 2` if that name is taken), uses your copy from then on, and saves the change there. Play with it as much as you like: it is a model of yours, like any other.
+- **No**: the change is undone, and the example stays as it was.
+
+The original stays in `Examples` so that it can be updated by the Cormas team, and installed again at any time, exactly as they made it.
+
+To share your changes with the Cormas team, so that they become part of the example:
+
+- with git and GitHub, open a pull request on the repository of the example: your copy is a clone of it, with its history;
+- without git, zip the folder of your copy with **Export…**, and send it to us by email (see [Community](../../community/index.md)). The git history inside the zip shows us what you changed.
 
 ## Exports
 
@@ -258,7 +283,7 @@ The name of a backup says what it holds and when it was made:
 |---|---|
 | `Forest 2026-11-07 14-05-09.zip` | The model folder |
 | `Forest (code in the image) 2026-11-07 14-05-09.zip` | The code of the model as it was in the image |
-| `Forest (Cormas 0.9) 2026-11-07 14-05-09.zip` | The model folder before it was migrated from Cormas 0.9 (see Versions) |
+| `Forest (Cormas 0.9) 2026-11-07 14-05-09.zip` | The model folder before it was migrated from Cormas 0.9 (see [Moving a model to another major](../versions/index.mdx#moving-a-model-to-another-major)) |
 
 A backup never replaces another one: a second backup within the same second ends with ` 2`. Cormas never deletes backups.
 
@@ -266,7 +291,7 @@ A backup has the layout of a model folder. To restore it, unzip it into `Models`
 
 ## Git
 
-A model folder is a normal git project, and git is never required. Cormas never runs git commands, and never creates repositories, branches or commits.
+A model folder is a normal git project, and git is never required. Cormas never runs git commands, and never creates repositories, branches, commits or tags. The versions of a model are its git tags (see [Versions of your models](../versions/index.mdx#versions-of-your-models)).
 
 When the folder of an installed model is a git repository, Cormas registers it with Iceberg, the git tool of Pharo, when the model list opens or when **Reload** is pressed. Commits can then be made from the image. After a git operation made in Iceberg, Cormas reloads the model from its folder. After a git operation made outside the image, such as a pull, press **Reload**.
 
