@@ -103,6 +103,21 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      mermaid: {
+        options: {
+          // SVG text instead of HTML labels: some browsers do not wrap HTML inside SVG, which crops the text
+          htmlLabels: false,
+          flowchart: { htmlLabels: false },
+          // Branch diagrams at their natural size, with bigger labels, instead of shrunk to the page width
+          gitGraph: { useMaxWidth: false, rotateCommitLabel: true },
+          themeVariables: {
+            // The font of the site (Infima), so that Mermaid measures labels with it
+            fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif',
+            commitLabelFontSize: '14px',
+            tagLabelFontSize: '14px',
+          },
+        },
+      },
       // Replace with your project's social card
       image: 'img/cormas-social-card.jpg',
       colorMode: {

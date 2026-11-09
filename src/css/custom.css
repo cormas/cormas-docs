@@ -28,3 +28,8 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* Wide diagrams scroll instead of overflowing the page. */
+.docusaurus-mermaid-container {
+  overflow-x: auto;
+}
