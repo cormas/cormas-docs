@@ -85,7 +85,7 @@ Filing a released version in its line will be done by a workflow of the catalog.
 An example downloaded by Cormas, in `Examples`, cannot be pushed back: Cormas treats a change to it as a new model of yours. To change the example itself, work on its repository, as on your own model:
 
 1. Clone the repository of the example into `Models` of your workspace, with git or GitHub Desktop. It opens on `dev`.
-2. In the model list, press **Reload**, then **Install** the example from `Models`. If the downloaded example is installed, uninstall it first: both have the same name.
+2. Open the model list, and **Install** the example from My models. If the downloaded example is installed, uninstall it first: both have the same name.
 3. Change the example in Cormas, and run it. Cormas writes every change to the folder, and records the Cormas you use in `cormas.json`.
 4. Commit and push to a branch, and open a pull request into `dev`.
 
@@ -100,7 +100,7 @@ Anyone with write access to the repository releases the changes merged into `dev
 3. In **Choose a tag**, type today's date, such as `2027.03.14`, and choose **Create new tag**. Keep **Target** on `main`.
 4. Say in a few words what changed, and whether the results of the model change. Then **Publish release**.
 
-Modelers get the new version with **Update examples**.
+Modelers get the new version with **Refresh**, in the model list.
 
 ## Common changes
 
