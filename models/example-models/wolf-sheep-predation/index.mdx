@@ -1,0 +1,134 @@
+---
+id: wolf-sheep-predation
+title: Wolf Sheep Predation
+slug: /wolf-sheep-predation
+---
+
+import spaceImg from './img/space.png'
+
+# Wolf Sheep Predation
+
+Wolves eat sheep, sheep eat grass, and both reproduce. Depending on the rules, the two populations oscillate together, or one of them goes extinct.
+
+This is the predator-prey model that Uri Wilensky and Kenneth Reisman published in 2006, in its three versions. Students built and tested it to learn how a population of predators and a population of prey regulate each other. The paper is the reference for the rules. Where it says nothing, such as the values of the parameters, the model follows the [NetLogo Wolf Sheep Predation model](https://ccl.northwestern.edu/netlogo/models/WolfSheepPredation) (Wilensky, 1997), so people who know it can compare the two. Its code is on GitHub at [cormas/wolf-sheep-predation-model](https://github.com/cormas/wolf-sheep-predation-model).
+
+## The model
+
+### The world
+
+The world is a grid of 51 by 51 patches, which wraps around: an animal leaving it on one side comes back on the other. Each patch has 8 neighbouring patches.
+
+At the start, 100 sheep and 50 wolves are placed on random patches. Each animal starts with a random amount of energy, below twice what it gains from a meal.
+
+### Version 1: wolves and sheep
+
+- **Sheep** move to a random neighbouring patch at each step, and reproduce with a probability of 4 %. They never run out of food, and die only when they are eaten.
+- **Wolves** move to a random neighbouring patch and lose 1 unit of energy. A wolf on a patch with sheep eats one of them and gains 20. A wolf dies when its energy reaches 0, and reproduces with a probability of 5 %.
+
+A parent shares its energy equally with its offspring, which is born on a random neighbouring patch.
+
+### Version 2: wolves, sheep and grass
+
+As version 1, but sheep need grass:
+
+- A **patch** has grass or not. At the start, half of the patches have grass. A patch whose grass was eaten grows it again 30 steps later.
+- **Sheep** lose 1 unit of energy when they move. A sheep on a patch with grass eats it and gains 4. A sheep dies when its energy is below 0.
+
+### Version 3: crowding
+
+As version 1, but sheep avoid crowds: a sheep moves only to a neighbouring patch with no animal on it, or stays where it is if there is none, and it reproduces only if a neighbouring patch has no animal on it.
+
+### One step
+
+At each step, all sheep act one after another, in a random order, then all wolves in a random order, then, in version 2, the patches.
+
+- A **sheep** moves, then, in version 2, loses energy, eats grass, and dies if it is out of energy. Then it may reproduce.
+- A **wolf** moves, loses energy, eats a sheep if there is one on its patch, dies if it is out of energy, and may reproduce.
+- A **patch** without grass counts down to the time its grass grows again.
+
+An eaten sheep disappears at once. Animals born during a step act only from the next one.
+
+The simulation stops when no animal is left.
+
+## Running the model
+
+Download Wolf Sheep Predation from the examples of the model list, install it, and simulate it (see [Workspace](/docs/reference/workspace#examples)).
+
+Each version has its own init method and its own control method:
+
+| Version | Init method | Control method |
+|---|---|---|
+| 1. Wolves and sheep | `sheepWolves` | `stepSheepWolves` |
+| 2. Wolves, sheep and grass | `sheepWolvesGrass` | `stepSheepWolvesGrass` |
+| 3. Crowding | `sheepWolvesCrowding` | `stepSheepWolvesCrowding` |
+
+### Parameters
+
+All parameters are defined in `WSPModel`.
+
+| Parameter | Default | Meaning |
+|---|---|---|
+| `initialNumberOfSheep` | 100 | Sheep at the start |
+| `initialNumberOfWolves` | 50 | Wolves at the start |
+| `sheepGainFromFood` | 4 | Energy a sheep gains by eating grass (version 2) |
+| `wolfGainFromFood` | 20 | Energy a wolf gains by eating a sheep |
+| `sheepMoveCost` | 1 | Energy a sheep loses at each step (version 2) |
+| `wolfMoveCost` | 1 | Energy a wolf loses at each step |
+| `sheepReproductionRate` | 0.04 | Probability that a sheep reproduces at each step |
+| `wolfReproductionRate` | 0.05 | Probability that a wolf reproduces at each step |
+| `grassRegrowthTime` | 30 | Steps before eaten grass grows again (version 2) |
+| `numberOfRows`, `numberOfColumns` | 51 | Size of the world |
+
+## Exploring the model
+
+### What you see
+
+Patches with grass are green, and eaten patches are brown. Sheep are white, and wolves are black and larger. In version 2 with the default parameters, after 100 steps, about 230 sheep and 20 wolves share the world with patches of grass, as can be seen below.
+
+<img src={spaceImg} width="600" />
+
+### Charts
+
+The charts follow the number of sheep, in blue, the number of wolves, in red, and the number of patches with grass, in green. In versions 1 and 3, every patch keeps its grass, so the curve of grass stays flat.
+
+With the default parameters:
+
+- In **version 1**, the populations oscillate, and within about 200 steps the wolves eat all the sheep, then starve. Sometimes the wolves go extinct first, and the sheep then multiply without limit.
+- In **version 2**, the grass limits the sheep, and the sheep limit the wolves. The sheep always survive, at about 150 to 250. The wolves survive 500 steps in about two runs out of three, and stay few.
+- In **version 3**, the sheep multiply quickly, the wolves follow them, then both go extinct within about 300 steps.
+
+As in the paper, version 2 is the stable one. In this model, its populations oscillate less than in NetLogo's, and its wolves are fewer (see [Differences with NetLogo](#differences-with-netlogo)).
+
+### Things to try
+
+- In version 1, change `wolfGainFromFood` and `wolfReproductionRate`. Can you find values for which both species survive?
+- In version 2, change `grassRegrowthTime`. How does the number of sheep follow the amount of grass?
+- In version 2, start with no wolves. How many sheep can the grass feed?
+- Compare versions 1 and 3. Why does avoiding crowds not save the sheep?
+- Fix the random seed, and run the same version twice. Then change one parameter. How far do the two runs diverge?
+
+## How it is built
+
+| In the model | In Cormas | Class |
+|---|---|---|
+| Patch | A cell | `WSPPatch` |
+| Animal | An agent | `WSPAnimal` |
+| Sheep | An agent | `WSPSheep`, a subclass of `WSPAnimal` |
+| Wolf | An agent | `WSPWolf`, a subclass of `WSPAnimal` |
+| The simulation, its world and its parameters | A model | `WSPModel` |
+
+Animals move with `randomWalk`, which takes them to a random neighbouring cell, and sheep of version 3 with `randomWalkConstrainedBy:`, which takes them to a random neighbouring cell that satisfies a condition.
+
+## Differences with NetLogo
+
+- **Movement.** Animals move to a random neighbouring patch at each step, as the paper says. In NetLogo, they turn a little and move forward, so they keep a direction and spread faster. In this model, the wolves of version 2 stay fewer, and the populations oscillate less.
+- **Energy.** Wolves die when their energy reaches 0, and moving has its own energy cost, as in the paper.
+- **Grass.** A patch grows grass again exactly `grassRegrowthTime` steps after it was eaten, as in the paper.
+- **Showing energy.** NetLogo can show the energy of each animal as a number next to it. Cormas cannot show text on entities yet.
+- **A limit on sheep.** NetLogo stops a run when the wolves are gone and the sheep pass 30,000. This model has no such limit, as in the paper. With the default parameters, the sheep reach it only in version 1, when the wolves go extinct first, and after a few hundred steps.
+
+## Reference
+
+Wilensky, U. & Reisman, K. (2006). Thinking like a wolf, a sheep or a firefly: Learning biology through constructing and testing computational theories — an embodied modeling approach. *Cognition and Instruction*, 24(2), 171–209.
+
+Wilensky, U. (1997). NetLogo Wolf Sheep Predation model. Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
