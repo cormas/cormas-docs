@@ -1,0 +1,346 @@
+---
+title: Looks, aspects and perspectives
+sidebar_position: 6
+---
+
+import defaultImg from './img/default.png'
+import ecologyImg from './img/ecology.png'
+import flocksImg from './img/flocks.png'
+import guardingImg from './img/guarding.png'
+
+# Looks, aspects and perspectives
+
+This page describes how entities appear in the space of a simulation, and how several views show the same simulation from different points of view. Its sections go from the simplest case, a color for each kind of entity, to the complete list of what a look can show.
+
+Three words describe how entities appear:
+
+- A **look** is how one entity appears in one view: its color, its shape, its size, and so on.
+- An **aspect** is a method of an entity class that fills the look of an entity, such as "green with grass, brown without".
+- A **perspective** is a method of the model that chooses an aspect for each class, such as "Ecology" or "Flocks".
+
+## The example: wolves, sheep and shepherds
+
+Every example on this page uses the Wolf Sheep Predation with Shepherds model. Download it from the examples of the model list, and install it (see [Workspace](../workspace/index.mdx#examples)).
+
+The world is a grid of 51 by 51 patches. Grass grows on the patches, sheep eat the grass, and wolves eat the sheep. Three shepherds keep their flocks in three pastures, and a wolf cannot eat a sheep close to a shepherd. The model has every kind of entity:
+
+| In the model | In Cormas | Class |
+|---|---|---|
+| Patch | A cell | `WSHPatch` |
+| Sheep, wolf | An agent | `WSHSheep` and `WSHWolf`, subclasses of `WSHAnimal` |
+| Shepherd | An agent | `WSHShepherd` |
+| Pasture | An aggregate of patches | `WSHPasture` |
+| The bond between a shepherd and one of their sheep | A link | `WSHFlockLink` |
+| Flock, all the links of a shepherd | A network | `WSHFlock` |
+
+## Defining an aspect
+
+An aspect is a method of an entity class that takes a look as its argument, and sends messages to the look to set its color and the rest. The default aspect, `aspectDefault:`, is the one a view shows when no other aspect is chosen. Every class inherits it from Cormas, and it draws cells and agents in grey until you redefine it in your class:
+
+```smalltalk
+WSHPatch >> aspectDefault: look
+    <aspect>
+    look color: (hasGrass
+        ifTrue: [ CMColor green ]
+        ifFalse: [ CMColor brown ])
+```
+
+- The pragma `<aspect>` marks the method as an aspect.
+- `color:` takes a `Color` as its argument. `CMColor` has a palette of named colors, such as `CMColor brown`, and `Color` has many more, such as `Color lightBlue`.
+- The aspect reads the entity's attributes, here `hasGrass`, so each patch is green or brown depending on its grass.
+
+The look of an agent also has a shape and a size. A size is a fraction of a cell: `0.7` is seven tenths of a cell.
+
+```smalltalk
+WSHShepherd >> aspectDefault: look
+    <aspect>
+    look
+        color: CMColor blue;
+        shape: #square;
+        size: 0.7
+```
+
+The shape is one of `#circle`, `#square`, `#diamond`, `#triangle`, `#hexagon` and `#star`.
+
+With the default aspects of the model, patches with grass are green and eaten patches brown, sheep are white, wolves are black and larger, and shepherds are blue squares. Thin grey lines link each shepherd to their sheep, and a dark grey border surrounds each pasture. After 100 steps with the random seed 2026, 37 sheep and 21 wolves are left, as can be seen below.
+
+<img src={defaultImg} width="600" />
+
+Before each refresh of a view, Cormas returns every value of the look to its default, then sends the aspect. An aspect therefore only sets what differs from the defaults, which are listed in [What a look can show](#what-a-look-can-show).
+
+An aspect only fills the look: it never changes the entity. Cormas sends it only when a view draws the entity, once for each view, so a simulation without any view never sends an aspect.
+
+## More aspects for a class
+
+A class can have as many aspects as you like, one for each way of looking at its entities. By convention, the name of an aspect starts with `aspect`:
+
+```smalltalk
+WSHPatch >> aspectGuarded: look
+    "Light blue where wolves cannot eat"
+    <aspect>
+    look color: (self isGuarded
+        ifTrue: [ Color lightBlue ]
+        ifFalse: [ Color veryLightGray ])
+```
+
+In the simulation window, each view of the space lists the classes it draws. For each class, choose one of its aspects, or hide the class. The view shows `aspectGuarded:` as "Guarded". You can also right-click an entity in the grid to choose an aspect for its class.
+
+Besides `aspectDefault:`, every class inherits two aspects from Cormas, which tell entities apart before you define your own:
+
+| Aspect | Shows |
+|---|---|
+| `aspectId:` | A color for each entity, from its id |
+| `aspectClassName:` | One color for all the entities of a class |
+
+## Colors and sizes from values
+
+Many aspects show a number: an animal's energy, the age of a crop, the traffic on a road. **Helpers** turn a number into a color, a size or a thickness. Each helper takes the value, and the range in which it usually lies:
+
+```smalltalk
+WSHAnimal >> aspectEnergy: look
+    "My default look, with a size that follows my energy"
+    <aspect>
+    self aspectDefault: look.
+    look sizeForValue: energy from: 0 to: 2 * self gainFromFood
+```
+
+A sheep with no energy is small, and a sheep with twice its food gain or more fills its cell.
+
+```smalltalk
+WSHWolf >> aspectHunger: look
+    "Red, pale when I am starving and dark when I am well fed"
+    <aspect>
+    self aspectDefault: look.
+    look
+        colorShadeOf: CMColor red
+        forValue: energy
+        from: 0
+        to: 2 * self gainFromFood
+```
+
+These two aspects start with `self aspectDefault: look`, which sends the default aspect of the entity first. The sheep stay white and the wolves black, and only their size or color changes. Without it, they would start from Cormas's grey circle.
+
+`aspectEnergy:` is defined once in `WSHAnimal`, and sheep and wolves both inherit it, as they inherit any method. `self aspectDefault: look` sends the default aspect of the sheep or of the wolf.
+
+To give each group its own color, such as a color per owner, send `colorGroupedBy:` to the look. It takes any object as its argument, and the same object always gets the same color:
+
+```smalltalk
+WSHSheep >> aspectFlock: look
+    "The color of my shepherd, with a dark border to stand out on my pasture"
+    <aspect>
+    self aspectDefault: look.
+    look
+        colorGroupedBy: self shepherd id;
+        borderColor: CMColor black;
+        borderThickness: 0.05
+```
+
+All the helpers are listed in [Helpers](#helpers).
+
+## Perspectives
+
+A perspective names a choice of aspects for the whole model. It is a method of your model, marked with the pragma `<perspective>`, that returns a `CMPerspective`:
+
+```smalltalk
+WSHModel >> perspectiveEcology
+    "Is the food chain balanced? Grass growing back, and animals sized by their energy"
+    <perspective>
+    ^ CMPerspective new
+        show: WSHPatch as: #aspectRegrowth:;
+        show: WSHAnimal as: #aspectEnergy:;
+        hide: WSHShepherd;
+        hide: WSHFlockLink;
+        hide: WSHFlock;
+        yourself
+```
+
+- `show:as:` takes a class and the selector of one of its aspects as its arguments. It checks them at once: if the class has no aspect with that selector, it raises an error that names the class and lists its aspects.
+- `hide:` takes a class as its argument, and draws none of its instances. A hidden class keeps its aspect, and `show:`, which takes a class as its argument, draws it again as before.
+- **A choice for a class applies to its subclasses,** unless a subclass has a choice of its own. Here `WSHAnimal` covers sheep and wolves.
+- **A class with no choice shows its `aspectDefault:`.** Here, pastures keep their default border.
+- **The name of a perspective comes from its selector:** `perspectiveEcology` is "Ecology".
+
+When a model defines perspectives, each view has one, and you can choose another one at any time. The model defines three perspectives, each answering a question. After 100 steps with the random seed 2026, they show the same simulation, as can be seen below.
+
+**Ecology: is the food chain balanced?** Eaten patches turn from brown back to green as their grass grows again, and the animals with more energy are larger. Shepherds and flocks are hidden.
+
+<img src={ecologyImg} width="600" />
+
+**Flocks: who owns what, and which flock is thriving?** Each pasture, shepherd, sheep and link has the color of its flock. Each flock is highlighted along its links, thicker the more sheep it has: the three flocks have 10, 15 and 12 sheep. Wolves are hidden, and patches are light grey.
+
+```smalltalk
+WSHModel >> perspectiveFlocks
+    <perspective>
+    ^ CMPerspective new
+        show: WSHPatch as: #aspectPlain:;
+        show: WSHPasture as: #aspectFlock:;
+        show: WSHShepherd as: #aspectFlock:;
+        show: WSHSheep as: #aspectFlock:;
+        show: WSHFlockLink as: #aspectFlock:;
+        show: WSHFlock as: #aspectSize:;
+        hide: WSHWolf;
+        yourself
+```
+
+<img src={flocksImg} width="600" />
+
+**Guarding: where are the sheep safe?** The 27 patches within one patch of a shepherd are light blue, and no wolf stands on them. Wolves are red, pale when they are starving and dark when they are well fed. Sheep are small and grey.
+
+```smalltalk
+WSHModel >> perspectiveGuarding
+    <perspective>
+    ^ CMPerspective new
+        show: WSHPatch as: #aspectGuarded:;
+        show: WSHWolf as: #aspectHunger:;
+        show: WSHSheep as: #aspectPlain:;
+        hide: WSHFlockLink;
+        hide: WSHFlock;
+        yourself
+```
+
+<img src={guardingImg} width="600" />
+
+The same aspect name in several classes shows the same idea: `aspectFlock:` shows the color of the flock in four classes, and `aspectPlain:` puts patches and sheep in the background.
+
+Perspectives are optional. A model with aspects only is complete.
+
+### The perspective of an init method
+
+An init method can name the perspective that a new simulation opens with, with the pragma `<perspective:>`, which takes the selector of a perspective as its argument:
+
+```smalltalk
+WSHModel >> sheepWolvesShepherds
+    <init>
+    <perspective: #perspectiveEcology>
+    self createPatches.
+    ...
+```
+
+Without the pragma, the simulation opens with no perspective, and every class shows its default aspect.
+
+### Opening a view from code
+
+`openSpaceWith:` takes the selector of a perspective as its argument, and opens a window that shows the space of the model from that perspective:
+
+```smalltalk
+model openSpaceWith: #perspectiveGuarding
+```
+
+### Why perspectives are methods of the model
+
+A perspective chooses aspects of several classes, so it belongs to the model, which knows them all. As a method, it is versioned with the model's code, shared by everyone who installs the model, and its aspects are checked when it is built.
+
+## Several views at once
+
+The simulation window has as many views of the space as you want, as tabs or in windows of their own. Every view follows the simulation at each step, and each one has its own perspective and its own choices.
+
+- **Open a new view**, or **duplicate** a view with its choices.
+- **Move a view to its own window** to watch it beside another view or beside the charts, and move it back to the tabs. A view keeps its choices when it moves.
+- **Change a view** by choosing aspects, hiding classes, or choosing another perspective. A view whose choices differ from its perspective is marked as modified, and **Reset** returns it to its perspective.
+
+Every choice applies to one view only, and never changes the perspective methods of the model. When a simulation is initialized again, its views close and one view opens with the perspective of the init method.
+
+### Why an entity has no look of its own
+
+The same sheep can be big in one view and grey in another at the same time, so a look belongs to an entity *in one view*, and never to the entity itself. If your model wants an entity to look different, such as a tracked sheep, give it an attribute, such as `isTracked`, and read the attribute in an aspect.
+
+## Aggregates, links and networks
+
+The look of an aggregate, a link or a network is drawn on top of its parts, and never changes their looks.
+
+- **An aggregate is a region.** It colors its area and draws a border around it. By default, only its border is drawn.
+- **A link is a line** between its two ends, with a color and a thickness. The default aspect of a link draws an arrowhead at the `to` end when the link is directed.
+- **A network is a route.** It is highlighted along its links with a color and a thickness. By default, nothing is drawn, since its links are already drawn.
+
+A translucent color, such as `Color green alpha: 0.5`, tints what is below: the cells of an aggregate, or the links of a network. An opaque color hides them.
+
+```smalltalk
+WSHPasture >> aspectFlock: look
+    "A translucent tint in the color of my shepherd, so that my patches show through"
+    <aspect>
+    look colorGroupedBy: self shepherd id.
+    look color: (look color alpha: 0.35)
+```
+
+```smalltalk
+WSHFlock >> aspectSize: look
+    "Highlighted along my links in the color of my shepherd, thicker the more sheep I have"
+    <aspect>
+    look colorGroupedBy: self shepherd id.
+    look
+        color: (look color alpha: 0.35);
+        thicknessForValue: self links size from: 0 to: 100
+```
+
+To vary the look of each link of a network, define the aspect in the link class: it can read the link's own attributes, or send `networks` to the link.
+
+Cormas draws cells first, then aggregates, then links, then networks, then agents. When aggregates or networks overlap, the one created last is drawn on top.
+
+## What a look can show
+
+Each kind of entity has its own kind of look, which understands only the messages that make sense for it. All sizes and thicknesses are fractions of a cell. The values in the table are the defaults.
+
+| Message | Cell | Agent | Aggregate | Link | Network |
+|---|:-:|:-:|:-:|:-:|:-:|
+| `color:` | grey | grey | transparent | black | transparent |
+| `tile:` | none | none | | | |
+| `shape:` | | `#circle` | | | |
+| `size:` | | `0.3` | | | |
+| `thickness:` | | | | `0.03` | `0.4` |
+| `borderColor:` | very light grey | very light grey | dark grey | | |
+| `borderThickness:` | `0.01` | `0` | `0.1` | | |
+| `hasArrowhead:` | | | | `false` | |
+| `beInvisible` | ✓ | ✓ | ✓ | ✓ | ✓ |
+
+- **`tile:`** takes the name of a tile as its argument, such as `#tree`, and draws the tile instead of the color. An agent can lay more tiles over it with `overlayTile:scaledTo:`.
+- **`beInvisible`** draws nothing for this entity only. To hide a whole class, a perspective or a view hides it.
+
+## Helpers
+
+| Helper | Sent to the look of | Sets |
+|---|---|---|
+| `colorShadeOf:forValue:from:to:` | Any entity | A shade of the color: white at the minimum, quickly the color itself, then darker until black at the maximum |
+| `colorBetween:and:forValue:from:to:` | Any entity | A color that goes from the first color at the minimum to the second at the maximum |
+| `colorGroupedBy:` | Any entity | A color chosen by its argument: the same object always gets the same color, in every view and every run, and different objects get different colors |
+| `sizeForValue:from:to:` | An agent | A size from a tenth of a cell at the minimum to a full cell at the maximum |
+| `thicknessForValue:from:to:` | A link or a network | A thickness from a thin line at the minimum to half a cell at the maximum |
+
+- A value outside the range is taken as the minimum or the maximum.
+- When the minimum and the maximum are equal, the result is that of the maximum.
+- A minimum above the maximum raises an error.
+
+The example uses each helper once:
+
+| Aspect | Helper |
+|---|---|
+| `WSHPatch >> aspectRegrowth:` | `colorBetween: CMColor brown and: CMColor green forValue: grassRegrowthTime - countdown from: 0 to: grassRegrowthTime` |
+| `WSHWolf >> aspectHunger:` | `colorShadeOf: CMColor red forValue: energy from: 0 to: 2 * self gainFromFood` |
+| `WSHSheep >> aspectFlock:` | `colorGroupedBy: self shepherd id` |
+| `WSHAnimal >> aspectEnergy:` | `sizeForValue: energy from: 0 to: 2 * self gainFromFood` |
+| `WSHFlock >> aspectSize:` | `thicknessForValue: self links size from: 0 to: 100` |
+
+## Tips and common mistakes
+
+- **Keep aspects fast.** An aspect is sent to every entity at every refresh of every view. `WSHPatch >> isGuarded` looks at all the shepherds, which is fine for three shepherds and 2,601 patches.
+- **An aspect of a directed link** that does not start with the default aspect of `CMLink` loses its arrowhead. Send `hasArrowhead: self isDirected` to keep it.
+- **Test your perspectives.** A misspelt aspect raises an error only when its perspective is built, not when the model is loaded. A test that builds each perspective with `perspectiveNamed:` finds it.
+
+## All the messages on this page
+
+| Sent to | Messages |
+|---|---|
+| The look of any entity | `color:`, `beInvisible`, `colorShadeOf:forValue:from:to:`, `colorBetween:and:forValue:from:to:`, `colorGroupedBy:` |
+| The look of a cell or an agent | `tile:`, `borderColor:`, `borderThickness:` |
+| The look of an agent | `shape:`, `size:`, `sizeForValue:from:to:`, `overlayTile:scaledTo:` |
+| The look of an aggregate | `borderColor:`, `borderThickness:` |
+| The look of a link | `thickness:`, `thicknessForValue:from:to:`, `hasArrowhead:` |
+| The look of a network | `thickness:`, `thicknessForValue:from:to:` |
+| Any entity | `aspectDefault:`, `aspectId:`, `aspectClassName:` |
+| A perspective | `show:as:`, `show:`, `hide:` |
+| Your model | `perspectiveNamed:`, `openSpaceWith:` |
+
+| Pragma | In |
+|---|---|
+| `<aspect>` | An aspect, an instance method of an entity class |
+| `<perspective>` | A perspective, an instance method of the model |
+| `<perspective: #selector>` | An init method, to name the perspective it opens with |
