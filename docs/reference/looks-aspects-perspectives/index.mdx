@@ -283,7 +283,7 @@ Each kind of entity has its own kind of look, which understands only the message
 | Message | Cell | Agent | Aggregate | Link | Network |
 |---|:-:|:-:|:-:|:-:|:-:|
 | `color:` | grey | grey | transparent | black | transparent |
-| `tile:` | none | none | | | |
+| `image:` | none | none | | | |
 | `shape:` | | `#circle` | | | |
 | `size:` | | `0.3` | | | |
 | `thickness:` | | | | `0.03` | `0.4` |
@@ -292,7 +292,7 @@ Each kind of entity has its own kind of look, which understands only the message
 | `hasArrowhead:` | | | | `false` | |
 | `beInvisible` | ✓ | ✓ | ✓ | ✓ | ✓ |
 
-- **`tile:`** takes the name of a tile as its argument, such as `#tree`, and draws the tile instead of the color. An agent can lay more tiles over it with `overlayTile:scaledTo:`.
+- **`image:`** takes the name of an image file of the model as its argument, such as `'tree'`, and draws the image over the color. Images can be combined, resized, moved and tinted (see [Images](../images/index.mdx)).
 - **`beInvisible`** draws nothing for this entity only. To hide a whole class, a perspective or a view hides it.
 
 ## Helpers
@@ -330,8 +330,8 @@ The example uses each helper once:
 | Sent to | Messages |
 |---|---|
 | The look of any entity | `color:`, `beInvisible`, `colorShadeOf:forValue:from:to:`, `colorBetween:and:forValue:from:to:`, `colorGroupedBy:` |
-| The look of a cell or an agent | `tile:`, `borderColor:`, `borderThickness:` |
-| The look of an agent | `shape:`, `size:`, `sizeForValue:from:to:`, `overlayTile:scaledTo:` |
+| The look of a cell or an agent | `image:`, `borderColor:`, `borderThickness:` |
+| The look of an agent | `shape:`, `size:`, `sizeForValue:from:to:` |
 | The look of an aggregate | `borderColor:`, `borderThickness:` |
 | The look of a link | `thickness:`, `thicknessForValue:from:to:`, `hasArrowhead:` |
 | The look of a network | `thickness:`, `thicknessForValue:from:to:` |

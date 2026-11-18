@@ -1,0 +1,186 @@
+---
+title: Images
+sidebar_position: 7
+---
+
+import smallImg from './img/small.png'
+import forestImg from './img/forest.png'
+import colorsImg from './img/colors.png'
+import woodImg from './img/wood.png'
+import groupsImg from './img/groups.png'
+
+# Images
+
+A cell or an agent can show a picture instead of a plain color: grass on a plot, a tree growing on it, a firefighter walking on it. Pictures are ordinary image files, kept in the folder of the model, and an aspect names the file it shows. This page describes where the files go, how an aspect shows them, and how it combines, resizes, moves and tints them.
+
+Aspects, looks and perspectives are described in [Looks, aspects and perspectives](../looks-aspects-perspectives/index.mdx). This page only adds images to them.
+
+## The example: firefighters
+
+Every example on this page uses the Firefighters model. Download it from the examples of the model list, and install it (see [Workspace](../workspace/index.mdx#examples)).
+
+The world is a grid of plots. A plot is a forest, is on fire, or is empty, and a fire spreads from plot to plot through the forest. Firefighters walk on the plots and put the fires out.
+
+| In the model | In Cormas | Class |
+|---|---|---|
+| Plot | A cell | `FFPlot` |
+| Firefighter | An agent | `FFFirefighter` |
+
+Its `images` folder holds four files: `grass.png`, `tree.png`, `tree-fire.png` and `firefighter.png`. The trees and the firefighter have transparent backgrounds, so that what is below them shows around them.
+
+## Image files
+
+The images of a model are files in a folder named `images`, inside the folder of the model in the workspace (see [Workspace](../workspace/index.mdx)). Create the folder if your model has none, and copy your pictures into it with the file browser of your computer.
+
+- **PNG and JPEG files** are read, whatever the case of their extension: `tree.png`, `photo.JPG` and `sand.jpeg` all work. Use PNG for pictures with transparent parts.
+- **An image is named after its file**, without the extension: `tree.png` is the image `'tree'`, and `tall-grass.png` is the image `'tall-grass'`. Name your files in lowercase, with hyphens between words.
+- **The folder is flat.** Cormas does not look into folders inside `images`.
+- **One file per image is enough.** Save each picture at the largest size you will need, a few hundred pixels wide. Cormas makes smaller copies of it for the size at which it is drawn, so that it stays sharp on a grid of 5 cells and on a grid of 100 cells, and when you zoom in.
+- **The files are part of the model.** They live in its folder, next to its code, and are shared with it.
+
+A view reads each file the first time it draws it. If you change a picture while a view is open, open a new view to see the new picture.
+
+An image that cannot be found raises an error as soon as a view draws it. Its message names the image and the folder, so that you can add the file or fix the name. Two files with the same name and different extensions, such as `tree.png` and `tree.jpg`, also raise an error, because Cormas cannot choose between them.
+
+## Showing an image
+
+Send `image:` to the look of a cell or an agent, with the name of an image as its argument. The firefighters are drawn with their picture:
+
+```smalltalk
+FFFirefighter >> aspectImage: look
+
+	<aspect>
+	look
+		image: 'firefighter';
+		size: 0.6
+```
+
+- **On a cell**, the image covers the whole cell. A picture that is not square is enlarged until it fills the cell, and the parts that stick out are cut off, keeping its centre.
+- **On an agent**, the image covers the agent: `size:` sets the size of the agent, as with colors, and the image is cut to the shape of the agent. A round agent shows a round picture.
+
+Sending `image:` again replaces the image. To show several images at once, combine them (see below).
+
+## Colors under images
+
+A look draws its color first, then its image over it. Where the image is transparent, the color shows. The file `tree.png` has a transparent background: only the tree itself has pixels. This aspect gives each plot a color of its own, chosen by its id, and draws a tree over the color:
+
+```smalltalk
+FFPlot >> aspectTreesOverColors: look
+
+	<aspect>
+	look
+		colorGroupedBy: self id;
+		image: ((CMImage named: 'tree') size: 0.8)
+```
+
+In a perspective that shows this aspect and hides the firefighters, the twenty plots of the 4 by 5 world have twenty different colors, and the same tree stands on each of them, with the color of its plot all around it, as can be seen below.
+
+<img src={colorsImg} width="600" />
+
+When an aspect sets an image and no color, the color under the image is transparent: a firefighter shows the plot it stands on, not a grey square. The order of `color:` and `image:` does not matter. A look with no image keeps its usual default color.
+
+## Combining images
+
+To combine images, make each of them with `CMImage named:`, which takes the name of an image as its argument, and add them with `+`. The image on the right of `+` is drawn over the image on its left. The plots of the example show grass, with a tree or a burning tree over it:
+
+```smalltalk
+FFPlot >> aspectImage: look
+
+	<aspect>
+	| image |
+	image := CMImage named: 'grass'.
+	self isForest ifTrue: [ image := image + ((CMImage named: 'tree') size: 0.7) ].
+	self isFire ifTrue: [ image := image + ((CMImage named: 'tree-fire') size: 0.7) ].
+	look image: image
+```
+
+With the init method `initSmall`, the world has 4 by 5 plots and two firefighters. After one step, seven plots are forest, one is on fire and twelve are empty, as can be seen below with the perspective Images.
+
+<img src={smallImg} width="600" />
+
+- `+` returns a new image, and you can add as many images as you need: `grass + tree + bird`.
+- The argument of `+` can also be the name of an image: `(CMImage named: 'grass') + 'tree'`.
+- `image:` takes the name of an image or an image made with `CMImage named:` as its argument. `look image: 'tree'` is short for `look image: (CMImage named: 'tree')`.
+
+## Resizing and moving images
+
+An image made with `CMImage named:` receives three more messages. They change the image, and return it, so that you can send them in a cascade inside parentheses.
+
+| Message | Its argument | Default |
+|---|---|---|
+| `size:` | The side of the image, as a fraction of the shorter side of the cell, such as `0.5` | The image covers the cell |
+| `shift:` | How far the image is moved from the centre, in fractions of the cell, such as `0.25 @ 0`; `y` grows downwards | `0 @ 0`, centred |
+| `tint:` | A color laid over the image | No tint |
+
+An image with a size is drawn whole in a square of that size, in the centre of the cell, and then moved by its shift. This aspect draws a small wood on every plot that is not empty: three trees, each in its own spot of the plot, with a size and a shift that vary a little. The random numbers start from the id of the plot, so that a plot keeps the same wood at every refresh. The trees are added from the back to the front, so that a lower tree is drawn over the tree behind it.
+
+```smalltalk
+FFPlot >> aspectWood: look
+
+	<aspect>
+	| random image trees |
+	random := Random seed: self id.
+	image := CMImage named: 'grass'.
+	self isEmpty ifFalse: [
+		trees := { -0.2 @ -0.15. 0.2 @ -0.15. 0 @ 0.15 } collect: [ :spot |
+			(CMImage named: (self isFire ifTrue: [ 'tree-fire' ] ifFalse: [ 'tree' ]))
+				size: 0.35 + (random next * 0.15);
+				shift: spot + (random next - 0.5 * 0.1 @ (random next - 0.5 * 0.1));
+				yourself ].
+		(trees asSortedCollection: [ :a :b | a shift y < b shift y ]) do: [ :each |
+			image := image + each ] ].
+	look image: image
+```
+
+The seven forest plots of the 4 by 5 world each show a wood of their own, and the burning plot shows three burning trees, as can be seen below.
+
+<img src={woodImg} width="600" />
+
+A combined image is resized and moved as a whole, with its parts inside it. This draws grass with a tree in a square of half the cell:
+
+```smalltalk
+look image: (((CMImage named: 'grass') + ((CMImage named: 'tree') size: 0.7)) size: 0.5)
+```
+
+Mind the parentheses: `size:` is also a message of the look of an agent. `look image: 'tree'; size: 0.5` resizes the agent, and `look image: ((CMImage named: 'tree') size: 0.5)` resizes the tree.
+
+## Tinting images
+
+`tint:` takes a color as its argument, and lays it over the pixels of the image only: the transparent parts stay transparent. The alpha of the color is the strength of the tint, from `0`, which leaves the image as it is, to `1`, which paints the whole image in that color.
+
+A tint can tell groups of agents apart. In this aspect, the firefighters with an even id stand for one group and the others for another, each with its own color:
+
+```smalltalk
+FFFirefighter >> aspectGroup: look
+
+	<aspect>
+	look
+		image: ((CMImage named: 'firefighter') tint: (self id even
+				  ifTrue: [ Color red alpha: 0.5 ]
+				  ifFalse: [ Color blue alpha: 0.5 ]));
+		size: 0.6
+```
+
+In the 4 by 5 world with four firefighters instead of two, two firefighters are red and two are blue, while the plots under them keep their colors, as can be seen below.
+
+<img src={groupsImg} width="600" />
+
+A tint of a combined image tints all its parts.
+
+Sizes, shifts and tints are numbers, points and colors like any other, so an aspect can compute them from the attributes of an entity, as it computes colors (see [Colors and sizes from values](../looks-aspects-perspectives/index.mdx#colors-and-sizes-from-values)).
+
+## Speed
+
+Views with images are about as fast as views with colors. Each picture is resized once for each size at which it is drawn, and every cell and agent that shows the same picture at the same size shares it. A size or a tint computed from an attribute makes more copies, but never more than the cells have pixels.
+
+The same files serve every size of grid. With the init method `basicCreationFullForest`, the world has 30 by 30 plots, all forest but one, which is on fire. After eight steps, the fire has spread to 289 plots, as can be seen below.
+
+<img src={forestImg} width="600" />
+
+## All the messages on this page
+
+| Sent to | Messages |
+|---|---|
+| The look of a cell or an agent | `image:` |
+| `CMImage` | `named:` |
+| An image | `+`, `size:`, `shift:`, `tint:` |

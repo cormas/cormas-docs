@@ -33,3 +33,9 @@
 .docusaurus-mermaid-container {
   overflow-x: auto;
 }
+
+/* Pharo code is indented with tabs: show each tab as wide as four spaces */
+pre,
+code {
+  tab-size: 4;
+}
