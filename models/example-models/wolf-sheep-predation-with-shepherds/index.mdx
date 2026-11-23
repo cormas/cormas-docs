@@ -1,0 +1,122 @@
+---
+id: wolf-sheep-predation-with-shepherds
+title: Wolf Sheep Predation with Shepherds
+slug: /wolf-sheep-predation-with-shepherds
+---
+
+import spaceImg from './img/space.png'
+
+# Wolf Sheep Predation with Shepherds
+
+Wolves eat sheep, sheep eat grass, and three shepherds keep their flocks in pastures and guard them from the wolves.
+
+This model extends [Wolf Sheep Predation](/models/wolf-sheep-predation). It keeps the rules of its version 2, with wolves, sheep and grass, and adds shepherds, pastures and flocks. So its results differ from those of Wolf Sheep Predation. Its code is on GitHub at [cormas/wolf-sheep-predation-shepherds-model](https://github.com/cormas/wolf-sheep-predation-shepherds-model).
+
+The model is the example of several pages of the documentation, because it has every kind of entity, probes and charts:
+
+- [Looks, aspects and perspectives](/docs/reference/looks-aspects-perspectives): how the same world is shown from several points of view;
+- [Probes and data](/docs/reference/probes-and-data): what the model measures and records;
+- [Charts](/docs/reference/charts): the charts of the model.
+
+## The model
+
+### The world
+
+The world is a grid of 51 by 51 patches, which wraps around. Grass grows on every patch, as in Wolf Sheep Predation: a patch whose grass was eaten grows it again 30 steps later. At the start, half of the patches have grass.
+
+Three **pastures** of 17 by 17 patches lie in a triangle: one in the north-west, one in the north-east and one in the south. Wild land lies around and between them.
+
+### Shepherds, sheep and wolves
+
+- **Shepherds.** Each pasture has a shepherd, named after where the pasture lies: North-west, North-east or South. A shepherd moves to a random neighbouring patch of its pasture at each step. Shepherds never die.
+- **Sheep.** Each sheep belongs to the flock of a shepherd, and lives in the pasture of this shepherd. It moves, eats grass and gives birth only inside its pasture. A lamb joins the flock of its mother. Otherwise, sheep follow the rules of Wolf Sheep Predation: a sheep loses 1 unit of energy when it moves, gains 4 when it eats grass, and dies when its energy is below 0.
+- **Wolves.** Wolves roam the whole world and follow the rules of Wolf Sheep Predation, with one difference: a shepherd guards the patches around it. A wolf never moves onto a guarded patch, and never eats a sheep there. By default, a shepherd guards the patches within 1 patch of its own.
+
+At the start, the 100 sheep are shared equally among the three flocks, on random patches of their pastures, and the 50 wolves are placed on random patches of the world.
+
+### One step
+
+At each step, the three shepherds move. Then all sheep act one after another, in a random order, then all wolves in a random order. Then the grass grows.
+
+The simulation stops when no animal is left.
+
+## Running the model
+
+Download Wolf Sheep Predation with Shepherds from the examples of the model list, install it, and simulate it (see [Workspace](/docs/reference/workspace#examples)).
+
+The init method is `sheepWolvesShepherds`, and the control method is `stepSheepWolvesShepherds`.
+
+### Parameters
+
+All parameters are defined in `WSHModel`. They are the parameters of Wolf Sheep Predation, with one more, `guardingDistance`, and a different default for `wolfGainFromFood`.
+
+| Parameter | Default | Meaning |
+|---|---|---|
+| `initialNumberOfSheep` | 100 | Sheep at the start, shared among the three flocks |
+| `initialNumberOfWolves` | 50 | Wolves at the start |
+| `sheepGainFromFood` | 4 | Energy a sheep gains by eating grass |
+| `wolfGainFromFood` | 40 | Energy a wolf gains by eating a sheep |
+| `sheepMoveCost` | 1 | Energy a sheep loses at each step |
+| `wolfMoveCost` | 1 | Energy a wolf loses at each step |
+| `sheepReproductionRate` | 0.04 | Probability that a sheep reproduces at each step |
+| `wolfReproductionRate` | 0.05 | Probability that a wolf reproduces at each step |
+| `grassRegrowthTime` | 30 | Steps before eaten grass grows again |
+| `guardingDistance` | 1 | How far a shepherd guards the patches around it, in patches. At 0, shepherds guard nothing |
+
+`wolfGainFromFood` is 40 instead of 20. The sheep live only in the pastures, a third of the world, so the wolves find fewer of them. With 20, the wolves always die out within a few hundred steps.
+
+The size of the world is fixed, since the pastures are at fixed places.
+
+## Exploring the model
+
+### What you see
+
+Patches with grass are green, and eaten patches are brown. Sheep are white, wolves are black, and shepherds are blue squares. The sheep stay in the three pastures, while the wolves are everywhere, as can be seen below.
+
+<img src={spaceImg} width="600" />
+
+The model has three perspectives, which show the world from different points of view:
+
+- **Ecology**, to see whether the food chain is balanced;
+- **Flocks**, to see which flock is thriving;
+- **Guarding**, to see where the sheep are safe.
+
+They are described on the page [Looks, aspects and perspectives](/docs/reference/looks-aspects-perspectives).
+
+### Charts
+
+The model defines charts that follow the sheep, the wolves, the grass, the flocks and the energy of the animals. Each chart answers a question about the model, such as "Which shepherd keeps the biggest flock?". They are described on the page [Charts](/docs/reference/charts), and their probes on the page [Probes and data](/docs/reference/probes-and-data).
+
+### What happens
+
+With the default parameters, over 300 steps:
+
+- The sheep always survive. They are between about 15 and 105.
+- The wolves die out in about half of the runs, between steps 150 and 190. In the other runs, a few wolves survive.
+
+### Things to try
+
+- Set `guardingDistance` to 0. Do the wolves survive longer when the shepherds guard nothing? What happens to the sheep?
+- Set `guardingDistance` to 3. Can the wolves still find sheep to eat?
+- Set `wolfGainFromFood` to 20, as in Wolf Sheep Predation. How long do the wolves survive?
+- Compare the three flocks with the chart `chartFlocks`. Is the biggest flock always the same one when you change the random seed?
+
+## How it is built
+
+The model has every kind of entity of Cormas:
+
+| In the model | In Cormas | Class |
+|---|---|---|
+| Patch | A cell | `WSHPatch` |
+| Sheep, wolf | An agent | `WSHSheep` and `WSHWolf`, subclasses of `WSHAnimal` |
+| Shepherd | An agent | `WSHShepherd` |
+| Pasture | An aggregate of patches | `WSHPasture` |
+| The bond between a shepherd and one of its sheep | A link | `WSHFlockLink` |
+| Flock, all the links of a shepherd | A network | `WSHFlock` |
+| The simulation, its world and its parameters | A model | `WSHModel` |
+
+## Reference
+
+Wilensky, U. & Reisman, K. (2006). Thinking like a wolf, a sheep or a firefly: Learning biology through constructing and testing computational theories — an embodied modeling approach. *Cognition and Instruction*, 24(2), 171–209.
+
+The shepherds, the pastures and the flocks are not in this paper, nor in the NetLogo model.

@@ -1,0 +1,183 @@
+---
+title: Probes and data
+sidebar_position: 8
+---
+
+import dataTabImg from './img/data-tab.png'
+
+# Probes and data
+
+A **probe** is a method that measures one thing in a simulation, such as the number of sheep or the energy of a wolf. At each step, Cormas sends every probe and records the results in tables. You can look at these tables in the simulation window, export them to CSV files, and draw them in charts (see [Charts](../charts/index.mdx)).
+
+This page describes probes of the model and of entities, what a probe can return, what is recorded, and how the data is shown and exported.
+
+## The example model
+
+Every example on this page comes from the Wolf Sheep Predation with Shepherds model (see [its page](/models/wolf-sheep-predation-with-shepherds)). The model defines these probes:
+
+| Probe | Defined in | Measures |
+|---|---|---|
+| `numberOfSheep`, `numberOfWolves` | `WSHModel` | The number of sheep and of wolves |
+| `amountOfGrass` | `WSHModel` | The number of patches with grass |
+| `shareOfGrass` | `WSHModel` | The share of the patches with grass, from 0 to 1 |
+| `sheepBorn` | `WSHModel` | The lambs born during the step |
+| `sheepEaten`, `sheepStarved` | `WSHModel` | The sheep eaten by wolves and the sheep dead of hunger during the step, as negative numbers |
+| `energy` | `WSHAnimal` | The energy of a sheep or of a wolf |
+| `herd` | `WSHAnimal` | The herd of an animal: the flock of a sheep, such as `North-west flock`, or `Wolves` |
+| `isHungry` | `WSHSheep` | Whether the energy of a sheep is below 5 |
+| `flockSize` | `WSHShepherd` | The number of sheep in the flock of a shepherd |
+| `name` | `WSHShepherd` | Where the pasture of a shepherd lies: North-west, North-east or South |
+
+## A probe of the model
+
+A probe is a method with the pragma `<probe>`. It takes no argument and returns the value that it measures. This probe of the model returns the number of sheep:
+
+```smalltalk
+WSHModel >> numberOfSheep
+
+	<probe>
+	^ (self @@ WSHSheep) size
+```
+
+- The name of the method is the name of the probe.
+- Cormas records every probe at the init and at each step, without any other setting.
+- The model has one table. It has a row for each recorded step and a column for each probe of the model.
+
+The **Data** tab of the simulation window shows this table. Under the table, it shows statistics of each column of numbers: the count, the mean, the standard deviation, the minimum, the quartiles and the maximum.
+
+With the random seed 42, over the first 100 steps, the number of sheep has a median of 46, between 28 and 101. The number of wolves has a median of 50, between 3 and 90, as can be seen in the statistics below.
+
+<img src={dataTabImg} />
+
+## Entity probes
+
+A probe can also be a method of an entity class: a cell, an agent, an aggregate, a link or a network. Cormas then measures it on every instance of the class. This probe returns the number of sheep in the flock of a shepherd:
+
+```smalltalk
+WSHShepherd >> flockSize
+
+	<probe>
+	^ flock links size
+```
+
+- **Each entity has a table of its own.** The table of a shepherd has a row for each recorded step and a column for each probe of the shepherd.
+- **A table has rows only while its entity is alive.** A lamb born at step 12 has rows from step 12. A sheep eaten at step 30 has no row after step 29.
+- **A probe defined in a superclass is measured on the instances of every subclass.** `energy` is defined in `WSHAnimal`, so it is measured on every sheep and on every wolf.
+
+The table of an entity is in its inspector, which opens with **Inspect** in the menu of the entity in the space. The **Data** tab of the inspector shows the table and the same statistics as for the model.
+
+### Ids and labels
+
+Each entity has an id and a label. Both appear in tables, in charts and in CSV files.
+
+- **The id** is a number: 1, 2, 3, and so on, for each class, from the start of each simulation. With the same random seed, the same parameters and the same init method, the same entity gets the same id in every simulation.
+- **The label** is the `printString` of the entity. By default, a wolf is labelled `a WSHWolf -id: 3`. A class that redefines `printOn:` gives its instances other labels. The shepherds of the example are labelled after their pasture, such as `North-west shepherd`:
+
+  ```smalltalk
+  WSHShepherd >> printOn: aStream
+
+  	aStream
+  		nextPutAll: name;
+  		nextPutAll: ' shepherd'
+  ```
+
+Cormas records the label once, when the entity appears. So a label should not depend on something that changes during the simulation, such as the cell of an agent. Labels do not need to be unique, since the id identifies the entity.
+
+## What a probe can return
+
+- **A number, a boolean or a string.** A symbol counts as a string. Any other result, such as `nil` or an entity, raises an error. To say where an entity is, return a number or a string, such as the name of a pasture.
+- **Always the same kind of value.** A probe that returned a number, and later returns a string, raises an error.
+- **Negative numbers** are allowed. `sheepEaten` and `sheepStarved` return negative numbers, because these sheep leave the population. A bar chart then draws them below zero (see [Charts](../charts/index.mdx#bars)).
+
+A probe only measures. How a value is drawn, with which label and which color, is chosen by the charts.
+
+A summary, such as a total or a mean, is a probe of the model that computes it. `shareOfGrass` divides the number of patches with grass by the number of patches:
+
+```smalltalk
+WSHModel >> shareOfGrass
+	"The share of the patches that have grass, from 0 to 1"
+
+	<probe>
+	^ self amountOfGrass / self cells size
+```
+
+The step is not a probe. Every table already has a column with the step of each row.
+
+## What is recorded
+
+By default, Cormas records every probe of the model and every probe of every entity, at the init and at each step.
+
+### Switching probes off
+
+The **Recording** settings of the simulation window list the probes of the model and of the entities, each with a checkbox. Cormas does not record a probe that is unticked. Unticking a probe of a superclass, such as `energy` of `WSHAnimal`, switches it off for all its subclasses. The settings take effect at the next init.
+
+In code, a simulation receives these messages before its init:
+
+| Message | Its arguments | Effect |
+|---|---|---|
+| `doNotRecord:` | A class | Records nothing of the model, or of the entities of this class and of its subclasses |
+| `doNotRecord:of:` | A probe name and a class | Does not record this probe of this class and of its subclasses |
+| `doNotRecordEntity:` | An entity | Records nothing more of this entity |
+| `record:` | A class | Records the model, or the entities of this class, again |
+| `record:of:` | A probe name and a class | Records this probe again |
+
+```smalltalk
+| simulation |
+simulation := (CMSimulation for: WSHModel new)
+	              activeInitSelector: #sheepWolvesShepherds;
+	              activeControlSelector: #stepSheepWolvesShepherds;
+	              yourself.
+simulation doNotRecord: WSHWolf.
+simulation doNotRecord: #name of: WSHShepherd
+```
+
+- `doNotRecord:of:` raises an error if the class has no such probe.
+- After `doNotRecordEntity:`, the entity with the same id is not recorded after a new init either.
+- Entities created during the simulation follow the settings of their class.
+- A probe of the model that is switched off has no column in the table of the model. An entity that is switched off has no table, and its Data tab says so.
+
+### Recorded steps
+
+The **Record every** setting chooses how often Cormas records the data: at every step, or every *n* steps. The init and the last step are always recorded. **Last step only** records the last step and nothing else. A sensitivity analysis records the last step only by default. With the last step only, there is nothing to draw over time, so there are no charts.
+
+In code, a simulation receives `recordEvery:`, which takes a number of steps as its argument, and `recordLastStepOnly`.
+
+:::note The cost of recording entities
+Each recorded entity adds a row at each recorded step. A model with a few hundred agents records them easily. A grid of 100 by 100 cells with a probe on its cells adds 10,000 rows at each step. Switching the cells off, recording every *n* steps, or measuring the cells with a probe of the model, such as `amountOfGrass`, keeps the tables small.
+:::
+
+## Exporting to CSV
+
+Three exports write CSV files into the `output` folder of the model (see [Workspace](../workspace/index.mdx#exports)):
+
+| Export | Button | File name |
+|---|---|---|
+| The table of the model | **Save to CSV**, in the Data tab of the simulation window | `data` followed by the date and time |
+| The table of one entity | **Save to CSV**, in the Data tab of its inspector | The class and the id, such as `WSHShepherd-1`, followed by the date and time |
+| The tables of all the instances of a class | **Save all** followed by the class name, in the Data tab of the inspector of one of them | The class, such as `WSHShepherd`, followed by the date and time |
+
+The files have a header line, and their values are separated by commas. Numbers that are not integers are written as decimals, booleans as `true` and `false`, and strings between double quotes.
+
+**The table of the model or of one entity** has a column `step`, then a column for each recorded probe, in alphabetical order. These are the first steps of the model of the example:
+
+```text
+step,amountOfGrass,numberOfSheep,numberOfWolves,shareOfGrass,sheepBorn,sheepEaten,sheepStarved
+0,1288,100,50,0.49519415609381007,0,0,0
+1,1265,100,54,0.4863514033064206,6,-1,-5
+2,1268,101,52,0.4875048058439062,5,-2,-2
+3,1289,95,54,0.4955786236063053,1,-2,-5
+```
+
+**The tables of all the instances of a class** are in one file. It has the columns `step`, `id` and `label`, then a column for each recorded probe. It has a line for each instance and each step, instance after instance, in the order of their ids. It holds only the instances of this class, not those of its subclasses. These are the first two steps of the shepherds of the example:
+
+```text
+step,id,label,flockSize,name
+0,1,"North-west shepherd",34,"North-west"
+1,1,"North-west shepherd",33,"North-west"
+0,2,"North-east shepherd",33,"North-east"
+1,2,"North-east shepherd",32,"North-east"
+0,3,"South shepherd",33,"South"
+1,3,"South shepherd",35,"South"
+```
+
+R, Python and spreadsheets read this form, with one line per entity and step, directly.

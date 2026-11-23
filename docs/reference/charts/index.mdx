@@ -1,0 +1,520 @@
+---
+title: Charts
+sidebar_position: 9
+---
+
+import sheepImg from './img/sheep.png'
+import populationsImg from './img/populations.png'
+import flocksImg from './img/flocks.png'
+import shepherdFlockImg from './img/shepherd-flock.png'
+import wolfEnergyImg from './img/wolf-energy.png'
+import predatorPreyImg from './img/predator-prey.png'
+import grassAndSheepImg from './img/grass-and-sheep.png'
+import sheepByFlockImg from './img/sheep-by-flock.png'
+import hungerImg from './img/hunger.png'
+import sheepFatesImg from './img/sheep-fates.png'
+import flockSizesImg from './img/flock-sizes.png'
+import energyImg from './img/energy.png'
+import sheepEnergyImg from './img/sheep-energy.png'
+import grassShareImg from './img/grass-share.png'
+import chartWindowsImg from './img/chart-windows.png'
+
+# Charts
+
+A chart shows how the values of probes change during a simulation, such as the number of sheep at each step. A **probe** is a method that measures something in a model, and Cormas records its value at each step (see [Probes and data](../probes-and-data/index.mdx)).
+
+This page describes chart methods, the series that a chart holds, each kind of series, axes and reference lines, and how charts appear in the simulation window. Each section has an example. The last sections list every message of charts and series.
+
+## The example model
+
+Every chart on this page is a method of the Wolf Sheep Predation with Shepherds model (see [its page](/models/wolf-sheep-predation-with-shepherds)). The figures show these charts after 100 steps of the init method `sheepWolvesShepherds`, with the random seed 42.
+
+## Chart methods
+
+A chart is a method with the pragma `<chart>`. It takes no argument and returns a new instance of `CMChart`. This chart of the model draws the number of sheep at each step:
+
+```smalltalk
+WSHModel >> chartSheep
+	"How many sheep are there?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Sheep';
+		  lineX: #currentTimeStep y: #numberOfSheep;
+		  yTitle: 'Number of sheep';
+		  yourself
+```
+
+The simulation starts with 100 sheep. Their number falls to 28 at step 34, then recovers to 63 at step 100, as can be seen below. The line has the default color, the first color of the palette (see [Colors](#colors)).
+
+<img src={sheepImg} />
+
+- `lineX:y:` adds a line to the chart. Its two arguments are the names of probes: the first one is drawn on the x axis, and the second one on the y axis.
+- `#currentTimeStep` stands for the step. With it on x, any probe is drawn over time.
+- `title:` and `yTitle:` set the title of the chart and the title of the y axis.
+- The name of the method identifies the chart.
+- By convention, the comment of the method states the question that the chart answers.
+
+A chart method of the model is a **model chart**. A chart method of an entity class is an **entity chart** (see [Entity charts](#entity-charts)).
+
+## Series
+
+A chart draws its probes with **series**: lines, points, areas, bars, boxes or histograms. A series is an instance of a series class, such as `CMLineSeries`. It is created with `new`, receives its probes, its label and its color, and is added to the chart with `add:`:
+
+```smalltalk
+WSHModel >> chartPopulations
+	"How do the wolves and the sheep rise and fall together?"
+
+	<chart>
+	| wolves sheep |
+	wolves := CMLineSeries new
+		          x: #currentTimeStep y: #numberOfWolves;
+		          label: 'Wolves';
+		          color: CMColor red;
+		          yourself.
+	sheep := CMLineSeries new
+		         x: #currentTimeStep y: #numberOfSheep;
+		         label: 'Sheep';
+		         color: CMColor blue;
+		         yourself.
+	^ CMChart new
+		  title: 'Wolves and sheep';
+		  add: wolves;
+		  add: sheep;
+		  yourself
+```
+
+The wolves rise from 50 to 90 in the first 18 steps, and the sheep fall from 100 to 28. Then the wolves starve: only 4 are left at step 100, and the sheep recover to 63, as can be seen below.
+
+<img src={populationsImg} />
+
+- `x:y:` takes the names of two probes as its arguments, like `lineX:y:`.
+- `label:` sets the name of the series in the legend. By default, the name is the name of the probe on y.
+- `color:` sets the color of the series. By default, each series takes the next color of a palette (see [Colors](#colors)).
+- `lineX:y:`, as in `chartSheep`, is a shortcut. It adds a line with the default label and color. Each kind of series has such shortcuts (see [Messages of a chart](#messages-of-a-chart)).
+
+### Series of all the instances of a class
+
+A series with `ofAll:` draws a probe of every instance of an entity class. `linesX:y:ofAll:` adds a line for each instance. In this chart, each line draws the probe `flockSize` of one shepherd:
+
+```smalltalk
+WSHModel >> chartFlocks
+	"Which shepherd keeps the biggest flock?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Flocks';
+		  linesX: #currentTimeStep y: #flockSize ofAll: WSHShepherd;
+		  yTitle: 'Sheep';
+		  yourself
+```
+
+The three flocks start with 33 or 34 sheep. The North-east flock falls to 5 sheep and the South flock to 7. The North-west flock loses the fewest sheep, and with 29 sheep it is the biggest flock at step 100, as can be seen below.
+
+<img src={flocksImg} />
+
+- The legend has an entry for each instance, named after its label, such as `North-west shepherd` (see [Probes and data](../probes-and-data/index.mdx#ids-and-labels)).
+- `ofAll:` also covers the instances of the subclasses. `linesX: #currentTimeStep y: #energy ofAll: WSHAnimal` draws a line for every sheep and every wolf.
+- The line of an entity starts when the entity is created and stops when it dies.
+
+## Entity charts
+
+An entity chart is a chart method of an entity class. It draws the probes of one entity. In this chart of a shepherd, `y: #flockSize` is the size of the flock of this shepherd:
+
+```smalltalk
+WSHShepherd >> chartFlock
+	"How does my flock grow and shrink?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Flock';
+		  lineX: #currentTimeStep y: #flockSize;
+		  yTitle: 'Sheep';
+		  yourself
+```
+
+The flock of the North-west shepherd starts with 34 sheep, falls to 13 at step 27, and grows again to 29, as can be seen below.
+
+<img src={shepherdFlockImg} />
+
+A chart method of a superclass is an entity chart of every subclass. `chartEnergy` is defined in `WSHAnimal`, so every sheep and every wolf has it:
+
+```smalltalk
+WSHAnimal >> chartEnergy
+	"How does my energy go up when I eat, down when I move, and in half when I give birth?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Energy';
+		  lineX: #currentTimeStep y: #energy;
+		  yourself
+```
+
+The wolf with the id 172 is born at step 38 with an energy of 17. Its energy goes up each time it eats a sheep, up to 97, and it still has 37 at step 100, as can be seen below.
+
+<img src={wolfEnergyImg} />
+
+An entity chart can also hold series with `ofAll:`, which draw the instances of a class, as in a model chart.
+
+## Kinds of series
+
+The class of a series sets how it is drawn. A chart can hold series of different kinds, such as lines and areas.
+
+### Lines
+
+`CMLineSeries` joins the values of a probe from step to step. With `#currentTimeStep` on x, it draws how a probe changes over time, as in the charts above. With another probe on x, it draws how two probes change together:
+
+```smalltalk
+WSHModel >> chartPredatorPrey
+	"Do the sheep and the wolves go round in cycles, more sheep bringing more wolves, and more wolves fewer sheep?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Predator and prey';
+		  lineX: #numberOfSheep y: #numberOfWolves;
+		  xTitle: 'Sheep';
+		  yTitle: 'Wolves';
+		  hideLegend;
+		  yourself
+```
+
+The simulation starts with 100 sheep and 50 wolves. The wolves rise to 90 while the sheep fall to 60. Then the wolves fall too. The sheep fall to 28 and recover, so the line turns round, as can be seen below.
+
+<img src={predatorPreyImg} />
+
+### Points
+
+`CMPointSeries` draws a translucent point for each value, without joining them, so that points on top of each other remain visible. With two probes of the model, there is a point for each step:
+
+```smalltalk
+WSHModel >> chartGrassAndSheep
+	"Are there more sheep when there is more grass?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Grass and sheep';
+		  pointsX: #amountOfGrass y: #numberOfSheep;
+		  xTitle: 'Patches with grass';
+		  yTitle: 'Sheep';
+		  hideLegend;
+		  yourself
+```
+
+When there are many sheep, there is little grass, and when there are few sheep, the grass grows back. So the points go down from left to right, as can be seen below.
+
+<img src={grassAndSheepImg} />
+
+### Areas
+
+`CMAreaSeries` draws areas stacked on top of each other. With a probe of numbers, there is an area for each instance of `ofAll:`:
+
+```smalltalk
+WSHModel >> chartSheepByFlock
+	"How are the sheep shared among the flocks?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Sheep in each flock';
+		  areasX: #currentTimeStep y: #flockSize ofAll: WSHShepherd;
+		  yTitle: 'Sheep';
+		  yourself
+```
+
+Each area shows the sheep of one flock, and the top of the last area shows all the sheep together, as can be seen below.
+
+<img src={sheepByFlockImg} />
+
+With a probe of strings or booleans, areas count entities. There is an area for each value of the probe, and it shows how many instances have this value at each step. `isHungry` is a probe of the sheep that returns whether the energy of the sheep is below 5:
+
+```smalltalk
+WSHSheep >> isHungry
+	"Whether my energy is below 5"
+
+	<probe>
+	^ energy < 5
+```
+
+```smalltalk
+WSHModel >> chartHunger
+	"How many sheep are hungry?"
+
+	<chart>
+	| sheep |
+	sheep := CMAreaSeries new
+		         x: #currentTimeStep y: #isHungry ofAll: WSHSheep;
+		         category: true label: 'Hungry' color: CMColor red;
+		         category: false label: 'Fed' color: CMColor green;
+		         yourself.
+	^ CMChart new
+		  title: 'Hungry sheep';
+		  add: sheep;
+		  yTitle: 'Sheep';
+		  yourself
+```
+
+At the start, 67 of the 100 sheep are hungry. At step 10, only 19 of the 65 sheep left are hungry, as can be seen below.
+
+<img src={hungerImg} />
+
+`category:label:color:` takes a value of the probe, a label and a color as its arguments. It sets the label and the color of the area of this value. The values set this way come first, in the order in which they were set. The other values follow in alphabetical order, with their default label and color.
+
+### Bars
+
+`CMBarSeries` draws a bar at each value of x. The bars of all the series and instances of a chart are stacked. Negative values are drawn below zero. Like areas, bars count entities when their probe returns strings or booleans. The probes `sheepEaten` and `sheepStarved` return negative numbers, because these sheep leave the population:
+
+```smalltalk
+WSHModel >> chartSheepFates
+	"Do the sheep die more from wolves or from hunger, and are enough lambs born to replace them?"
+
+	<chart>
+	| born eaten starved |
+	born := CMBarSeries new
+		        x: #currentTimeStep y: #sheepBorn;
+		        label: 'Born';
+		        color: CMColor blue;
+		        yourself.
+	eaten := CMBarSeries new
+		         x: #currentTimeStep y: #sheepEaten;
+		         label: 'Eaten';
+		         color: CMColor red;
+		         yourself.
+	starved := CMBarSeries new
+		           x: #currentTimeStep y: #sheepStarved;
+		           label: 'Starved';
+		           color: CMColor gold;
+		           yourself.
+	^ CMChart new
+		  title: 'Sheep born and lost';
+		  add: born;
+		  add: eaten;
+		  add: starved;
+		  yTitle: 'Sheep';
+		  yourself
+```
+
+In the first 10 steps, 45 sheep starve and the wolves eat 16, as can be seen below.
+
+<img src={sheepFatesImg} />
+
+### Boxes
+
+`CMBoxSeries` summarizes the values of a probe of all the instances of a class. At each value of x, it draws a box:
+
+- the box goes from the first quartile to the third quartile, so it holds the middle half of the values;
+- the white line in the box is the median;
+- the thin line goes from the lowest value to the highest value.
+
+The probe `herd` returns the name of the herd of an animal: the flock of a sheep, such as `North-west flock`, or `Wolves`. This chart has a box for each herd, with the values of all the recorded steps. The sheep and the wolves are two series, so that they have two colors:
+
+```smalltalk
+WSHModel >> chartEnergy
+	"Are the animals starving, or do most of them have energy to spare? Are the sheep of some flocks better fed than others?"
+
+	<chart>
+	| sheep wolves |
+	sheep := CMBoxSeries new
+		         x: #herd y: #energy ofAll: WSHSheep;
+		         label: 'Sheep';
+		         color: CMColor blue;
+		         yourself.
+	wolves := CMBoxSeries new
+		          x: #herd y: #energy ofAll: WSHWolf;
+		          label: 'Wolves';
+		          color: CMColor red;
+		          yourself.
+	^ CMChart new
+		  title: 'Energy';
+		  add: sheep;
+		  add: wolves;
+		  yTitle: 'Energy';
+		  hideLegend;
+		  yourself
+```
+
+The sheep of the three flocks have about the same energy, with a median of about 9. The wolves have more energy, with a median of 16, and some of them reach 139, as can be seen below.
+
+<img src={energyImg} />
+
+When several series have values at the same value of x, their boxes stand side by side.
+
+### Histograms
+
+`CMHistogramSeries` counts how many values of a probe fall in each interval. It has a probe on x only: the y axis is the count. The histograms of a chart use the same intervals.
+
+```smalltalk
+WSHModel >> chartSheepEnergy
+	"How is the energy spread among the sheep?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Energy of the sheep';
+		  histogramX: #energy ofAll: WSHSheep;
+		  lineAtX: 5 label: 'Hungry' color: CMColor red;
+		  xTitle: 'Energy';
+		  hideLegend;
+		  yourself
+```
+
+Over all the recorded steps, more than a quarter of the energies of the sheep are below 5, and fewer than one in ten are above 30. Most sheep live close to hunger, as can be seen below.
+
+<img src={sheepEnergyImg} />
+
+## The shown step
+
+By default, a series draws every recorded step. A series that receives `atShownStep` draws only one step, the **shown step**, and its chart has a **step slider**. While the simulation runs, the shown step is the latest step. The slider chooses an earlier step.
+
+When the probe on x returns strings, the x axis has a place for each string, in the order in which they appear. This chart has a bar for each shepherd, at the shown step:
+
+```smalltalk
+WSHModel >> chartFlockSizes
+	"How big is each flock at the shown step?"
+
+	<chart>
+	| flocks |
+	flocks := CMBarSeries new
+		          x: #name y: #flockSize ofAll: WSHShepherd;
+		          atShownStep;
+		          yourself.
+	^ CMChart new
+		  title: 'Flocks at the shown step';
+		  add: flocks;
+		  yTitle: 'Sheep';
+		  hideLegend;
+		  yourself
+```
+
+At step 100, the North-west flock has 29 sheep, the North-east flock 12, and the South flock 22, as can be seen below.
+
+<img src={flockSizesImg} />
+
+Every kind of series can receive `atShownStep`, and every kind can have strings on x. A histogram at the shown step counts the values of that step only.
+
+## Axes and reference lines
+
+By default, the axes fit the values. `yFrom:to:` sets the range of the y axis. A value beyond this range widens the axis, so that it is still drawn.
+
+A **reference line** is a dashed line across the chart at a fixed value, with a label at its end. `lineAtY:label:` draws a horizontal line, and `lineAtX:label:` a vertical one, both in gray. `lineAtY:label:color:` and `lineAtX:label:color:` draw them in another color, such as the red line "Hungry" of the histogram above.
+
+```smalltalk
+WSHModel >> chartGrassShare
+	"Does the grass come back to what it was at the start?"
+
+	<chart>
+	^ CMChart new
+		  title: 'Share of patches with grass';
+		  lineX: #currentTimeStep y: #shareOfGrass;
+		  yFrom: 0 to: 1;
+		  lineAtY: 0.5 label: 'Half the patches, as at the start';
+		  hideLegend;
+		  yourself
+```
+
+At the start, half of the patches have grass. From step 5, more than half of the patches always have grass. At step 100, 83 % of them have grass, as can be seen below.
+
+<img src={grassShareImg} />
+
+A reference line stays at the same value during the whole simulation. A value that changes is a probe, drawn by a series.
+
+## Charts in the simulation window
+
+The **Charts** tab of the simulation window shows the model charts. It has a list of the charts, named after their titles, and shows the chosen chart. The chart is drawn again after each step.
+
+The window button of the Charts tab opens a copy of the tab in a window of its own. Each copy shows its own chart, so that several charts are visible at the same time while the simulation runs. Closing a copy closes only its window.
+
+After 100 steps, the space of the simulation and four charts are visible together: the sheep born and lost, the share of patches with grass, the sheep in each flock, and the wolves and the sheep, as can be seen below.
+
+<img src={chartWindowsImg} />
+
+Entity charts are in the inspector of the entity, which opens with **Inspect** in the menu of the entity in the space. The inspector has a tab for each entity chart. The **Move** button of such a chart moves it to a window of its own, and back to the tabs.
+
+In every chart:
+
+- clicking an entry of the legend hides its series, and clicking it again shows it;
+- **Save a picture** saves the chart as a PNG file in the `output` folder of the model, named after the chart method (see [Workspace](../workspace/index.mdx#exports));
+- a chart whose probe was not recorded says which probe is missing, instead of being drawn (see [Probes and data](../probes-and-data/index.mdx#what-is-recorded)).
+
+When only the last step is recorded, there is nothing to draw over time, and there are no charts (see [Probes and data](../probes-and-data/index.mdx#recorded-steps)).
+
+## Messages of a chart
+
+A chart receives these messages, usually in a cascade after `CMChart new`:
+
+| Message | Its arguments | Effect |
+|---|---|---|
+| `title:` | A string | Sets the title of the chart |
+| `xTitle:`, `yTitle:` | A string | Sets the title of the x axis or of the y axis |
+| `hideLegend` | None | Removes the legend |
+| `add:` | A series | Adds the series to the chart |
+| `yFrom:to:` | Two numbers | Sets the range of the y axis |
+| `lineAtX:label:` | A number and a string | Draws a gray dashed vertical line, with its label |
+| `lineAtY:label:` | A number and a string | Draws a gray dashed horizontal line, with its label |
+| `lineAtX:label:color:` | A number, a string and a color | Draws a dashed vertical line of this color, with its label |
+| `lineAtY:label:color:` | A number, a string and a color | Draws a dashed horizontal line of this color, with its label |
+
+These shortcuts add a series with the default label and color:
+
+| Shortcut | Adds |
+|---|---|
+| `lineX:y:` | A line of a probe of the model, or of the entity of an entity chart |
+| `linesX:y:ofAll:` | A line for each instance of a class |
+| `pointsX:y:` | Points of a probe of the model, or of the entity |
+| `pointsX:y:ofAll:` | Points of every instance of a class |
+| `areaX:y:` | An area of a probe of the model, or of the entity |
+| `areasX:y:ofAll:` | An area for each instance of a class, or for each value of a probe of strings or booleans |
+| `barsX:y:` | Bars of a probe of the model, or of the entity |
+| `barsX:y:ofAll:` | Bars for each instance of a class, or for each value of a probe of strings or booleans |
+| `boxesX:y:ofAll:` | Boxes of the values of every instance of a class |
+| `histogramX:ofAll:` | A histogram of the values of every instance of a class |
+
+The arguments of the keywords `x:` and `y:` are probe names, as symbols, or `#currentTimeStep`. The argument of `ofAll:` is an entity class.
+
+## Messages of a series
+
+A series is created with `new`, then receives these messages, usually in a cascade:
+
+| Message | Its arguments | Effect |
+|---|---|---|
+| `x:y:` | Two probe names | Draws the second probe against the first one, for the model, or for the entity of an entity chart |
+| `x:y:ofAll:` | Two probe names and an entity class | Draws the probes of every instance of the class and of its subclasses |
+| `x:` | A probe name | For a histogram only: counts the values of the probe of the model, or of the entity |
+| `x:ofAll:` | A probe name and an entity class | For a histogram only: counts the values of the probe of every instance of the class |
+| `label:` | A string | Sets the name of the series in the legend |
+| `color:` | A color | Sets the color of the series, and of all its instances |
+| `atShownStep` | None | Draws only the shown step |
+| `category:label:` | A value and a string | For areas and bars that count entities: sets the label of the value |
+| `category:color:` | A value and a color | For areas and bars that count entities: sets the color of the value |
+| `category:label:color:` | A value, a string and a color | For areas and bars that count entities: sets both |
+
+### Kinds of series
+
+| Class | Draws | Its probe on y returns |
+|---|---|---|
+| `CMLineSeries` | A line joining the values from step to step | Numbers |
+| `CMPointSeries` | A translucent point for each value | Numbers |
+| `CMAreaSeries` | Stacked areas | Numbers, or strings or booleans to count entities |
+| `CMBarSeries` | Stacked bars, with negative values below zero | Numbers, or strings or booleans to count entities |
+| `CMBoxSeries` | A box at each value of x, side by side with the boxes of other series | Numbers |
+| `CMHistogramSeries` | Bars counting the values in intervals | No probe on y: its probe on x returns numbers |
+
+The probe on x of every kind of series can return numbers or strings.
+
+### Rules
+
+These mistakes raise an error:
+
+- **A series whose probe on x differs from the probe on x of the other series.** All the series of a chart have the same probe on x, so that the x axis has one meaning.
+- **A series that shows the same probes of the same entities as another series of the chart.** A chart shows each thing once.
+- **A name on x or y that is neither a probe nor `#currentTimeStep`.** The error is raised when the chart is drawn.
+- **A probe that returns the wrong kind of values**, such as strings on y for a line. The error is raised when the chart is drawn.
+
+### Colors
+
+By default, each entry of the legend takes the next color of `CMColor palette`: azure, red, green, purple, orange, tiffany blue, brown and gold. After the eighth entry, the colors start again from azure. A series that receives `color:` keeps its color.
+
+### Legend
+
+- A series of the model or of the entity has an entry, named after its label.
+- A series with `ofAll:` has an entry for each instance, named after the label of the instance, such as `North-west shepherd`.
+- A series that counts entities has an entry for each value, named after the label of the value, or else after the value itself.
+- Boxes and histograms have an entry for each series, named after its label.
+- A legend that would take more than three lines is replaced by a short note, so that it does not hide the chart.

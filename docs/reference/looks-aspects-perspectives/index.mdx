@@ -20,18 +20,7 @@ Three words describe how entities appear:
 
 ## The example: wolves, sheep and shepherds
 
-Every example on this page uses the Wolf Sheep Predation with Shepherds model. Download it from the examples of the model list, and install it (see [Workspace](../workspace/index.mdx#examples)).
-
-The world is a grid of 51 by 51 patches. Grass grows on the patches, sheep eat the grass, and wolves eat the sheep. Three shepherds keep their flocks in three pastures, and a wolf cannot eat a sheep close to a shepherd. The model has every kind of entity:
-
-| In the model | In Cormas | Class |
-|---|---|---|
-| Patch | A cell | `WSHPatch` |
-| Sheep, wolf | An agent | `WSHSheep` and `WSHWolf`, subclasses of `WSHAnimal` |
-| Shepherd | An agent | `WSHShepherd` |
-| Pasture | An aggregate of patches | `WSHPasture` |
-| The bond between a shepherd and one of their sheep | A link | `WSHFlockLink` |
-| Flock, all the links of a shepherd | A network | `WSHFlock` |
+Every example on this page uses the Wolf Sheep Predation with Shepherds model (see [its page](/models/wolf-sheep-predation-with-shepherds)). The model has every kind of entity: cells, agents, an aggregate, links and a network (see [How it is built](/models/wolf-sheep-predation-with-shepherds#how-it-is-built)).
 
 ## Defining an aspect
 
