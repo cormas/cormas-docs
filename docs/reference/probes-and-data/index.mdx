@@ -138,7 +138,7 @@ simulation doNotRecord: #name of: WSHShepherd
 
 ### Recorded steps
 
-The **Record every** setting chooses how often Cormas records the data: at every step, or every *n* steps. The init and the last step are always recorded. **Last step only** records the last step and nothing else. A sensitivity analysis records the last step only by default. With the last step only, there is nothing to draw over time, so there are no charts.
+The **Record every** setting chooses how often Cormas records the data: at every step, or every *n* steps. The init and the last step are always recorded. **Last step only** records the last step and nothing else. A [sensitivity analysis](../sensitivity-analysis/index.mdx#recording) records the last step only by default. With the last step only, there is nothing to draw over time, so there are no charts.
 
 In code, a simulation receives `recordEvery:`, which takes a number of steps as its argument, and `recordLastStepOnly`.
 

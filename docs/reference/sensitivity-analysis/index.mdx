@@ -1,0 +1,216 @@
+---
+title: Sensitivity analysis
+sidebar_position: 10
+---
+
+import sheepByGuardingDistanceImg from './img/sheep-by-guarding-distance.png'
+import setupImg from './img/setup.png'
+import runnerImg from './img/runner.png'
+
+# Sensitivity analysis
+
+A **sensitivity analysis** runs the same simulation many times, with different values of its parameters, and collects the final value of each probe of every run. It shows how much the results of a model depend on each parameter. A **probe** is a method that measures something in a model (see [Probes and data](../probes-and-data/index.mdx)).
+
+This page describes how an analysis is set up, in its window and in code, how it runs, and what its results and exports contain. The last sections list its messages.
+
+Cormas runs designs that vary the values given for each parameter. Other methods, such as Morris, Sobol or a calibration, are left to tools such as [OpenMOLE](../../tutorials/hands-on-tutorials/openmole/index.md), R or SALib, which read the exported CSV files.
+
+## The example
+
+The example uses the Wolf Sheep Predation with Shepherds model (see [its page](/models/wolf-sheep-predation-with-shepherds)). It asks how the guarding distance of the shepherds and the reproduction rate of the wolves affect the sheep left after 200 steps.
+
+```smalltalk
+| simulation analysis |
+simulation := (CMSimulation for: WSHModel new)
+	              activeInitSelector: #sheepWolvesShepherds;
+	              activeControlSelector: #stepSheepWolvesShepherds;
+	              stopAfterStep: 200;
+	              yourself.
+simulation doNotRecord: WSHAnimal.
+simulation doNotRecord: WSHShepherd.
+analysis := (CMSensitivityAnalysis on: simulation)
+	            parameter: #guardingDistance of: WSHModel values: #( 0 1 2 3 );
+	            parameter: #wolfReproductionRate of: WSHModel values: #( 0.03 0.05 0.07 );
+	            replicates: 10;
+	            masterSeed: 42;
+	            yourself.
+analysis run.
+analysis export
+```
+
+- The analysis takes its settings from the simulation: the init method, the control method and the stop condition, here 200 steps.
+- It varies two parameters of the model: the guarding distance takes 4 values, and the wolf reproduction rate takes 3.
+- Each of the 12 combinations of values runs 10 times, with 10 different random seeds, so the analysis makes 120 runs.
+- The animals and the shepherds are not recorded, so the results hold the probes of the model only.
+
+After 200 steps, the sheep left hardly depend on the guarding distance or on the reproduction rate of the wolves: in every combination, their median is between 62 and 73. The wolves die out in up to 5 of the 10 runs of a combination. This can be seen below, with a point for each run.
+
+<img src={sheepByGuardingDistanceImg} />
+
+## Setting up an analysis
+
+### The setup window
+
+The setup window opens with **Sensitivity analysis** in the menu of a model in the model list. It holds the whole analysis:
+
+- the init method, the control method, and the stop condition: a final step, and optionally a boolean method of the model that stops a run earlier when it returns true;
+- the parameters of the model and of its entity classes, with their current values; the values of a parameter to vary are set with its **Edit** link, and **Reset** gives it back its single value;
+- the design, the number of replicates and the master seed;
+- the recording settings, as in the simulation window (see [Probes and data](../probes-and-data/index.mdx#what-is-recorded)).
+
+The run button shows the number of runs of the analysis, such as **Run 120 simulations**, and opens the window of the analysis.
+
+In the example, the analysis starts with `sheepWolvesShepherds` and stops after step 200. The guarding distance takes the values 0, 1, 2 and 3, and the wolf reproduction rate takes 0.03, 0.05 and 0.07. The design is a full factorial with 10 replicates and the master seed 42, so the analysis makes 120 runs, as can be seen below.
+
+<img src={setupImg} />
+
+The values of a parameter come from one of three samplings:
+
+| Sampling | Values |
+|---|---|
+| **List** | The values written one by one |
+| **Range** | From a lowest value to a highest value, with a fixed step |
+| **Monte Carlo** | A number of random values between a lowest value and a highest value |
+
+The Monte Carlo values are drawn at random each time an analysis is set up. The master seed does not choose them, but the export records them.
+
+### In code
+
+An analysis is created with `CMSensitivityAnalysis on:`, which takes a simulation as its argument. Every run is a new simulation with the settings of this simulation: its init method, its control method, its stop condition, its parameter values and its recording settings. The simulation itself does not change.
+
+`parameter:of:values:` adds a parameter to vary. It takes the name of a parameter, the class that defines it, and a collection of values as its arguments. The class is the model class or one of its entity classes. A class that has no such parameter raises an error.
+
+### Designs
+
+| Design | Runs | Number of runs |
+|---|---|---|
+| **Full factorial**, the default | Every combination of the values of the parameters | The product of the numbers of values, times the replicates |
+| **One factor at a time** | The values of each parameter in turn. The other parameters keep their values in the simulation | The sum of the numbers of values, times the replicates |
+
+The example has a full factorial design: 4 × 3 combinations, times 10 replicates, make 120 runs. One factor at a time, it would make (4 + 3) × 10 = 70 runs.
+
+### Replicates and seeds
+
+Each combination runs once for each **replicate**, with its own random seed. The **master seed** chooses the seed of each replicate:
+
+- replicate *k* has the same seed in every combination, so that the combinations are compared on the same random numbers;
+- the same master seed gives the same seeds, so the same analysis gives the same results again.
+
+In the setup window, the master seed starts with a random value.
+
+### Recording
+
+The results hold the values of the last recorded step of each run. By default, each run records its last step only, which keeps the runs fast. The setup window also starts with the probes of the entities switched off, so that the results hold the probes of the model only. In code, the recording settings of the simulation apply, as in the example.
+
+## Running
+
+The run button of the setup window opens the **window of the analysis** and starts it. In code, `run` and `runInBackground` start an analysis without a window. The analysis knows its number of runs before it starts, and its window shows the runs completed, such as **37 / 120 completed**. The runs follow each other, one at a time.
+
+The example analysis below is paused after about 40 of its 120 runs. Its Data tab holds a row for each completed run, with the final values of the probes of the model.
+
+<img src={runnerImg} />
+
+These are the limits of a run today:
+
+- **Pause**, or `pause` in code, lets the current run finish, then waits before the next one. While the analysis is paused, the Data tab and the Analysis tab show the runs completed so far. **Resume** continues with the next run.
+- **Stop**, or `stop` in code, lets the current run finish and starts no other run. The completed runs stay, and they can be looked at and exported. A stopped analysis cannot be resumed.
+- Neither pause nor stop interrupts a run. A run whose stop condition never holds goes on forever. The Pharo interrupt key, Cmd+. on macOS and Alt+. on Windows and Linux, interrupts it.
+- The results are in memory only, until they are exported. Closing the window of the analysis, or quitting Pharo, loses them, and an analysis cannot be continued later.
+- The same master seed gives the same runs, so a stopped analysis can be run again exactly, from the start.
+
+## Results
+
+The **Data** tab of the window of the analysis shows the **final values**: a row for each run with the last recorded value of each probe of the model. Its list chooses the model or an entity class whose probes were recorded. For an entity class, there is a row for each run and each instance.
+
+Each row starts with the run: its number, its replicate, its seed and the values of the varied parameters. The column `step` holds the last recorded step of the run. A run stopped early by a boolean method has a smaller step than the others.
+
+### The Analysis tab
+
+The **Analysis** tab draws an output against a varied parameter, with a point for each run:
+
+- **Output** chooses a probe of the model, drawn on y;
+- **On x** chooses a varied parameter. Values that are not numbers are drawn as categories;
+- **Colored by** chooses another varied parameter, in a full factorial of several parameters. Its values are shades of one color, from light to dark, when they are numbers, and distinct colors otherwise.
+
+In a one-factor-at-a-time design, the points of a parameter are the runs that vary this parameter.
+
+## Exporting
+
+**Export all data** writes the results once the analysis is finished or stopped. Its button shows the size of the export, such as **Export all data (9.60 KB)**. Nothing is written before.
+
+The export is a folder in the `output` folder of the model (see [Workspace](../workspace/index.mdx#exports)). It is named after when the analysis started and its init method, such as `2026-11-24T00-09-31 sheepWolvesShepherds analysis`. If the folder already exists, the export is refused. It holds these files:
+
+| File | Contents |
+|---|---|
+| `analysis.json` | The settings that the runs share: the model, the init and control methods, the stop condition, the parameter values, the recording settings and the versions of the code. Then the design, the varied parameters with their values, the number of replicates and the master seed |
+| `results.csv` | A line for each run, with the final values of the probes of the model |
+| `results-<Class>.csv` | For each entity class whose probes were recorded: a line for each run and each instance |
+
+**`results.csv`** has the columns `run`, `replicate` and `seed`, then a column for each varied parameter, then `step` and a column for each probe of the model. The column of a parameter of an entity class has the name of the class, a dot, and the name of the parameter. These are the first runs of the example:
+
+```text
+run,replicate,seed,guardingDistance,wolfReproductionRate,step,amountOfGrass,numberOfSheep,numberOfWolves,shareOfGrass,sheepBorn,sheepEaten,sheepStarved
+1,1,611301037666962945,0,0.03,200,2063,72,3,0.7931564782775855,3,0,0
+2,2,532427791665668225,0,0.03,200,2168,54,17,0.8335255670895809,1,0,-2
+3,3,157583133458280961,0,0.03,200,2116,69,15,0.8135332564398309,4,0,0
+4,4,20966098687293725,0,0.03,200,2182,57,20,0.8389081122645137,2,0,-1
+```
+
+**`results-<Class>.csv`** has the same first columns, then `id` and `label` before `step`. With the shepherds recorded, and the guarding distance at 0 and 3, `results-WSHShepherd.csv` starts with:
+
+```text
+run,replicate,seed,guardingDistance,id,label,step,flockSize,name
+1,1,611301037666962945,0,1,"North-west shepherd",200,24,"North-west"
+1,1,611301037666962945,0,2,"North-east shepherd",200,22,"North-east"
+1,1,611301037666962945,0,3,"South shepherd",200,22,"South"
+2,1,611301037666962945,3,1,"North-west shepherd",200,33,"North-west"
+2,1,611301037666962945,3,2,"North-east shepherd",200,18,"North-east"
+2,1,611301037666962945,3,3,"South shepherd",200,22,"South"
+```
+
+The files are written as the CSV files of a simulation (see [Probes and data](../probes-and-data/index.mdx#exporting-to-csv)). Each run is in the results only: no run is saved in a folder of its own.
+
+## Messages of an analysis
+
+### Settings
+
+| Message | Its arguments | Effect |
+|---|---|---|
+| `CMSensitivityAnalysis on:` | A simulation | Creates an analysis whose runs take the settings of the simulation |
+| `parameter:of:values:` | A parameter name, a class and a collection | Varies the parameter of the class over the values |
+| `beFullFactorial` | None | Runs every combination of values. This is the default |
+| `beOneFactorAtATime` | None | Varies each parameter in turn |
+| `replicates:` | A number | Runs each combination this number of times. The default is 1 |
+| `masterSeed:` | An integer | Chooses the seeds of the replicates. The default is random |
+| `recordEvery:` | A number of steps | Records each run every this number of steps, and at its last step, instead of at its last step only |
+
+### Running
+
+| Message | Effect |
+|---|---|
+| `run` | Runs the analysis in the current process, and returns when it is finished or stopped |
+| `runInBackground` | Runs the analysis in another process |
+| `pause` | Waits before the next run |
+| `resume` | Continues after a pause |
+| `stop` | Starts no other run |
+| `numberOfRuns` | Returns the number of runs of the analysis |
+| `numberOfCompletedRuns` | Returns the number of runs completed |
+| `progress` | Returns the fraction of the runs completed, from 0 to 1 |
+| `isRunning`, `isPaused` | Return whether the analysis is running, and whether it is paused |
+| `whenProgressDo:` | Takes a block as its argument, evaluated with the analysis after each run |
+| `whenFinishedDo:` | Takes a block as its argument, evaluated with the analysis when it is finished or stopped |
+
+### Results and export
+
+| Message | Effect |
+|---|---|
+| `results` | Returns a row for each run, with its final values of the probes of the model. A row is a dictionary from column names to values |
+| `resultClasses` | Returns the model class, then the entity classes whose probes were recorded |
+| `resultsOf:` | Takes a class of `resultClasses` as its argument, and returns its rows |
+| `outputs` | Returns the names of the probes of the model that the runs record |
+| `parameterNames` | Returns the names of the columns of the varied parameters |
+| `exportSize` | Returns the size of the export, in bytes |
+| `export` | Writes the export in the `output` folder of the model, and returns its folder |
+| `exportTo:` | Takes a folder as its argument, and writes the export in it |
+
+`export` and `exportTo:` raise an error when no run is completed, or when the folder of the export already exists.
